@@ -1,5 +1,5 @@
 ---
-title: "CRIM 595 Project Template"
+title: "CRIM 515 Project Template"
 author: "Your Name"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
@@ -71,7 +71,7 @@ Often, this is the section where you include how you got the data.
 
 ## Wrangle Data
 ```{r}
-# more code heree
+# more code here
 ```
 This is typically where any processing, extracting, and/or formatting occurs.
 
