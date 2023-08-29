@@ -1,0 +1,30 @@
+---
+title: "CRIM 515 Graph Exercise"
+author: "My Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+# PACKAGES
+```{r}
+library(tidyverse)
+```
+
+# SOURCES
+```{r}
+dc.data <- read.csv("https://opendata.arcgis.com/datasets/89561a4f02ba46cca3c42333425d1b87_5.csv", stringsAsFactors = FALSE)
+```
+
+# GRAPH 1
+```{r}
+ggplot(dc.data, aes(SHIFT)) + 
+  geom_bar(stat = "count", aes(fill = OFFENSE), position = position_stack(reverse = TRUE)) + 
+  theme_classic() +
+  facet_wrap(~DISTRICT)
+```
+
+# GRAPH 2
+```{r}
+
+```
+
