@@ -59,7 +59,7 @@ Also, if we had used the message=FALSE here, all that extra stuff would not have
 
 # SOURCES
 ```{r}
-# Data source link here 
+# Data source link here
 ```
 A completely optional section for any data source references.
 
