@@ -85,6 +85,27 @@ data.mj <- separate(data = data.mj, col = location, into = c("city", "state"), s
 # Add a ‘Day of Week’ field
 data.mj$day <- weekdays(data.mj$date)
 
+# Only keep the relevant fields
+data.mj <- data.mj[c(1,4,2,3,6,7,8,31,30)]
+
+# Rename the fields
+names(data.mj) <- c("event", "date", "city", "state", "killed", "injured", "total", "day", "source")
+
+### Gun Violence Archive
+# Format the dates correctly
+data.gva$date <- as.Date(data.gva$Incident.Date, format = "%B %d, %Y")
+# Add a source
+data.gva$source <- "Gun Violence Archive"
+# Calculate total victims
+data.gva$total.victims <- data.gva$Victims.Killed + data.gva$Victims.Injured
+# Add a ‘Day of Week’ field
+data.gva$day <- weekdays(data.gva$date) 
+# Only keep the relevant fields
+data.gva <- data.gva[c(1,12,4,3,6,7,14,15,13)]
+# Rename the fields
+names(data.gva) <- c("event", "date", "city", "state", "killed", "injured", "total", "day", "source")
+# Deduplicate the repeat rows
+data.gva <- data.gva[!duplicated(data.gva), ]
 
 
 
