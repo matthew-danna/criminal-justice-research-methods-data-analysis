@@ -174,6 +174,30 @@ year.post <- events.post %>%
 
 t.test(year.pre$count, year.post$count)
 
-# GVA 
+# GVA events using 1/1/2019 as the break-point
+events.pre <- subset(data.gva, data.gva$date < '2019-01-01')
+events.post <- subset(data.gva, data.gva$date >= '2019-01-01')
+
+yearmonth.pre <- events.pre %>%
+  group_by(yearmonth) %>%
+  summarise(count = n())
+yearmonth.post <- events.post %>%
+  group_by(yearmonth) %>%
+  summarise(count = n())
+
+t.test(yearmonth.pre$count, yearmonth.post$count)
 
 
+# MJ total casualty counts using Columbine
+events.pre <- subset(data.mj, data.mj$date < '1999-04-20')
+events.post <- subset(data.mj, data.mj$date > '1999-04-20')
+
+year.pre <- aggregate(events.pre$total, by = list(Category = events.pre$year), FUN = sum)
+year.post <- aggregate(events.post$total, by = list(Category = events.post$year), FUN = sum)
+
+t.test(year.pre$x, year.post$x)
+
+year.pre <- aggregate(events.pre$killed, by = list(Category = events.pre$year), FUN = sum)
+year.post <- aggregate(events.post$killed, by = list(Category = events.post$year), FUN = sum)
+
+t.test(year.pre$x, year.post$x)
