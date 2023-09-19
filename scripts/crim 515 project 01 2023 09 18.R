@@ -109,6 +109,7 @@ install.packages('explore')
 library(explore)
 explore(data.mj)
 
+# Summary tables by state, year, and yearmonth
 events.state <- data.mj %>%
   group_by(state) %>%
   summarise(count = n()) %>%
@@ -131,8 +132,33 @@ events.year <- data.gva %>%
   summarise(count = n()) %>%
   mutate(PCT = count/sum(count)*100)
            
+data.gva$month <- substr(data.gva$date, 6, 7)
+events.month <- data.gva %>%
+  group_by(month) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
            
+data.gva$yearmonth <- paste(data.gva$year, data.gva$month, sep = "-")
+events.yearmonth <- data.gva %>%
+  group_by(yearmonth) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
            
-           
+### casualty counts
+# victims by state
+victims.state <- aggregate(data.mj$total, by = list(Category = data.mj$state), FUN = sum)
+victims.state <- aggregate(data.gva$total, by = list(Category = data.gva$state), FUN = sum)
+victims.state <- aggregate(data.mj$killed, by = list(Category = data.mj$state), FUN = sum)
+victims.state <- aggregate(data.gva$killed, by = list(Category = data.gva$state), FUN = sum)
+
+# victims by year
+victims.year <- aggregate(data.gva$total, by = list(Category= data.gva$year), FUN = sum)
+
+# victims by year-month
+victims.yearmonth <- aggregate(data.gva$total, by = list(Category = data.gva$yearmonth), FUN = sum)
+
+
+
+
            
            
