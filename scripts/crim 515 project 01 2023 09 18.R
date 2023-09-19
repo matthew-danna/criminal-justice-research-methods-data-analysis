@@ -157,8 +157,23 @@ victims.year <- aggregate(data.gva$total, by = list(Category= data.gva$year), FU
 # victims by year-month
 victims.yearmonth <- aggregate(data.gva$total, by = list(Category = data.gva$yearmonth), FUN = sum)
 
+### t tests!
+# Mother Jones events using Columbine as the break-point
+# first, subset the data
+events.pre <- subset(data.mj, data.mj$date < '1999-04-20')
+events.post <- subset(data.mj, data.mj$date > '1999-04-20')
 
-
-
+# second, group the data
+year.pre <- events.pre %>%
+  group_by(year) %>%
+  summarise(count = n())
            
-           
+year.post <- events.post %>%
+  group_by(year) %>%
+  summarise(count = n())
+
+t.test(year.pre$count, year.post$count)
+
+# GVA 
+
+
