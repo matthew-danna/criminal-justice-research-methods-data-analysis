@@ -13,7 +13,7 @@ library(tidyverse)
 trends <- gtrends("mass shooting", geo = "US", time = "all")
 plot(trends)
 
-trends1 <- gtrends("mass shooting", geo = "US", time = "2013-01-01 2023-09-11")
+trends1 <- gtrends("mass shooting", geo = "US", time = "2013-01-01 2023-09-18")
 plot(trends1)
 
 trends2 <- gtrends(c("mass shooting", "mass murder", "spree killing"), geo = "US", time = "all")
@@ -59,8 +59,6 @@ for (urls in results) {
 
 ##### Step 2
 ### Mother Jones
-#install.packages('tidyverse')
-library(tidyverse)
 
 # parse and clean the month
 data.mj$temp.month <- substr(data.mj$date, 0, 2)
@@ -106,7 +104,35 @@ names(data.gva) <- c("event", "date", "city", "state", "killed", "injured", "tot
 # Deduplicate the repeat rows
 data.gva <- data.gva[!duplicated(data.gva), ]
 
+##### Step 3
+install.packages('explore')
+library(explore)
+explore(data.mj)
 
+events.state <- data.mj %>%
+  group_by(state) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
 
+events.state <- data.gva %>%
+  group_by(state) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
 
-
+data.mj$year <- substr(data.mj$date, 0, 4)
+events.year <- data.mj %>%
+  group_by(year) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
+           
+data.gva$year <- substr(data.gva$date, 0, 4)
+events.year <- data.gva %>%
+  group_by(year) %>%
+  summarise(count = n()) %>%
+  mutate(PCT = count/sum(count)*100)
+           
+           
+           
+           
+           
+           
