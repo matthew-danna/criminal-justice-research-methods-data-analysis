@@ -33,14 +33,19 @@ Second, I used mass shooting data from _____.
 
 # Methods
 Some words, and some code...
-I created summary tables for ____ (events/victims), by ______ (year/month)
+I created summary tables for ____ (events/victims), by ______ (year/month)...
+```{r}
+
+```
+Some words about my break-point...
+Some code prepping for my t-test...
 ```{r}
 
 ```
 
 # Findings
 ## Finding 1: Mass Shooting Activity
-Some words, some code, a visual...
+Some words, some code (including the t test), a visual...
 ```{r}
 
 ```
