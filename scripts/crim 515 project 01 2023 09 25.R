@@ -204,3 +204,30 @@ year.pre <- aggregate(events.pre$killed, by = list(Category = events.pre$year), 
 year.post <- aggregate(events.post$killed, by = list(Category = events.post$year), FUN = sum)
 
 t.test(year.pre$x, year.post$x)
+
+### Step 4: Visuals
+# bar graphs
+ggplot(events.year, aes(x = count, y = year)) +
+  geom_bar(stat = "identity")
+
+ggplot(events.year, aes(x = count, y = year)) +
+  geom_bar(stat = "identity" ,color = 'purple', fill = 'white')
+
+ggplot(events.year, aes(x = count, y = year)) + 
+  geom_bar(stat = "identity", color = 'purple', fill = 'white') + 
+  coord_flip() + 
+  labs(title = "Add your title here", subtitle = "add a subtitle here") + 
+  theme_classic() # with labels
+
+ggplot(events.year, aes(count, year)) +  
+  geom_point() + 
+  coord_flip() + 
+  labs(title = "Add your title here", subtitle = "add a subtitle here") + 
+  theme_dark()
+
+ggplot(data.gva, aes(x = state, y = total)) + 
+  geom_boxplot(fill = "grey92") # events by state
+
+
+
+
