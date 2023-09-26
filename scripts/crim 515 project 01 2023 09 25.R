@@ -13,7 +13,7 @@ library(tidyverse)
 trends <- gtrends("mass shooting", geo = "US", time = "all")
 plot(trends)
 
-trends1 <- gtrends("mass shooting", geo = "US", time = "2013-01-01 2023-09-18")
+trends1 <- gtrends("mass shooting", geo = "US", time = "2013-01-01 2023-09-25")
 plot(trends1)
 
 trends2 <- gtrends(c("mass shooting", "mass murder", "spree killing"), geo = "US", time = "all")
@@ -105,10 +105,6 @@ names(data.gva) <- c("event", "date", "city", "state", "killed", "injured", "tot
 data.gva <- data.gva[!duplicated(data.gva), ]
 
 ##### Step 3
-install.packages('explore')
-library(explore)
-explore(data.mj)
-
 # Summary tables by state, year, and yearmonth
 events.state <- data.mj %>%
   group_by(state) %>%
@@ -152,9 +148,12 @@ victims.state <- aggregate(data.mj$killed, by = list(Category = data.mj$state), 
 victims.state <- aggregate(data.gva$killed, by = list(Category = data.gva$state), FUN = sum)
 
 # victims by year
+data.gva$year <- substr(data.gva$date, 0, 4)
 victims.year <- aggregate(data.gva$total, by = list(Category= data.gva$year), FUN = sum)
 
 # victims by year-month
+data.gva$month <- substr(data.gva$date, 6, 7)
+data.gva$yearmonth <- paste(data.gva$year, data.gva$month, sep = "-")
 victims.yearmonth <- aggregate(data.gva$total, by = list(Category = data.gva$yearmonth), FUN = sum)
 
 ### t tests!

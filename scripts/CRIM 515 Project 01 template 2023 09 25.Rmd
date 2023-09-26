@@ -4,6 +4,13 @@ author: "My Name"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 ---
+# Libraries
+```{r}
+library(gtrendsR)
+library(Hmisc)
+library(rvest)
+library(tidyverse)
+```
 
 # Research Question
 All words, no code
@@ -13,12 +20,20 @@ All words, no code.
 
 # Data
 Some words, and some code...
+
+First, I acquired public interest data from ________.
+```{r}
+google.trends <- gtrends("mass shooting", geo = "US", time = "2014-01-01 2023-09-25")
+```
+
+Second, I used mass shooting data from _____.
 ```{r}
 
 ```
 
 # Methods
 Some words, and some code...
+I created summary tables for ____ (events/victims), by ______ (year/month)
 ```{r}
 
 ```
