@@ -228,6 +228,125 @@ ggplot(events.year, aes(count, year)) +
 ggplot(data.gva, aes(x = state, y = total)) + 
   geom_boxplot(fill = "grey92") # events by state
 
+ggplot(victims.yearmonth, aes(x = x, y = Category)) + 
+  geom_bar(stat = "identity", color = 'purple', fill = 'white') + 
+  coord_flip() + 
+  labs(title = "Add your title here", subtitle = "add a subtitle here") + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, size = 5)) 
+
+# maps
+install.packages('usmap')
+library(usmap)
+
+events.state$state <- state.abb[match(events.state$state, state.name)]
+plot_usmap(data = events.state, values = "count", color = "grey") + 
+  scale_fill_continuous(name = "Legend title here", label = scales::comma) +  
+  theme(legend.position = "right")
+
+# rainclouds
+devtools::install_github('jorvlan/raincloudplots')
+library(raincloudplots)
+install.packages('plyr')
+
+data.1x1 <- data_1x1(
+  array_1 = data.mj$total[122:147], # use row ID numbers
+  array_2 = data.mj$total[1:121], # update these relative to your break point
+)
+# for total victims over time
+events.raincloud <- raincloud_1x1(
+  data = data.1x1, 
+  colors = (c('dodgerblue','darkorange')), 
+  fills = (c('dodgerblue','darkorange')), 
+  size = 1, 
+  alpha = .6, 
+  ort = 'h') +
+  scale_x_continuous(breaks=c(1,2), labels=c("Early", "Late"), limits=c(0, 3)) +
+  xlab("Groups") + 
+  ylab("Total Victims") +
+  theme_classic()
+events.raincloud
 
 
+# for events per year
+# works best for events counts
+events.year.1x1 <- data_1x1(
+  array_1 = events.year$count[1:16],
+  array_2 = events.year$count[17:39],
+)
+year.raincloud <- raincloud_1x1(
+  data = events.year.1x1, 
+  colors = (c('dodgerblue','darkorange')), 
+  fills = (c('dodgerblue','darkorange')), 
+  size = 1, 
+  alpha = .6, 
+  ort = 'v') + # change v to h to flip graph orientation
+  scale_x_continuous(breaks=c(1,2), labels=c("Early", "Late"), limits=c(0, 3)) +
+  xlab("Groups") + 
+  ylab("Total Events") +
+  theme_classic()
+year.raincloud
+
+# comparing means model
+# this works best for victim count analyses
+library(broom)
+events.pre$group <- 0
+events.post$group <- 1
+events <- rbind(events.pre, events.post) # rebuilds the ‘data’ table with these new fields, based on the divide you did earlier
+model <- lm(killed ~ factor(group), data = events)
+result <- tidy(model) # builds a linear model for the casualties per event
+install.packages('dabestr')
+library(dabestr)
+bootstrap <- dabest(events,
+                    group,
+                    killed,
+                    idx = c("0", "1"),
+                    paired = FALSE)
+bootstrap_diff <- mean_diff(bootstrap)
+plot(bootstrap_diff)
+
+# Google Trends
+plot(trends1)
+
+trends.data <- data.frame(trends1$interest_over_time)
+ggplot(trends.data, aes(x = date, y = hits)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm', aes(colour = 'linear'), se = FALSE) +  
+  theme_bw() + 
+  scale_colour_brewer(name = 'Trendline', palette = 'Set2')
+
+install.packages('shiny')
+install.packages('plotly')
+library(plotly)
+p <- plot(trends1)
+ggplotly(p)
+
+install.packages('lubridate')
+library(lubridate)
+TrendsInterest <- trends1$interest_over_time
+trends.new <- TrendsInterest %>% filter(year(date)>2003) %>% mutate(date = ymd(date), hits = as.numeric(hits))
+pink <- "#FF8DC6"
+blue <- "#56C1FF"
+red = "#ff7f7f"
+ggplot() + 
+  geom_line(data=trends.new, aes(x=date, y=hits, group=keyword, color = keyword)) + 
+  scale_color_manual(values=c(red, blue, pink)) + 
+  theme_classic() + 
+  theme(legend.position="bottom") + 
+  labs(title = "YOUR TITLE HERE", subtitle = "Your subtitle here", caption = "Source: whatever you want here",  
+       x = "Date", y = "Hits") 
+
+install.packages('gifski')
+library(gifski)
+install.packages('gganimate')
+library(gganimate)
+install.packages('ggimage')
+library(ggimage)
+install.packages('usethis')
+library(usethis)
+install.packages('png')
+library(png)
+t <- p + transition_reveal(as.numeric(date)) 
+gif <- animate(t, end_pause = 25, width = 800, height = 400, fps = 8)
+gif
 
