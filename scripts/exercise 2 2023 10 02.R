@@ -105,7 +105,8 @@ ggplot() +
   geom_density2d(data = dc.data, aes(x = LONGITUDE, y = LATITUDE), size = 0.15) +
   facet_wrap(~ WARD, nrow = 4)
 
-### an example
+### pick one of these examples:
+### an example (transparent points)
 ### the xxx, yyy, zzz, and aaa need to be replaced
 ggplot() + 
   geom_sf(data = dc.outline, color = "blue") +
@@ -114,7 +115,7 @@ ggplot() +
   theme_void() + 
   facet_wrap(~ zzz, nrow = aaa)
 
-### another example
+### another example (density)
 ### the xxx, yyy, zzz, and aaa need to be replaced
 ggplot() + 
   geom_sf(data = dc.outline, color = "blue") +
@@ -123,4 +124,31 @@ ggplot() +
                  size = 0.01, bins = xxx, data = subset(dc.data), geom = "polygon") +
   theme_void() + 
   facet_wrap(~ yyy, nrow = zzz)
+
+# interactive clusters
+leaflet(dc.data) %>%
+  addTiles() %>%
+  addMarkers(lng = ~LONGITUDE, lat = ~LATITUDE, 
+             clusterOptions = markerClusterOptions())
+
+leaflet(dc.data) %>%
+  addTiles() %>%
+  addMarkers(lng = ~LONGITUDE, lat = ~LATITUDE, popup = dc.data$OFFENSE, 
+             clusterOptions = markerClusterOptions())
+
+leaflet(dc.data) %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addMarkers(lng = ~LONGITUDE, lat = ~LATITUDE, popup = paste("Crime Type: ",dc.data$OFFENSE,"<br>",
+                                                              "Date: ", dc.data$REPORT_DAT),
+             clusterOptions = markerClusterOptions()) %>%
+  addPolygons(data = dc.outline)
+
+### an example
+### need to replace the xxx
+leaflet(subset(dc.data, dc.data$OFFENSE == 'xxx')) %>%
+  addTiles() %>%
+  addMarkers(lng = ~LONGITUDE, lat = ~LATITUDE, 
+             clusterOptions = markerClusterOptions())
+
+
 
