@@ -5,23 +5,37 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 ---
 
+# LIBRARIES
+```{r, message=FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+```
+
 # DATA
 ### Crime Data
 ```{r}
-
+dc.data <- read.csv("https://opendata.arcgis.com/datasets/89561a4f02ba46cca3c42333425d1b87_5.csv", 
+                    stringsAsFactors = FALSE) 
 ```
 
 ### Geographic Data
+```{r, results='hide', message=FALSE}
+dc.roads <- roads("DC", "District of Columbia")
+dc.roads.major <- dc.roads %>%
+  filter(RTTYP %in% c("I","S","U"))
+dc.outline <- county_subdivisions("DC", "District of Columbia")
+```
 
 # MAPS
-
 ### Map 1: Transparent points
-D.C. Crime Type for 2023
-```{r}
+##### D.C. Crime XXX for 2023
+```{r, echo=FALSE}
 ggplot() +
   geom_sf(data = dc.outline) +
   geom_sf(data = dc.roads.major, color = "grey") +
-  geom_point(aes(x=LONGITUDE, y=LATITUDE), data = subset(dc.data, dc.data$OFFENSE == 'xxx'), 
+  geom_point(aes(x=LONGITUDE, y=LATITUDE), data = subset(dc.data, dc.data$OFFENSE == 'XXX'), 
              alpha = yyy, size = zzz) +
   theme_void()
 ```
