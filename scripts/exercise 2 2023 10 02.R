@@ -68,3 +68,32 @@ ggplot() +
                                                                                      margin=margin(2, 0, 5, 0))) + 
   labs(title = "A Title", subtitle = "Some other text")
 
+# density
+ggplot() + 
+  stat_density2d(aes(x = LONGITUDE, y = LATITUDE, fill = ..level.., alpha = 0.01),  
+                 size = 0.01, bins = 50, data = dc.data, geom = "polygon")
+
+# contour
+ggplot() + 
+  geom_sf(data = dc.outline) +
+  geom_density2d(data = dc.data, aes(x = LONGITUDE, y = LATITUDE), size = 0.15)
+
+# combination
+ggplot() + 
+  stat_density2d(aes(x = LONGITUDE, y = LATITUDE, fill = ..level.., alpha = 0.01), 
+                 size = 0.001, bins = 10, data = dc.data, geom = "polygon") + 
+  geom_density2d(data = dc.data, aes(x = LONGITUDE, y = LATITUDE), size = 0.15)
+
+### an example
+### the xxx and yyy need to be updated
+ggplot() + 
+  geom_sf(data = dc.outline) +
+  stat_density2d(aes(x = LONGITUDE, y = LATITUDE, fill = ..level.., alpha = 0.01), 
+                 size = 0.01, bins = xxx, data = subset(dc.data, dc.data$OFFENSE == 'yyy'), geom = "polygon") +
+  geom_sf(data = dc.roads.major) +
+  theme_void() +
+  ggtitle("Update my title please") +
+  theme(legend.position = "none")
+
+
+
