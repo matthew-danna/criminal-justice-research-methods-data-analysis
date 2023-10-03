@@ -95,5 +95,32 @@ ggplot() +
   ggtitle("Update my title please") +
   theme(legend.position = "none")
 
+# facets
+ggplot() + 
+  geom_point(aes(x = LONGITUDE, y = LATITUDE), data = dc.data, alpha = 0.01, size = 0.5) + 
+  facet_wrap(~ DISTRICT, nrow = 4)
 
+ggplot() + 
+  geom_sf(data = dc.outline) +
+  geom_density2d(data = dc.data, aes(x = LONGITUDE, y = LATITUDE), size = 0.15) +
+  facet_wrap(~ WARD, nrow = 4)
+
+### an example
+### the xxx, yyy, zzz, and aaa need to be replaced
+ggplot() + 
+  geom_sf(data = dc.outline, color = "blue") +
+  geom_sf(data = dc.roads.major, color = "grey") +
+  geom_point(aes(x = LONGITUDE, y = LATITUDE), data = dc.data, alpha = xxx, size = yyy) + 
+  theme_void() + 
+  facet_wrap(~ zzz, nrow = aaa)
+
+### another example
+### the xxx, yyy, zzz, and aaa need to be replaced
+ggplot() + 
+  geom_sf(data = dc.outline, color = "blue") +
+  geom_sf(data = dc.roads.major, color = "grey") +
+  stat_density2d(aes(x = LONGITUDE, y = LATITUDE, fill = ..level.., alpha = 0.01), 
+                 size = 0.01, bins = xxx, data = subset(dc.data), geom = "polygon") +
+  theme_void() + 
+  facet_wrap(~ yyy, nrow = zzz)
 
