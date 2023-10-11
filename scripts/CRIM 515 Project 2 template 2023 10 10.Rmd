@@ -4,15 +4,36 @@ author: "My Name"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 ---
+## Libraries
+```{r}
+library(gtrendsR)
+```
+
 
 ## Research Question
-Just text, 3 components
+Just text, 3 components...
+
+1. how police shootings differ by victims and places over time;
+
+2. if public interest about police shootings is changing; and 
+
+3. describe the relationship between trends in events and public interest in police shootings.
 
 ## Literature Review
 Just text, one citation, one paragraph
 
 ## Data
-Some text about acquiring and cleaning data, and some code
+Some text about acquiring and cleaning three different datasets, and some code
+
+###### Dataset 1
+```{r}
+
+```
+###### Dataset 2
+```{r}
+
+```
+###### Dataset 3
 ```{r}
 
 ```
