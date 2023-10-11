@@ -1,6 +1,8 @@
 # Libraries
 library(gtrendsR)
 library(tidyverse)
+install.packages('tidycensus')
+library(tidycensus)
 
 # Step 1: Data
 ## Police Shootings
@@ -59,5 +61,25 @@ wapo.race.mental <- wapo.data %>%
   group_by(race, was_mental_illness_related) %>%
   summarise(count = n()) %>%
   mutate(pct = round(count/sum(count)*100,2))
+
+wapo.race.state <- wapo.data %>%
+  group_by(race, state) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count)*100,2))
+
+# Step 5: Census Data
+census_api_key("YOU API KEY HERE", install = TRUE) # run once!
+
+census.variables.2021 <- load_variables(2021, "acs5", cache = TRUE)
+
+race.2021 <- get_acs(geography = "state", 
+                     variables = c("B02008_001", "B02009_001", "B02010_001", "B02011_001", "B03001_003"), 
+                     year = 2021)
+
+race.2021$variable <- gsub("B02008_001", "White", race.2021$variable)
+race.2021$variable <- gsub("B02009_001", "Black", race.2021$variable)
+race.2021$variable <- gsub("B02010_001", "Native American", race.2021$variable)
+race.2021$variable <- gsub("B02011_001", "Asian", race.2021$variable)
+race.2021$variable <- gsub("B03001_003", "Hispanic", race.2021$variable)
 
 
