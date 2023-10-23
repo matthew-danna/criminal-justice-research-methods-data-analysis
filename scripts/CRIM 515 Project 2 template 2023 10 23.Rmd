@@ -1,0 +1,76 @@
+---
+title: "CRIM 515 Project 2 Template"
+author: "My Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+## Libraries
+```{r}
+library(gtrendsR)
+```
+
+
+## Research Question
+Just text, 3 components...
+
+1. how police shootings differ by victims and places over time;
+
+2. if public interest about police shootings is changing; and 
+
+3. describe the relationship between trends in events and public interest in police shootings.
+
+## Literature Review
+Just text, one citation, one paragraph
+
+## Data
+Some text about acquiring and cleaning three different datasets, and some code
+
+###### Dataset 1
+```{r}
+
+```
+###### Dataset 2
+```{r}
+
+```
+###### Dataset 3
+```{r}
+
+```
+
+## Methods
+Some text about stats and techniques, and some code
+```{r}
+
+```
+
+## Findings
+#### Finding 1
+Some analysis, and some code for Visual 1
+```{r}
+
+```
+
+#### Finding 2
+Some analysis, and some code for Visual 2
+```{r}
+
+```
+
+#### Finding 3
+Some analysis, and some code for Visual 3
+```{r}
+
+```
+
+## So What
+All text, two paragraphs (roughly), all text
+
+
+# Example Section
+```{r, echo=FALSE, message=FALSE, results='hide', fig.show='hide'}
+# when you set 'echo' to false, you are hiding the block of code 
+# when you set 'message' to false, you are hiding the console text that comes after running your code
+# when you set 'results' to hide, you are hiding extra processing that occasionally shows up in the console
+# when you set fig.show to hide, you are hiding the plot output
+```

@@ -150,5 +150,3 @@ leaflet(subset(dc.data, dc.data$OFFENSE == 'xxx')) %>%
   addMarkers(lng = ~LONGITUDE, lat = ~LATITUDE, 
              clusterOptions = markerClusterOptions())
 
-
-
