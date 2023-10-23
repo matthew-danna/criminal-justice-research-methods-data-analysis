@@ -1,7 +1,6 @@
 # Libraries
 library(gtrendsR)
 library(tidyverse)
-install.packages('tidycensus')
 library(tidycensus)
 
 # Step 1: Data
@@ -20,8 +19,6 @@ wapo.data$date <- as.Date(wapo.data$date)
 wapo.data$month <- substr(wapo.data$date, 6, 7)
 wapo.data$year <- substr(wapo.data$date,0,4)
 wapo.data$yearmonth <- paste(wapo.data$year, wapo.data$month, sep = "-")
-
-unique(wapo.data$race)
 wapo.data$race <- gsub("B;H", "O", wapo.data$race)
 
 # Step 3

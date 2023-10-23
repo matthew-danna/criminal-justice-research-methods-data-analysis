@@ -1,16 +1,19 @@
 ---
-title: "CRIM 515 Project 2 Template"
+title: "CRIM 515 Project 2 Template version 2"
 author: "My Name"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 ---
 ## Libraries
-```{r}
+```{r, message=FALSE}
 library(gtrendsR)
+library(tidyverse)
+library(tidycensus)
 ```
 
 
 ## Research Question
+*Note - I'd recommend doing this section at the end of the project
 Just text, 3 components...
 
 1. how police shootings differ by victims and places over time;
@@ -25,15 +28,26 @@ Just text, one citation, one paragraph
 ## Data
 Some text about acquiring and cleaning three different datasets, and some code
 
-###### Dataset 1
+### Dataset 1 (name it)
+Add some sentences here about this data source - how many records, date range, etc...
 ```{r}
-
+wapo.data <- read.csv("https://raw.githubusercontent.com/washingtonpost/data-police-shootings/master/v2/fatal-police-shootings-data.csv", 
+                      stringsAsFactors = FALSE)
+wapo.data$date <- as.Date(wapo.data$date)
+wapo.data$month <- substr(wapo.data$date, 6, 7)
+wapo.data$year <- substr(wapo.data$date,0,4)
+wapo.data$yearmonth <- paste(wapo.data$year, wapo.data$month, sep = "-")
+wapo.data$race <- gsub("B;H", "O", wapo.data$race)
 ```
-###### Dataset 2
+##### Dataset 2 (name it)
+Add some sentences here about this data source - how many records, date range, etc...
 ```{r}
-
+today <- as.character(Sys.Date())
+time.range <- paste("2015-01-01", today, sep = " ")
+trends1 <- gtrends("police shooting", geo = "US", time = time.range)
 ```
-###### Dataset 3
+###### Dataset 3 (name it)
+Add some sentences here about this data source - how many records, date range, etc...
 ```{r}
 
 ```
