@@ -150,6 +150,10 @@ ggplot(wapo.data) +
 ##### Maps
 world <- ne_countries(scale = "medium", returnclass = "sf") # this builds a list of countries
 states <- st_as_sf(map("state", plot = FALSE, fill = TRUE)) # this cleans up the US states
+names(wapo.state) <- c("state", "Count", "Shooting.PCT", "State.Full")
+plot_usmap(data = wapo.state, values = "Count", color = "red") + 
+  scale_fill_continuous(name = "Events per state", label = scales::comma) +   
+  theme(legend.position = "right") # by counts
 
 ggplot(data = world) + 
   geom_sf() + 
@@ -175,8 +179,14 @@ ggplot(data = world) +
   coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE) +
   facet_wrap(~ year, nrow = 3)
 
+wapo.data.clean <- subset(wapo.data, !is.na(wapo.data$latitude))
+wapo.data.clean$latitude <- round(as.numeric(wapo.data.clean$latitude),4)
+wapo.data.clean$longitude <- round(as.numeric(wapo.data.clean$longitude),4)
+wapo.data.clean <- subset(wapo.data.clean, wapo.data.clean$longitude > -125)
 
-
-
-
+ggplot(data = world) + 
+  geom_sf() + 
+  geom_sf(data = states, fill = NA) + 
+  stat_density_2d(data = wapo.data.clean, aes(x = longitude, y = latitude, fill = stat(level)), bins = 10, geom = "polygon") + 
+  coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE)
 
