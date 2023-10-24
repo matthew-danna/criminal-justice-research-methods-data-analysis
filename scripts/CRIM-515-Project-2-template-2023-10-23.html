@@ -11,7 +11,7 @@
 
 <meta name="author" content="My Name" />
 
-<meta name="date" content="2023-10-23" />
+<meta name="date" content="2023-10-24" />
 
 <title>CRIM 515 Project 2 Template version 2</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">CRIM 515 Project 2 Template version 2</h1>
 <h4 class="author">My Name</h4>
-<h4 class="date">23 October 2023</h4>
+<h4 class="date">24 October 2023</h4>
 
 </div>
 
@@ -361,12 +361,22 @@ display: none;
 <h2>Libraries</h2>
 <pre class="r"><code>library(gtrendsR)
 library(tidyverse)
-library(tidycensus)</code></pre>
+library(tidycensus)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(maps)
+library(lubridate)
+library(usmap)
+library(sf)
+library(leaflet)
+library(plotly)
+theme_set(theme_bw())</code></pre>
 </div>
 <div id="research-question" class="section level2">
 <h2>Research Question</h2>
-<p>*Note - I’d recommend doing this section at the end of the project
-Just text, 3 components…</p>
+<p><em>Note - I’d recommend doing this section at the end of the
+project</em></p>
+<p>Just text, 3 components…</p>
 <ol style="list-style-type: decimal">
 <li><p>how police shootings differ by victims and places over
 time;</p></li>
@@ -384,28 +394,74 @@ interest in police shootings.</p></li>
 <h2>Data</h2>
 <p>Some text about acquiring and cleaning three different datasets, and
 some code</p>
-<div id="dataset-1" class="section level6">
-<h6>Dataset 1</h6>
+<div id="dataset-1-name-it" class="section level3">
+<h3>Dataset 1 (name it)</h3>
 <p>Add some sentences here about this data source - how many records,
 date range, etc…</p>
 <pre class="r"><code>wapo.data &lt;- read.csv(&quot;https://raw.githubusercontent.com/washingtonpost/data-police-shootings/master/v2/fatal-police-shootings-data.csv&quot;, 
-                      stringsAsFactors = FALSE)</code></pre>
-</div>
-<div id="dataset-2" class="section level6">
-<h6>Dataset 2</h6>
+                      stringsAsFactors = FALSE)
+wapo.data$date &lt;- as.Date(wapo.data$date)
+wapo.data$month &lt;- substr(wapo.data$date, 6, 7)
+wapo.data$year &lt;- substr(wapo.data$date,0,4)
+wapo.data$yearmonth &lt;- paste(wapo.data$year, wapo.data$month, sep = &quot;-&quot;)
+wapo.data$race &lt;- gsub(&quot;B;H&quot;, &quot;O&quot;, wapo.data$race)</code></pre>
+<div id="dataset-2-name-it" class="section level5">
+<h5>Dataset 2 (name it)</h5>
 <p>Add some sentences here about this data source - how many records,
 date range, etc…</p>
 <pre class="r"><code>today &lt;- as.character(Sys.Date())
 time.range &lt;- paste(&quot;2015-01-01&quot;, today, sep = &quot; &quot;)
 trends1 &lt;- gtrends(&quot;police shooting&quot;, geo = &quot;US&quot;, time = time.range)</code></pre>
 </div>
-<div id="dataset-3" class="section level6">
-<h6>Dataset 3</h6>
+<div id="dataset-3-name-it" class="section level5">
+<h5>Dataset 3 (name it)</h5>
+<p>Add some sentences here about this data source - how many records,
+date range, etc…</p>
+<div id="table-1---name-it" class="section level6">
+<h6>Table 1 - name it</h6>
+<pre class="r"><code>race.2021 &lt;- get_acs(geography = &quot;state&quot;, 
+                     variables = c(&quot;B02008_001&quot;, &quot;B02009_001&quot;, &quot;B02010_001&quot;, &quot;B02011_001&quot;, &quot;B03001_003&quot;), 
+                     year = 2021)
+
+race.2021$variable &lt;- gsub(&quot;B02008_001&quot;, &quot;White&quot;, race.2021$variable)
+race.2021$variable &lt;- gsub(&quot;B02009_001&quot;, &quot;Black&quot;, race.2021$variable)
+race.2021$variable &lt;- gsub(&quot;B02010_001&quot;, &quot;Native American&quot;, race.2021$variable)
+race.2021$variable &lt;- gsub(&quot;B02011_001&quot;, &quot;Asian&quot;, race.2021$variable)
+race.2021$variable &lt;- gsub(&quot;B03001_003&quot;, &quot;Hispanic&quot;, race.2021$variable)</code></pre>
+</div>
+<div id="table-2---name-it" class="section level6">
+<h6>Table 2 - name it</h6>
+<pre class="r"><code>race.total &lt;- get_acs(geography = &quot;us&quot;, 
+                      variables = c(&quot;B02008_001&quot;, &quot;B02009_001&quot;, &quot;B02010_001&quot;, &quot;B02011_001&quot;, &quot;B03001_003&quot;), 
+                      year = 2021)
+
+race.total$variable &lt;- gsub(&quot;B02008_001&quot;, &quot;White&quot;, race.total$variable)
+race.total$variable &lt;- gsub(&quot;B02009_001&quot;, &quot;Black&quot;, race.total$variable)
+race.total$variable &lt;- gsub(&quot;B02010_001&quot;, &quot;Native American&quot;, race.total$variable)
+race.total$variable &lt;- gsub(&quot;B02011_001&quot;, &quot;Asian&quot;, race.total$variable)
+race.total$variable &lt;- gsub(&quot;B03001_003&quot;, &quot;Hispanic&quot;, race.total$variable)</code></pre>
+</div>
+<div id="table-3---name-it" class="section level6">
+<h6>Table 3 - name it</h6>
+<pre class="r"><code>totalpop.2021 &lt;- get_acs(geography = &quot;state&quot;, variables = &quot;B01003_001&quot;, year = 2021)
+names(totalpop.2021) &lt;- c(&quot;GEOID&quot;, &quot;State&quot;, &quot;Variable&quot;, &quot;Population&quot;, &quot;junk&quot;)
+totalpop.2021$State.PCT &lt;- round(totalpop.2021$Population/sum(totalpop.2021$Population)*100,2)
+temp.race.population &lt;- race.2021 %&gt;% left_join(totalpop.2021, by = &quot;GEOID&quot;)
+race.population &lt;- temp.race.population[c(1:4,8,10)]
+names(race.population) &lt;- c(&quot;GEOID&quot;, &quot;State&quot;, &quot;Race&quot;, &quot;Population.Race&quot;, &quot;Population.State&quot;, &quot;State.PCT&quot;)
+race.population$Race.PCT &lt;- round(race.population$Population.Race/race.population$Population.State*100, 2)
+race.total$PCT &lt;- race.total$estimate/sum(totalpop.2021$Population)*100
+names(race.total) &lt;- c(&quot;GEOID&quot;, &quot;Area&quot;, &quot;Race&quot;, &quot;Count&quot;, &quot;moe&quot;, &quot;Race.PCT&quot;)</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div id="methods" class="section level2">
 <h2>Methods</h2>
-<p>Some text about stats and techniques, and some code</p>
+<p>Some text about stats and techniques, and some code. I do my work
+with summary tables here… and I only include the summary tables I
+actually analyze. And that analysis matches my research question. I
+would also do any event-census table joining here, too</p>
 </div>
 <div id="findings" class="section level2">
 <h2>Findings</h2>

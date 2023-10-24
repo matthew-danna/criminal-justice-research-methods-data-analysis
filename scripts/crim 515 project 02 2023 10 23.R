@@ -1,7 +1,19 @@
 # Libraries
+install.packages(c("cowplot", "ggrepel", "rgeos", "sf", "maps", "usmap", "ggspatial", "libwgeom", 
+                   "rnaturalearth", "rnaturalearthdata"))
 library(gtrendsR)
 library(tidyverse)
 library(tidycensus)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(maps)
+library(lubridate)
+library(usmap)
+library(sf)
+library(leaflet)
+library(plotly)
+theme_set(theme_bw())
+
 
 # Step 1: Data
 ## Police Shootings
@@ -13,6 +25,8 @@ today <- as.character(Sys.Date())
 time.range <- paste("2015-01-01", today, sep = " ")
 trends1 <- gtrends("police shooting", geo = "US", time = time.range)
 plot(trends1)
+p <- plot(trends1)
+ggplotly(p)
 
 # Step 2
 wapo.data$date <- as.Date(wapo.data$date)
@@ -120,4 +134,49 @@ wapo.census.race <- wapo.race %>% left_join(race.total, by = "Race")
 wapo.census.race <- wapo.census.race[c(1,3,8)]
 wapo.census.state <- wapo.state %>% left_join(totalpop.2021, by = "State")
 wapo.census.state <- wapo.census.state[c(4,3,9)]
+
+##### Graphs
+ggplot(wapo.data) + geom_bar(aes(x = race), stat = "count", fill = "grey")
+
+ggplot(wapo.race.mental, aes(x = factor(race), y = pct, fill = factor(was_mental_illness_related))) + 
+  geom_bar(stat="identity", width = 0.7) + 
+  labs(x = "Race", y = "pct", fill = "Mental Illness") + 
+  theme_minimal(base_size = 14)
+
+ggplot(wapo.data) + 
+  geom_bar(aes(x = was_mental_illness_related), stat = "count", fill = "grey") + 
+  facet_wrap(~ race, nrow = 3)
+
+##### Maps
+world <- ne_countries(scale = "medium", returnclass = "sf") # this builds a list of countries
+states <- st_as_sf(map("state", plot = FALSE, fill = TRUE)) # this cleans up the US states
+
+ggplot(data = world) + 
+  geom_sf() + 
+  geom_point(data = wapo.data, aes(x = longitude, y = latitude), size = 2, shape = 23, fill = "black") + 
+  coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE)
+
+ggplot(data = world) + 
+  geom_sf() + 
+  geom_sf(data = states, fill = NA) + 
+  geom_point(data = wapo.data, aes(x = longitude, y = latitude), size = 2, shape = 1, fill = "darkred") + 
+  coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE)
+
+ggplot(data = world) + 
+  geom_sf() + 
+  geom_sf(data = states, fill = NA) + 
+  geom_point(data = wapo.data, aes(x = longitude, y = latitude), size = 2, alpha = 0.15, shape = 1, fill = "darkred") + 
+  coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE)
+
+ggplot(data = world) + 
+  geom_sf() + 
+  geom_sf(data = states, fill = NA) + 
+  geom_point(data = wapo.data, aes(x = longitude, y = latitude), size = 2, alpha = 0.20, shape = 1) + 
+  coord_sf(xlim = c(-135, -60), ylim = c(25, 50), expand = FALSE) +
+  facet_wrap(~ year, nrow = 3)
+
+
+
+
+
 
