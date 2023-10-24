@@ -67,8 +67,7 @@ wapo.race.state <- wapo.data %>%
 # Step 5: Census Data
 census_api_key("YOU API KEY HERE", install = TRUE) # run once!
 
-census.variables.2021 <- load_variables(2021, "acs5", cache = TRUE)
-
+### table 1: race by state
 race.2021 <- get_acs(geography = "state", 
                      variables = c("B02008_001", "B02009_001", "B02010_001", "B02011_001", "B03001_003"), 
                      year = 2021)
@@ -79,6 +78,7 @@ race.2021$variable <- gsub("B02010_001", "Native American", race.2021$variable)
 race.2021$variable <- gsub("B02011_001", "Asian", race.2021$variable)
 race.2021$variable <- gsub("B03001_003", "Hispanic", race.2021$variable)
 
+### table 2: race for all US
 race.total <- get_acs(geography = "us", 
                       variables = c("B02008_001", "B02009_001", "B02010_001", "B02011_001", "B03001_003"), 
                       year = 2021)
@@ -89,6 +89,7 @@ race.total$variable <- gsub("B02010_001", "Native American", race.total$variable
 race.total$variable <- gsub("B02011_001", "Asian", race.total$variable)
 race.total$variable <- gsub("B03001_003", "Hispanic", race.total$variable)
 
+### table 3: population by state
 totalpop.2021 <- get_acs(geography = "state", variables = "B01003_001", year = 2021)
 names(totalpop.2021) <- c("GEOID", "State", "Variable", "Population", "junk")
 totalpop.2021$State.PCT <- round(totalpop.2021$Population/sum(totalpop.2021$Population)*100,2)
@@ -100,6 +101,7 @@ race.population$Race.PCT <- round(race.population$Population.Race/race.populatio
 race.total$PCT <- race.total$estimate/sum(totalpop.2021$Population)*100
 names(race.total) <- c("GEOID", "Area", "Race", "Count", "moe", "Race.PCT")
 
+# clean the WAPO data to match the race names
 wapo.race$race <- gsub("W", "White", wapo.race$race)
 wapo.race$race <- gsub("B", "Black", wapo.race$race)
 wapo.race$race <- gsub("H", "Hispanic", wapo.race$race)
@@ -108,10 +110,14 @@ wapo.race$race <- gsub("N", "Native American", wapo.race$race)
 wapo.race$race <- gsub("O", "Other", wapo.race$race)
 names(wapo.race) <- c("Race", "Count", "Shooting.PCT")
 
+# clean the WAPO data to match the state names
 wapo.state$State.Name <- state.name[match(wapo.state$state,state.abb)]
 wapo.state$State.Name <- replace_na(wapo.state$State.Name, "District of Columbia")
 names(wapo.state) <- c("oldstate", "Count", "Shooting.PCT", "State")
 
+# join the census and WAPO datas together
 wapo.census.race <- wapo.race %>% left_join(race.total, by = "Race")
+wapo.census.race <- wapo.census.race[c(1,3,8)]
 wapo.census.state <- wapo.state %>% left_join(totalpop.2021, by = "State")
+wapo.census.state <- wapo.census.state[c(4,3,9)]
 
