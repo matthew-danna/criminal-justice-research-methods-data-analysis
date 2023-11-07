@@ -59,7 +59,7 @@ counts.word <- my.clean.words %>% count(word, sort = TRUE)
 names(counts.word) <- c("word", "freq")
 
 wordcloud2(data = counts.word, size = 1.6, color = 'random-dark')
-wordcloud2(data = counts.word, color = rep_len(c("green","blue","red"), nrow(counts.word)))
+wordcloud2(data = counts.word, size = 1.0, color = rep_len(c("green","blue","red"), nrow(counts.word)), shape = circle)
 wordcloud2(data = counts.word, size = 0.8, shape = 'circle')
 
 
