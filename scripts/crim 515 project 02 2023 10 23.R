@@ -36,14 +36,41 @@ wapo.data$yearmonth <- paste(wapo.data$year, wapo.data$month, sep = "-")
 wapo.data$race <- gsub("B;H", "O", wapo.data$race)
 
 ##### to find all the gun-related "armed_with" events
+wapo.data$armed <- ""
 wapo.data.gun <- subset(wapo.data, wapo.data$armed_with == 'gun' |
                           wapo.data$armed_with == 'other;gun' | 
                           wapo.data$armed_with == 'gun;knife' |
                           wapo.data$armed_with == 'vehicle;gun' |
                           wapo.data$armed_with == 'gun;vehicle')
-wapo.data.gun$gun <- "Y"
-wapo.data.gun <- wapo.data.gun[c(1,20)]
-wapo.data.full <- wapo.data %>% left_join(wapo.data.gun, by = 'id')
+wapo.data.gun$armed <- "GUN"
+wapo.data.blunt <- subset(wapo.data, wapo.data$armed_with == 'blunt_object' |
+                            wapo.data$armed_with == 'blunt_object;blunt_object' |
+                            wapo.data$armed_with == 'knife;blunt_object' |
+                            wapo.data$armed_with == 'blunt_object;knife' |
+                            wapo.data$armed_with == 'other;blunt_object;knife')
+wapo.data.blunt$armed <- "BLUNT OBJECT"
+wapo.data.replica <- subset(wapo.data, wapo.data$armed_with == 'replica' |
+                              wapo.data$armed_with == 'replica;vehicle' |
+                              wapo.data$armed_with == 'replica;knife')
+wapo.data.replica$armed <- "REPLICA"
+wapo.data.other <- subset(wapo.data, wapo.data$armed_with == 'unarmed' |
+                            wapo.data$armed_with == 'other' |
+                            wapo.data$armed_with == '' |
+                            wapo.data$armed_with == 'vehicle' |
+                            wapo.data$armed_with == 'undetermined' |
+                            wapo.data$armed_with == 'unknown')
+wapo.data.other$armed <- "OTHER"
+wapo.data.knife <- subset(wapo.data, wapo.data$armed_with == 'knife' |
+                            wapo.data$armed_with == 'knife;vehicle' |
+                            wapo.data$armed_with == 'vehicle;knife;other')
+wapo.data.knife$armed <- "KNIFE"
+
+wapo.data.full <- rbind(wapo.data.gun, wapo.data.blunt, wapo.data.replica, wapo.data.other, wapo.data.knife)
+
+wapo.armed <- wapo.data.full %>%
+  group_by(armed) %>%
+  summarise(COUNT = n()) %>%
+  mutate(PCT = round(COUNT/sum(COUNT)*100,2))
 
 # Step 3
 # single variable summary tables
