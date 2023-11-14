@@ -41,7 +41,7 @@ These are different heading styles. When you 'knit' this template, you see how t
 *When you are ready to see what the output looks like*, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
 
 # Example Section
-```{r, echo=FALSE, message=FALSE, results='hide', fig.show='hide', warning=FALSE}
+```{r, echo=FALSE, message=FALSE, results='hide', fig.show='hide', warning=FALSE, error=FALSE}
 # when you set 'echo' to false, you are hiding the block of code 
 # when you set 'message' to false, you are hiding the console text that comes after running your code
 # when you set 'results' to hide, you are hiding extra processing that occasionally shows up in the console

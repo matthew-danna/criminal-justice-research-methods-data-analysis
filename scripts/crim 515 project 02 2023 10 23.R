@@ -23,10 +23,10 @@ wapo.data <- read.csv("https://raw.githubusercontent.com/washingtonpost/data-pol
 ## Google Trends
 today <- as.character(Sys.Date())
 time.range <- paste("2015-01-01", today, sep = " ")
-trends1 <- gtrends("police shooting", geo = "US", time = time.range)
-plot(trends1)
-p <- plot(trends1)
-ggplotly(p)
+#trends1 <- gtrends("police shooting", geo = "US", time = time.range)
+#plot(trends1)
+#p <- plot(trends1)
+#ggplotly(p)
 
 # Step 2
 wapo.data$date <- as.Date(wapo.data$date)
@@ -34,6 +34,16 @@ wapo.data$month <- substr(wapo.data$date, 6, 7)
 wapo.data$year <- substr(wapo.data$date,0,4)
 wapo.data$yearmonth <- paste(wapo.data$year, wapo.data$month, sep = "-")
 wapo.data$race <- gsub("B;H", "O", wapo.data$race)
+
+##### to find all the gun-related "armed_with" events
+wapo.data.gun <- subset(wapo.data, wapo.data$armed_with == 'gun' |
+                          wapo.data$armed_with == 'other;gun' | 
+                          wapo.data$armed_with == 'gun;knife' |
+                          wapo.data$armed_with == 'vehicle;gun' |
+                          wapo.data$armed_with == 'gun;vehicle')
+wapo.data.gun$gun <- "Y"
+wapo.data.gun <- wapo.data.gun[c(1,20)]
+wapo.data.full <- wapo.data %>% left_join(wapo.data.gun, by = 'id')
 
 # Step 3
 # single variable summary tables
