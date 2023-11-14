@@ -1,20 +1,20 @@
 ### Step 1: LIBRARIES
-install.packages('readtext')
-install.packages('pdftools')
-install.packages('tidyverse')
-install.packages('tidytext')
-install.packages('textstem')
-install.packages('textdata')
-install.packages('widyr')
-install.packages('tm')
-install.packages('reshape2')
-install.packages('igraph')
-install.packages('ggraph')
-install.packages('wordcloud')
-install.packages('topicmodels')
-install.packages('devtools')
-devtools::install_github("56north/happyorsad")
-devtools::install_github("brooke-watson/BRRR")
+#install.packages('readtext')
+#install.packages('pdftools')
+#install.packages('tidyverse')
+#install.packages('tidytext')
+#install.packages('textstem')
+#install.packages('textdata')
+#install.packages('widyr')
+#install.packages('tm')
+#install.packages('reshape2')
+#install.packages('igraph')
+#install.packages('ggraph')
+#install.packages('wordcloud')
+#install.packages('topicmodels')
+#install.packages('devtools')
+#devtools::install_github("56north/happyorsad")
+#devtools::install_github("brooke-watson/BRRR")
 
 library(readtext)
 library(pdftools)
@@ -85,13 +85,7 @@ my.bing <- my.clean.words %>% inner_join(get_sentiments("bing"))
 my.loughran <- my.clean.words %>% inner_join(get_sentiments("loughran"))
 my.nrc <- my.clean.words %>% inner_join(get_sentiments("nrc"))
 
-summary.nrc <- my.nrc %>%
-  group_by(sentiment) %>%
-  summarise(count = n()) %>%
-  mutate(PCT = round(count/sum(count)*100,2))
-
-my.sentiment1 <- my.afinn
-my.sentiment2 <- my.bing
+my.sentiment <- my.bing
 
 ## Word Counts
 # counts of unique usable words
@@ -100,13 +94,12 @@ counts.my.clean.words <- my.clean.words %>%
   mutate(PCT = round(n/sum(n)*100,2))
 
 # counts of words with sentiment
-counts.my.sentiment <- my.sentiment1 %>% 
+counts.my.sentiment <- my.sentiment %>% 
   count(word, sort = TRUE) %>%
   mutate(PCT = round(n/sum(n)*100,2))
 
 # counts of sentiments
-counts.sentiments <- my.sentiment1 %>% count(value, sort = TRUE)
-counts.sentiments <- my.sentiment2 %>% count(sentiment, sort = TRUE)
+counts.sentiments <- my.sentiment %>% count(sentiment, sort = TRUE)
 
 # counts of words with sentiment for a specific article
 counts.koper1995 <- my.sentiment1 %>% 
