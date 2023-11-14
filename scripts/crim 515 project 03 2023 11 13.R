@@ -95,22 +95,23 @@ counts.my.clean.words <- my.clean.words %>%
 
 # counts of words with sentiment
 counts.my.sentiment <- my.sentiment %>% 
-  count(word, sort = TRUE) %>%
+  count(word, sentiment, sort = TRUE) %>%
   mutate(PCT = round(n/sum(n)*100,2))
 
 # counts of sentiments
 counts.sentiments <- my.sentiment %>% count(sentiment, sort = TRUE)
 
 # counts of words with sentiment for a specific article
-counts.koper1995 <- my.sentiment1 %>% 
+counts.koper1995 <- my.sentiment %>% 
   subset(file == "Koper 1995.pdf") %>% 
-  count(word, value, sort = TRUE) %>%
+  count(word, sentiment, sort = TRUE) %>%
   mutate(PCT = round(n/sum(n)*100,2))
 
 # to get a full list of all the articles available, run this:
 file.list
 
 top.my.clean.words <- subset(counts.my.clean.words, n >= quantile(counts.my.clean.words$n, 0.999))
+top.my.sentiment <- subset(counts.my.sentiment, n >= quantile(counts.my.sentiment$n, 0.99))
 
 ## Word Pairs
 # for entire corpus
@@ -122,12 +123,16 @@ wordpairs.koper1995 <- my.clean.words %>%
   pairwise_count(word, file.ID, sort = TRUE)
 
 # for most frequently occurring word pairs
-wordpairs.top <- subset(wordpairs.my.words, n >= quantile(wordpairs.my.words$n, 0.99999))
+wordpairs.top <- subset(wordpairs.my.words, n >= quantile(wordpairs.my.words$n, 0.999999))
 
 ### Step 5: VISUALIZE
 # bar graph
-ggplot(top.my.clean.words, aes(x=word, y=n, fill=n)) + 
-  geom_bar(stat = "identity") + 
+ggplot(top.my.clean.words, aes(x=reorder(word, n), y=n, fill=n)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+ggplot(top.my.sentiment, aes(x=reorder(word, n), y=n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
   coord_flip()
 
 # wordcloud
@@ -136,11 +141,11 @@ wordcloud(my.clean.words$word, max.words = 1000)
 # network chart
 set.seed(611)
 pairs.plot <- wordpairs.my.words %>%
-  filter(n >= 350) %>%
+  filter(n >= 300) %>% ##### make sure to check this value
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "steelblue") +
-  ggtitle("Word Pairs! For combinations greater than 350") +
+  ggtitle("Word Pairs! For combinations greater than 300") + ### update this as necessary
   geom_node_point(size = 5) +
   geom_node_text(aes(label = name), repel = TRUE,
                  point.padding = unit(0.2, "lines")) +
@@ -151,13 +156,16 @@ pairs.plot
 
 # all the visuals for one article of interest
 my.clean.article <- subset(my.clean.words, file == "d_anna 2016.pdf") #yep we’re testing mine
-counts.my.clean.article <- my.clean.article %>% count(word, sort = TRUE)
-top.my.clean.article <- subset(counts.my.clean.article, n >= quantile(counts.my.clean.article$n, 0.95))
+my.article.sentiment <- my.clean.article %>% inner_join(get_sentiments("bing")) # confirm you want to use bing
+counts.my.article.sentiment <- my.article.sentiment %>% count(word, sentiment, sort = TRUE)
+top.my.article.sentiment <- subset(counts.my.article.sentiment, n >= quantile(counts.my.article.sentiment$n, 0.85)) # confirm this is a good percentage for your article
 wordpairs.article <- my.clean.article %>% pairwise_count(word, file.ID, sort = TRUE)
-ggplot(top.my.clean.article, aes(x=word, y=n, fill=n)) + geom_bar(stat = "identity") + coord_flip()
+ggplot(top.my.article.sentiment, aes(x=reorder(word, n), y=n, fill=sentiment)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
 set.seed(611)
 pairs.plot.article <- wordpairs.article %>%
-  filter(n >= 5)               %>%
+  filter(n >= 5)               %>% # confirm this value is right for your data
   graph_from_data_frame()        %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "steelblue") +
