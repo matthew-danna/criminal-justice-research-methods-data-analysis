@@ -178,9 +178,77 @@ pairs.plot.article <- wordpairs.article %>%
         axis.ticks = element_blank())
 pairs.plot.article
 
-# Topic Modeling
+#### TOPIC MODELING
+# add a scored sentiment
+my.clean.words <- my.clean.words %>%
+  mutate(Sentiment = map_int(my.clean.words$word,happyorsad,"da"))
+# word counts
+words_topic <- my.clean.words             %>%
+  count(file, word, sort = TRUE) %>%
+  ungroup()
+reviewDTM <- words_topic       %>%
+  cast_dtm(file, word, n)
+# run LDA model
+reviewLDA <- LDA(reviewDTM, k = 14, control = list(seed = 347)) 
+# experiment with ‘10’ as the “right” number of topics
 
+# identify the topics
+topics <- tidy(reviewLDA, matrix = "beta")
 
+# get the top terms for each topic
+topTerms <- topics %>%
+  group_by(topic)          %>%
+  top_n(9, beta)           %>% # change this accordingly for more or less words
+  ungroup()                %>%
+  arrange(topic, -beta)    %>%
+  mutate(order = rev(row_number()))
 
+# graph the topics!
+plot_topics <- topTerms %>%
+  ggplot(aes(order, beta)) +
+  ggtitle("Topics, Graphed!") +
+  geom_col(show.legend = FALSE, fill = "steelblue") +
+  scale_x_continuous(
+    breaks = topTerms$order,
+    labels = topTerms$term,
+    expand = c(0,0)) +
+  facet_wrap(~ topic,scales = "free") +
+  coord_flip(ylim = c(0,0.02)) +
+  theme(axis.title = element_blank())
+plot_topics
 
+### topic modeling for a subset of authors
+words.authors <- subset(my.clean.words, my.clean.words$file == 'Lum 2011.pdf' |
+                          my.clean.words$file == 'Lum et al (2021).pdf' |
+                          my.clean.words$file == 'lum et al 2023.pdf' |
+                          my.clean.words$file == 'lum koper wu 2022.pdf')
+
+words_topic <- words.authors             %>%
+  count(file, word, sort = TRUE) %>%
+  ungroup()
+reviewDTM <- words_topic       %>%
+  cast_dtm(file, word, n)
+
+reviewLDA <- LDA(reviewDTM, k = 3, control = list(seed = 347)) 
+topics <- tidy(reviewLDA, matrix = "beta")
+
+topTerms <- topics %>%
+  group_by(topic)          %>%
+  top_n(12, beta)           %>% # change this accordingly for more or less words
+  ungroup()                %>%
+  arrange(topic, -beta)    %>%
+  mutate(order = rev(row_number()))
+
+plot_topics <- topTerms %>%
+  ggplot(aes(order, beta)) +
+  ggtitle("Lum Topics, Graphed!") +
+  geom_col(show.legend = FALSE, fill = "steelblue") +
+  scale_x_continuous(
+    breaks = topTerms$order,
+    labels = topTerms$term,
+    expand = c(0,0)) +
+  facet_wrap(~ topic,scales = "free") +
+  coord_flip(ylim = c(0,0.02)) +
+  theme(axis.title = element_blank())
+plot_topics
 
