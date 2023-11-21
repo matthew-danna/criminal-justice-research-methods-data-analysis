@@ -23,8 +23,8 @@ wapo.data <- read.csv("https://raw.githubusercontent.com/washingtonpost/data-pol
 ## Google Trends
 today <- as.character(Sys.Date())
 time.range <- paste("2015-01-01", today, sep = " ")
-#trends1 <- gtrends("police shooting", geo = "US", time = time.range)
-#plot(trends1)
+trends1 <- gtrends("police shooting", geo = "US", time = time.range)
+plot(trends1)
 #p <- plot(trends1)
 #ggplotly(p)
 
