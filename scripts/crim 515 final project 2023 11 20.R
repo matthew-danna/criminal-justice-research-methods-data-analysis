@@ -82,6 +82,11 @@ summary.year.month <- calls.seasons %>%
   mutate(pct = round(count/sum(count),2))
 
 ##### 5: Determine a break-point
+covid.pre <- subset(summary.year.month, summary.year.month$yearmonth < '2020-03' & 
+                      summary.year.month$yearmonth > '2017-02')
+covid.post <- subset(summary.year.month, summary.year.month$yearmonth >= '2020-03')
+3/1/2020
+1/6/2021
 
 ##### 6: Calculate a t test to identify statistically significant changes
 
