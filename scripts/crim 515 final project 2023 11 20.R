@@ -82,11 +82,19 @@ summary.year.month <- calls.seasons %>%
   mutate(pct = round(count/sum(count),2))
 
 ##### 5: Determine a break-point
-covid.pre <- subset(summary.year.month, summary.year.month$yearmonth < '2020-03' & 
-                      summary.year.month$yearmonth > '2017-02')
-covid.post <- subset(summary.year.month, summary.year.month$yearmonth >= '2020-03')
-3/1/2020
-1/6/2021
+covid.pre <- subset(calls.seasons, calls.seasons$date < '2020-03-01')
+covid.post <- subset(calls.seasons, calls.seasons$date >= '2020-03-01')
+
+covid.pre.sum <- covid.pre %>%
+  group_by(year, season) %>%
+  summarise(count = n())
+covid.pre.sum <- subset(covid.pre.sum, covid.pre.sum$year > '2016')
+covid.post.sum <- covid.post %>%
+  group_by(year, season) %>%
+  summarise(count = n())
+
+jan6.pre <- subset(calls.subset3, calls.subset3$date < '2021-01-06')
+jan6.post <- subset(calls.subset3, calls.subset3$date > '2021-01-06')
 
 ##### 6: Calculate a t test to identify statistically significant changes
 
