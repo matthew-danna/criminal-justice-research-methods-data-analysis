@@ -29,6 +29,7 @@ calls.subset3 <- calls %>%
 calls.subset3$date <- as.Date(calls.subset3$date)
 calls.subset3$week <- week(ymd(calls.subset3$date))
 calls.subset3$month <- substr(calls.subset3$date, 6,7)
+calls.subset3$yearmonth <- paste(calls.subset3$year, calls.subset3$month, sep = "-")
 
 # for seasons:
 calls.summer <- subset(calls.subset3, calls.subset3$month == '06' |
@@ -60,6 +61,25 @@ summary.season <- calls.seasons %>%
   summarise(count = n()) %>%
   mutate(pct = round(count/sum(count),2))
 
+summary.year.season <- calls.seasons %>%
+  group_by(year, season) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
+
+summary.type.season <- calls.seasons %>%
+  group_by(type, season) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
+
+summary.month <- calls.seasons %>%
+  group_by(month) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
+
+summary.year.month <- calls.seasons %>%
+  group_by(yearmonth) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
 
 ##### 5: Determine a break-point
 
