@@ -96,6 +96,16 @@ covid.post.sum <- covid.post %>%
 jan6.pre <- subset(calls.subset3, calls.subset3$date < '2021-01-06')
 jan6.post <- subset(calls.subset3, calls.subset3$date > '2021-01-06')
 
+jan6.pre.sum <- jan6.pre %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+jan6.pre.sum <- subset(jan6.pre.sum, jan6.pre.sum$year > '2017')
+jan6.post.sum <- jan6.post %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
 ##### 6: Calculate a t test to identify statistically significant changes
+t.test(covid.pre.sum$count, covid.post.sum$count)
+t.test(jan6.pre.sum$count, jan6.post.sum$count)
 
 ##### 7: Visualize the findings
