@@ -7,6 +7,45 @@ output: html_document
 
 Some intro text
 
+# Research Question
+Provide a brief paragraph (2-4 sentences) on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured. End this section with a clear, answerable question.
+
+# Literature Review
+Provide a brief paragraph describing a prior study related to your current project. This study should be from a peer-academic academic journal. Include details about the research question, data, methods, and findings. Cite the article in APA format. 
+
+# Data
+Provide a brief paragraph (3-5 sentences) on the data used in this study. This includes the activity types, number of records, and date range. Be specific enough that a reader could replicate this work.
+
+# Methods
+Provide a brief paragraph on the research methods leveraged to answer this question. This includes the software, calculations, skills, techniques, and unique workflows used to analyze your data and develop an answer. You do NOT need to describe click-by-click instructions or lines of code describing how you did things; you DO need to describe a logical process that is specific enough that a reader could replicate. 
+The intended audience is law enforcement decision-makers that do not need to replicate your work; they need to understand it to integrate it into operational plans.
+
+# Findings
+Provide two brief paragraphs (4-6 sentences) on the findings of your study (5pts each). Your findings should be descriptive, clear, and comprehensively answer the original question. Make sure to actually answer the question!
+## Paragraph 1
+analysis of your t tests (in plain English) and counts of activity changes over time
+
+## Paragraph 2
+analysis of your hotspots and changes over time
+
+# Visuals
+Provide at least five visuals of your data (2pts each). These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
+Thoughtful and logical: do they make sense to someone that has never seen them before?
+All visuals should be somehow, someway referenced in the text/presentation
+Analytically meaningful: does each visual provide useful, relevant, and actionable insights? 
+
+## Graph 1
+
+## Graph 2
+
+## Map 1
+
+## Map 2
+
+## Map 3
+
+
+# So What: 1pt
 
 
 
