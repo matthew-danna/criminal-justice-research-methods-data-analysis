@@ -5,9 +5,16 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 output: html_document
 ---
 
-Some intro text
+Some intro text, maybe
+
+```{r, echo=FALSE, warning=FALSE, results='hide', message=FALSE}
+library(tidyverse)
+```
+
 
 # Research Question
+What are the patterns and trends of criminal activity _________ in the City of Fairfax, and have they changed over time?
+
 Provide a brief paragraph (2-4 sentences) on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured. End this section with a clear, answerable question.
 
 # Literature Review
@@ -15,6 +22,16 @@ Provide a brief paragraph describing a prior study related to your current proje
 
 # Data
 Provide a brief paragraph (3-5 sentences) on the data used in this study. This includes the activity types, number of records, and date range. Be specific enough that a reader could replicate this work.
+
+```{r}
+calls <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", "1gRoL7lZlwm7sreA5F9WbPoH5su4n4iGS"))
+
+calls.group <- c("MISC", "SERVICE", "UNKNOWN", "Special Detail")
+
+calls.subset3 <- calls %>%
+  filter(calls$type %in% calls.group)
+```
+
 
 # Methods
 Provide a brief paragraph on the research methods leveraged to answer this question. This includes the software, calculations, skills, techniques, and unique workflows used to analyze your data and develop an answer. You do NOT need to describe click-by-click instructions or lines of code describing how you did things; you DO need to describe a logical process that is specific enough that a reader could replicate. 
