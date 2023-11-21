@@ -50,6 +50,16 @@ calls.fall$season <- "FALL"
 calls.seasons <- rbind(calls.summer, calls.winter, calls.spring, calls.fall)
 
 ##### 4: Identify trends over time
+summary.calls <- calls.seasons %>%
+  group_by(type) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
+
+summary.season <- calls.seasons %>%
+  group_by(season) %>%
+  summarise(count = n()) %>%
+  mutate(pct = round(count/sum(count),2))
+
 
 ##### 5: Determine a break-point
 
