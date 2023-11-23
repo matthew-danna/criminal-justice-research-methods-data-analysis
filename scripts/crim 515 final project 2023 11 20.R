@@ -82,6 +82,7 @@ summary.year.month <- calls.seasons %>%
   mutate(pct = round(count/sum(count),2))
 
 ##### 5: Determine a break-point
+# build presidential terms!
 covid.pre <- subset(calls.seasons, calls.seasons$date < '2020-03-01')
 covid.post <- subset(calls.seasons, calls.seasons$date >= '2020-03-01')
 
