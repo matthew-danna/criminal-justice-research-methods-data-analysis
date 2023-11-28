@@ -154,6 +154,11 @@ ggplot(summary.obama1, aes(x = week, y = count)) +
   geom_bar(stat = "identity")
   
 ggplot(summary.obama2, aes(x = week, y = count)) +
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x= element_text(angle = 90)) +
+  scale_x_continuous("Date", labels = paste(as.character(summary.obama2$year), as.character(summary.obama2$week), sep = "-"), 
+                     breaks = summary.obama2$week)
 
-## Map hotspots and find changes in areas
+
+
+##### Step 9: Map hotspots and find changes in areas
