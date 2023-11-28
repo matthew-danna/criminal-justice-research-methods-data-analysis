@@ -128,7 +128,9 @@ summary.postjan6 <- subset.postjan6 %>%
   summarise(count = n())
 
 ##### Step 6: Run t tests
-
+t.test(summary.obama1$count, summary.obama2$count)
+t.test(summary.obama2$count, summary.trump$count)
+t.test(summary.trump$count, summary.biden$count)
 
 7. Pick best on
 ## Find best relationship. 
