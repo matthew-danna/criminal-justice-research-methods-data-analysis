@@ -115,7 +115,7 @@ summary.precovid <- subset.precovid %>%
   group_by(year, week) %>%
   summarise(count = n())
 
-summary.postcovid <- subset.precovid %>%
+summary.postcovid <- subset.postcovid %>%
   group_by(year, week) %>%
   summarise(count = n())
 
@@ -131,6 +131,8 @@ summary.postjan6 <- subset.postjan6 %>%
 t.test(summary.obama1$count, summary.obama2$count)
 t.test(summary.obama2$count, summary.trump$count)
 t.test(summary.trump$count, summary.biden$count)
+
+t.test(summary.precovid$count, summary.postcovid$count)
 
 7. Pick best on
 ## Find best relationship. 
