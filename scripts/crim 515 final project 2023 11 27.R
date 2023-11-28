@@ -149,5 +149,11 @@ t.test(summary.prejan6$count, summary.postjan6$count)
 
 ##### Step 7: Pick the best set of t tests from above
 
+##### Step 8: Bar graphs
+ggplot(summary.obama1, aes(x = week, y = count)) +
+  geom_bar(stat = "identity")
+  
+ggplot(summary.obama2, aes(x = week, y = count)) +
+  geom_bar(stat = "identity")
 
 ## Map hotspots and find changes in areas
