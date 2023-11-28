@@ -46,10 +46,34 @@ calls.fall$season <- "FALL"
 calls.winter$season <- "WINTER"
 calls.spring$season <- "SPRING"
 calls.summer$season <- "SUMMER"
+
 calls.full <- rbind(calls.fall, calls.winter, calls.spring, calls.summer)
 
-3. Subset
-4. Groups (presidents, COVID, plus 1)
+##### Step 3: Subset
+# shows you what call types are available:
+unique(calls$type)
+
+calls.summary <- calls %>%
+  group_by(type) %>%
+  summarise(COUNT = n()) %>%
+  mutate(PCT = round(COUNT/sum(COUNT),2))
+
+# subsetting, one of three ways:
+calls.subset <- subset(calls, calls$type == 'MISC')
+
+# for two call types:
+calls.subset <- subset(calls, calls$type == 'MISC' |
+                          calls$type == 'SERVICE')
+
+# for more than two calls:
+calls.group <- c("MISC", "SERVICE", "UNKNOWN", "Special Detail")
+
+calls.subset <- calls %>%
+  filter(calls$type %in% calls.group)
+
+##### Step 4: Groups (presidents, COVID, plus 1)
+
+
 5. Choose time measure
 6. Run t tests
 7. Pick best on
