@@ -134,12 +134,18 @@ summary.postjan6 <- subset.postjan6 %>%
   summarise(count = n())
 
 ##### Step 6: Run t tests
+# Presidential terms:
 t.test(summary.obama1$count, summary.obama2$count)
 t.test(summary.obama2$count, summary.trump$count)
 t.test(summary.trump$count, summary.biden$count)
 
+# COVID
 t.test(summary.precovid$count, summary.covid$count)
 t.test(summary.covid$count, summary.postcovid$count)
+t.test(summary.precovid$count, summary.postcovid$count)
+
+# January 6th
+t.test(summary.prejan6$count, summary.postjan6$count)
 
 7. Pick best on
 ## Find best relationship. 
