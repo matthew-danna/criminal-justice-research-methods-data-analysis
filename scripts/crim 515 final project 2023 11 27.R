@@ -1,5 +1,8 @@
 ##### Step 0: Libraries
 library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
 
 ##### Step 1: Get data
 calls <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", "1gRoL7lZlwm7sreA5F9WbPoH5su4n4iGS"))
@@ -159,6 +162,14 @@ ggplot(summary.obama2, aes(x = week, y = count)) +
   scale_x_continuous("Date", labels = paste(as.character(summary.obama2$year), as.character(summary.obama2$week), sep = "-"), 
                      breaks = summary.obama2$week)
 
-
-
 ##### Step 9: Map hotspots and find changes in areas
+fairfax.roads <- roads("VA", "Fairfax City")
+fairfax.outline <- county_subdivisions("VA", "Fairfax City")
+
+ggplot() +
+  geom_sf(data = fairfax.outline) +
+  geom_sf(data = fairfax.roads) +
+  geom_point(aes(x = lon, y = lat), data = subset.obama1, alpha = 0.05, size = 0.75, color = "red") +
+  facet_wrap(~ month, nrow = 4)
+  
+
