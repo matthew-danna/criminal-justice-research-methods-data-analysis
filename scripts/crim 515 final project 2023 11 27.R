@@ -71,11 +71,65 @@ calls.group <- c("MISC", "SERVICE", "UNKNOWN", "Special Detail")
 calls.subset <- calls %>%
   filter(calls$type %in% calls.group)
 
-##### Step 4: Groups (presidents, COVID, plus 1)
+##### Step 4: Groups (Presidents, COVID, plus 1)
+# Obama
+subset.obama1 <- subset(calls.subset, calls.subset$date >= '2009-01-20' &
+                         calls.subset$date <= '2013-01-19')
+subset.obama2 <- subset(calls.subset, calls.subset$date >= '2013-01-20' &
+                          calls.subset$date <= '2017-01-19')
+# Trump
+subset.trump <- subset(calls.subset, calls.subset$date >= '2017-01-20' &
+                          calls.subset$date <= '2021-01-19')
+# Biden
+subset.biden <- subset(calls.subset, calls.subset$date >= '2021-01-20' &
+                          calls.subset$date <= '2025-01-19')
+# COVID
+subset.precovid <- subset(calls.subset, calls.subset$date >= '2016-07-01' &
+                          calls.subset$date < '2020-03-01')
+subset.postcovid <- subset(calls.subset, calls.subset$date >= '2020-03-01')
+
+# January 6th attacks
+subset.prejan6 <- subset(calls.subset, calls.subset$date >= '2018-01-01' &
+                            calls.subset$date < '2021-01-06')
+subset.postjan6 <- subset(calls.subset, calls.subset$date > '2021-01-06')
+
+##### Step 5: Choose time measure
+# you pick one: weeks, months, quarters, OR seasons
+summary.obama1 <- subset.obama1 %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.obama2 <- subset.obama2 %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.trump <- subset.trump %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.biden <- subset.biden %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.precovid <- subset.precovid %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.postcovid <- subset.precovid %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.prejan6 <- subset.prejan6 %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+summary.postjan6 <- subset.postjan6 %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
+##### Step 6: Run t tests
 
 
-5. Choose time measure
-6. Run t tests
 7. Pick best on
 ## Find best relationship. 
 ## Map hotspots and find changes in areas
