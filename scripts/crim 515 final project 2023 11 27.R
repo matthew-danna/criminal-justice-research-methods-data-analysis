@@ -147,6 +147,7 @@ t.test(summary.precovid$count, summary.postcovid$count)
 # January 6th
 t.test(summary.prejan6$count, summary.postjan6$count)
 
-7. Pick best on
-## Find best relationship. 
+##### Step 7: Pick the best set of t tests from above
+
+
 ## Map hotspots and find changes in areas
