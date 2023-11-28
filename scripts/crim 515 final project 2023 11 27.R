@@ -84,9 +84,11 @@ subset.trump <- subset(calls.subset, calls.subset$date >= '2017-01-20' &
 subset.biden <- subset(calls.subset, calls.subset$date >= '2021-01-20' &
                           calls.subset$date <= '2025-01-19')
 # COVID
-subset.precovid <- subset(calls.subset, calls.subset$date >= '2016-07-01' &
+subset.precovid <- subset(calls.subset, calls.subset$date >= '2018-04-01' &
                           calls.subset$date < '2020-03-01')
-subset.postcovid <- subset(calls.subset, calls.subset$date >= '2020-03-01')
+subset.covid <- subset(calls.subset, calls.subset$date >= '2020-03-01' &
+                         calls.subset$date <= '2022-12-31')
+subset.postcovid <- subset(calls.subset, calls.subset$date >= '2023-01-01')
 
 # January 6th attacks
 subset.prejan6 <- subset(calls.subset, calls.subset$date >= '2018-01-01' &
@@ -115,6 +117,10 @@ summary.precovid <- subset.precovid %>%
   group_by(year, week) %>%
   summarise(count = n())
 
+summary.covid <- subset.covid %>%
+  group_by(year, week) %>%
+  summarise(count = n())
+
 summary.postcovid <- subset.postcovid %>%
   group_by(year, week) %>%
   summarise(count = n())
@@ -132,7 +138,8 @@ t.test(summary.obama1$count, summary.obama2$count)
 t.test(summary.obama2$count, summary.trump$count)
 t.test(summary.trump$count, summary.biden$count)
 
-t.test(summary.precovid$count, summary.postcovid$count)
+t.test(summary.precovid$count, summary.covid$count)
+t.test(summary.covid$count, summary.postcovid$count)
 
 7. Pick best on
 ## Find best relationship. 
