@@ -1,0 +1,6 @@
+install.packages('devtools')
+devtools::install_github("brooke-watson/BRRR") 
+library(BRRR)
+skrrrahh(0)
+skrrrahh_list()
+skrrrahh(31)
