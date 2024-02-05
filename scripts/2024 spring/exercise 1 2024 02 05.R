@@ -43,7 +43,7 @@ ggplot(calls.random, aes(type)) + geom_bar(stat = 'count', aes(fill = month),
 ggplot(calls.random, aes(type)) + geom_bar(stat = 'count', aes(fill = month),
                                            position = position_stack(reverse = TRUE)) +
   theme_classic() + theme(legend.position = "bottom")
-ggplot(calls.random, aes(type)) + geom_bar(stat = 'count', aes(fill = month),
+ggplot(calls.random, aes(hour)) + geom_bar(stat = 'count', aes(fill = month),
                                            position = position_stack(reverse = TRUE)) +
   theme_classic() + theme(legend.position = "right") +
   facet_wrap(~hour)
