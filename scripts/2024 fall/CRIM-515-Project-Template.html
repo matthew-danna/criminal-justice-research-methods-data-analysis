@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Your Name" />
+  <meta name="dcterms.date" content="2024-08-30" />
+  <title>CRIM 515 Project Template</title>
+
+<style type="text/css" charset="utf-8">
+
+body {
+
+margin: 0.5em auto;
+padding: 0.5em;
+max-width: 48em;
+}
+code, code * { font-family: inherit; }
+@media only screen and (max-width: 768px) {
+body { max-width: 100%; }
+}
+</style>
+
+  
+  <style type="text/css">@charset "UTF-8";
+body {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+line-height: 1.4;
+max-width: 800px;
+margin: 20px auto;
+padding: 0 10px;
+color: #dbdbdb;
+background: #202b38;
+text-rendering: optimizeLegibility;
+}
+button, input, textarea {
+transition: background-color 0.1s linear, border-color 0.1s linear, color 0.1s linear, box-shadow 0.1s linear, transform 0.1s ease;
+}
+h1 {
+font-size: 2.2em;
+margin-top: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-bottom: 12px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong {
+color: #ffffff;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+font-weight: 600;
+}
+blockquote {
+border-left: 4px solid #0096bfab;
+margin: 1.5em 0em;
+padding: 0.5em 1em;
+font-style: italic;
+}
+blockquote > footer {
+margin-top: 10px;
+font-style: normal;
+}
+blockquote cite {
+font-style: normal;
+}
+address {
+font-style: normal;
+}
+a[href^='mailto']::before {
+content: '📧 ';
+}
+a[href^='tel']::before {
+content: '📞 ';
+}
+a[href^='sms']::before {
+content: '💬 ';
+}
+button,
+input[type='submit'],
+input[type='button'],
+input[type='checkbox'] {
+cursor: pointer;
+}
+input:not([type='checkbox']):not([type='radio']),
+select {
+display: block;
+}
+input, select, button, textarea {
+color: #ffffff;
+background-color: #161f27;
+font-family: inherit;
+font-size: inherit;
+margin-right: 6px;
+margin-bottom: 6px;
+padding: 10px;
+border: none;
+border-radius: 6px;
+outline: none;
+}
+input:not([type='checkbox']):not([type='radio']),
+select, button, textarea {
+-webkit-appearance: none;
+}
+textarea {
+margin-right: 0;
+width: 100%;
+box-sizing: border-box;
+resize: vertical;
+}
+button, input[type='submit'], input[type='button'] {
+padding-right: 30px;
+padding-left: 30px;
+}
+button:hover,
+input[type='submit']:hover,
+input[type='button']:hover {
+background: #324759;
+}
+input:focus,
+select:focus,
+button:focus,
+textarea:focus {
+box-shadow: 0 0 0 2px #0096bfab;
+}
+input[type='checkbox']:active,
+input[type='radio']:active,
+input[type='submit']:active,
+input[type='button']:active,
+button:active {
+transform: translateY(2px);
+}
+input:disabled,
+select:disabled,
+button:disabled,
+textarea:disabled {
+cursor: not-allowed;
+opacity: .5;
+}
+::-webkit-input-placeholder {
+color: #a9a9a9;
+}
+:-ms-input-placeholder {
+color: #a9a9a9;
+}
+::-ms-input-placeholder {
+color: #a9a9a9;
+}
+::placeholder {
+color: #a9a9a9;
+}
+a {
+text-decoration: none;
+color: #41adff;
+}
+a:hover {
+text-decoration: underline;
+}
+code, kbd {
+background: #161f27;
+color: #ffbe85;
+padding: 5px;
+border-radius: 6px;
+}
+pre > code {
+padding: 10px;
+display: block;
+overflow-x: auto;
+}
+img {
+max-width: 100%;
+}
+hr {
+border: none;
+border-top: 1px solid #dbdbdb;
+}
+table {
+border-collapse: collapse;
+margin-bottom: 10px;
+width: 100%;
+}
+td, th {
+padding: 6px;
+text-align: left;
+}
+th {
+border-bottom: 1px solid #dbdbdb;
+}
+tbody tr:nth-child(even) {
+background-color: #161f27;
+}
+::-webkit-scrollbar {
+height: 10px;
+width: 10px;
+}
+::-webkit-scrollbar-track {
+background: #161f27;
+border-radius: 6px;
+}
+::-webkit-scrollbar-thumb {
+background: #324759;
+border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #415c73;
+}
+
+</style>
+
+<style type="text/css" charset="utf-8">
+
+img { max-width: 100%; }
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: auto;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ color: #00769e; background-color: #f1f3f5; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #00769e; } 
+code span.al { color: #ad0000; } 
+code span.an { color: #5e5e5e; } 
+code span.at { color: #657422; } 
+code span.bn { color: #ad0000; } 
+code span.bu { } 
+code span.cf { color: #00769e; } 
+code span.ch { color: #20794d; } 
+code span.cn { color: #8f5902; } 
+code span.co { color: #5e5e5e; } 
+code span.cv { color: #5e5e5e; font-style: italic; } 
+code span.do { color: #5e5e5e; font-style: italic; } 
+code span.dt { color: #ad0000; } 
+code span.dv { color: #ad0000; } 
+code span.er { color: #ad0000; } 
+code span.ex { } 
+code span.fl { color: #ad0000; } 
+code span.fu { color: #4758ab; } 
+code span.im { } 
+code span.in { color: #5e5e5e; } 
+code span.kw { color: #00769e; } 
+code span.op { color: #5e5e5e; } 
+code span.ot { color: #00769e; } 
+code span.pp { color: #ad0000; } 
+code span.sc { color: #5e5e5e; } 
+code span.ss { color: #20794d; } 
+code span.st { color: #20794d; } 
+code span.va { color: #111111; } 
+code span.vs { color: #20794d; } 
+code span.wa { color: #5e5e5e; font-style: italic; } 
+</style>
+<script>
+// remove everything from pandoc code styles _except_ for 'code span' colors
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      if (/^code span/.test(rule.selectorText)) {
+        j++;
+        continue;
+      }
+      sheets[i].deleteRule(j);
+    }
+  }
+})();
+</script>
+
+<style>
+code, pre { overflow: auto; }
+pre code, pre code:not([class]) { white-space: unset; }
+</style>
+
+
+</head>
+<body>
+
+
+<main>
+<header>
+<h1 id="title" class="toc-ignore">CRIM 515 Project Template</h1>
+<p id="date">30 August 2024</p>
+<p id="author">Your Name</p>
+
+</header>
+<ul>
+<li><a href="#heading-1" id="toc-heading-1">Heading 1</a>
+<ul>
+<li><a href="#heading-2" id="toc-heading-2">Heading 2</a>
+<ul>
+<li><a href="#heading-3" id="toc-heading-3">Heading 3</a></li>
+<li><a href="#italics" id="toc-italics"><em>Italics</em></a></li>
+<li><a href="#bold" id="toc-bold"><strong>Bold</strong></a></li>
+<li><a href="#bold-italicized" id="toc-bold-italicized"><strong><em>Bold
+Italicized</em></strong></a></li>
+</ul></li>
+</ul></li>
+<li><a href="#example-section" id="toc-example-section">Example
+Section</a></li>
+<li><a href="#packages" id="toc-packages">PACKAGES</a></li>
+<li><a href="#sources" id="toc-sources">SOURCES</a>
+<ul>
+<li><a href="#acquire-data" id="toc-acquire-data">Acquire Data</a></li>
+<li><a href="#wrangle-data" id="toc-wrangle-data">Wrangle Data</a></li>
+<li><a href="#calculate-data" id="toc-calculate-data">Calculate
+Data</a></li>
+<li><a href="#visualize-data" id="toc-visualize-data">Visualize
+Data</a></li>
+<li><a href="#quick-example" id="toc-quick-example">Quick
+Example</a></li>
+</ul></li>
+<li><a href="#analytics" id="toc-analytics">ANALYTICS</a></li>
+</ul>
+
+<p>Here’s a collection of text formatting/styling things you may (or may
+not) care about. Copy them, use them, or delete them, just don’t leave
+all of this here when you submit your project…</p>
+<p>There’s a <a href="https://www.rforecology.com/post/how-to-use-rmarkdown-part-one/">useful
+link here</a>.</p>
+<p>And here’s <a href="https://sage-fenglisu-c38dfb.netlify.app/">another one</a>.</p>
+<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html">Here’s a
+great link</a> for creating tables as visuals in your file.</p>
+<p>Both of the examples above show you how to hyperlink text. That’s
+useful when you want to cite something, without providing the URL in the
+text.</p>
+<p>These are different heading styles. When you ‘knit’ this template,
+you see how they differ:</p>
+<h1 id="heading-1">Heading 1</h1>
+<h2 id="heading-2">Heading 2</h2>
+<h3 id="heading-3">Heading 3</h3>
+<h4 id="heading-4">Heading 4</h4>
+<h5 id="heading-5">Heading 5</h5>
+<h6 id="heading-6">Heading 6</h6>
+<h3 id="italics"><em>Italics</em></h3>
+<h3 id="bold"><strong>Bold</strong></h3>
+<h3 id="bold-italicized"><strong><em>Bold Italicized</em></strong></h3>
+<ol type="1">
+<li>Numbered</li>
+<li>List</li>
+<li>Like</li>
+<li>This</li>
+</ol>
+<ul>
+<li>bullet points</li>
+<li>work</li>
+<li>like this</li>
+<li>or this</li>
+</ul>
+<p><em>When you are ready to see what the output looks like</em>,
+<strong>click the ‘Knit’ button.</strong> The output file will be saved
+to the same folder this script is saved to.</p>
+<h1 id="example-section">Example Section</h1>
+<p>See how the chunk of code above doesn’t show up in the knitted
+output? It’s magic, really.</p>
+<h1 id="packages">PACKAGES</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&#39;tidyverse&#39;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&#39;formatdown&#39;)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(formatdown)</span></code></pre></div>
+<pre><code>## Warning: package &#39;formatdown&#39; was built under R version 4.3.3</code></pre>
+<p><strong>NOTE:</strong> <em>Never ever ever include any
+install.packages functions.</em> Either comment them out with a #, or
+delete them.</p>
+<p>Also, if we had used the message=FALSE here, all that extra stuff
+would not have displayed in the knit.</p>
+<h1 id="sources">SOURCES</h1>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data source link here</span></span></code></pre></div>
+<p>A completely optional section for any data source references.</p>
+<h2 id="acquire-data">Acquire Data</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Code here</span></span></code></pre></div>
+<p>Often, this is the section where you include how you got the
+data.</p>
+<h2 id="wrangle-data">Wrangle Data</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more code here</span></span></code></pre></div>
+<p>This is typically where any processing, extracting, and/or formatting
+occurs.</p>
+<h2 id="calculate-data">Calculate Data</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more code</span></span></code></pre></div>
+<p>This can be the place where math is done. <strong>Wrangle</strong>
+and <strong>Calculate</strong> can often be one section, too.</p>
+<h2 id="visualize-data">Visualize Data</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># yep, more code, but with graphs</span></span></code></pre></div>
+<p>A place for graphs, maps, etc.</p>
+<h2 id="quick-example">Quick Example</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data set included in formatdown</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;metals&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract two columns (data.table syntax)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>DT <span class="ot">&lt;-</span> metals[, .(metal, elast_mod)]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Format one column</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">$</span>elast_mod <span class="ot">&lt;-</span> <span class="fu">format_numbers</span>(DT<span class="sc">$</span>elast_mod, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">format =</span> <span class="st">&quot;engr&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the text column</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">$</span>metal <span class="ot">&lt;-</span> <span class="fu">format_text</span>(DT<span class="sc">$</span>metal)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(DT, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;metal&quot;</span>, <span class="st">&quot;modulus (Pa)&quot;</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">metal</th>
+<th style="text-align: left;">modulus (Pa)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">aluminum 6061</span></td>
+<td style="text-align: left;"><span class="math inline">73.1 × 10<sup>9</sup></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">copper</span></td>
+<td style="text-align: left;"><span class="math inline">117 × 10<sup>9</sup></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">lead</span></td>
+<td style="text-align: left;"><span class="math inline">13.8 × 10<sup>9</sup></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">platinum</span></td>
+<td style="text-align: left;"><span class="math inline">147 × 10<sup>9</sup></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">steel 1020</span></td>
+<td style="text-align: left;"><span class="math inline">207 × 10<sup>9</sup></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">titanium</span></td>
+<td style="text-align: left;"><span class="math inline">102 × 10<sup>9</sup></span></td>
+</tr>
+</tbody>
+</table>
+<h1 id="analytics">ANALYTICS</h1>
+<p>Insert text here for your actual findings and results. You can also
+insert text above/below visualizations along the way.</p>
+<p><strong>NOTE:</strong> When submitting your projects, you are
+submitting either an <strong>HTML</strong> or <strong>PDF</strong>
+output of your Markdown file. Blackboard does not accept HTML files, so
+if you go that route (<em>and I recommend it, really</em>), <a href="mailto:mdanna2@gmu.edu">email me</a> a copy of your final
+submission.</p>
+
+</main>
+
+
+
+</body>
+</html>
