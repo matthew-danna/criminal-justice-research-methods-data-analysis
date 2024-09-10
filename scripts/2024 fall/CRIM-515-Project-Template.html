@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Your Name" />
-  <meta name="dcterms.date" content="2024-08-30" />
+  <meta name="dcterms.date" content="2024-09-06" />
   <title>CRIM 515 Project Template</title>
 
 <style type="text/css" charset="utf-8">
@@ -232,99 +232,6 @@ img { max-width: 100%; }
 
 
 
-<style type="text/css">
-code {
-white-space: pre;
-}
-.sourceCode {
-overflow: auto;
-}
-</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-{ counter-reset: source-line 0; }
-pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-color: #aaaaaa;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
-div.sourceCode
-{ color: #00769e; background-color: #f1f3f5; }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span { color: #00769e; } 
-code span.al { color: #ad0000; } 
-code span.an { color: #5e5e5e; } 
-code span.at { color: #657422; } 
-code span.bn { color: #ad0000; } 
-code span.bu { } 
-code span.cf { color: #00769e; } 
-code span.ch { color: #20794d; } 
-code span.cn { color: #8f5902; } 
-code span.co { color: #5e5e5e; } 
-code span.cv { color: #5e5e5e; font-style: italic; } 
-code span.do { color: #5e5e5e; font-style: italic; } 
-code span.dt { color: #ad0000; } 
-code span.dv { color: #ad0000; } 
-code span.er { color: #ad0000; } 
-code span.ex { } 
-code span.fl { color: #ad0000; } 
-code span.fu { color: #4758ab; } 
-code span.im { } 
-code span.in { color: #5e5e5e; } 
-code span.kw { color: #00769e; } 
-code span.op { color: #5e5e5e; } 
-code span.ot { color: #00769e; } 
-code span.pp { color: #ad0000; } 
-code span.sc { color: #5e5e5e; } 
-code span.ss { color: #20794d; } 
-code span.st { color: #20794d; } 
-code span.va { color: #111111; } 
-code span.vs { color: #20794d; } 
-code span.wa { color: #5e5e5e; font-style: italic; } 
-</style>
-<script>
-// remove everything from pandoc code styles _except_ for 'code span' colors
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    var j = 0;
-    while (j < rules.length) {
-      var rule = rules[j];
-      if (/^code span/.test(rule.selectorText)) {
-        j++;
-        continue;
-      }
-      sheets[i].deleteRule(j);
-    }
-  }
-})();
-</script>
 
 <style>
 code, pre { overflow: auto; }
@@ -339,174 +246,104 @@ pre code, pre code:not([class]) { white-space: unset; }
 <main>
 <header>
 <h1 id="title" class="toc-ignore">CRIM 515 Project Template</h1>
-<p id="date">30 August 2024</p>
+<p id="date">06 September 2024</p>
 <p id="author">Your Name</p>
 
 </header>
 <ul>
-<li><a href="#heading-1" id="toc-heading-1">Heading 1</a>
+<li><a href="#research-questionn" id="toc-research-questionn">Research
+QuestionN</a>
 <ul>
-<li><a href="#heading-2" id="toc-heading-2">Heading 2</a>
+<li><a href="#instructions" id="toc-instructions">INSTRUCTIONS</a></li>
+</ul></li>
+<li><a href="#literature-review" id="toc-literature-review">Literature
+Review</a>
 <ul>
-<li><a href="#heading-3" id="toc-heading-3">Heading 3</a></li>
-<li><a href="#italics" id="toc-italics"><em>Italics</em></a></li>
-<li><a href="#bold" id="toc-bold"><strong>Bold</strong></a></li>
-<li><a href="#bold-italicized" id="toc-bold-italicized"><strong><em>Bold
-Italicized</em></strong></a></li>
+<li><a href="#instructions-1" id="toc-instructions-1">INSTRUCTIONS</a></li>
 </ul></li>
-</ul></li>
-<li><a href="#example-section" id="toc-example-section">Example
-Section</a></li>
-<li><a href="#packages" id="toc-packages">PACKAGES</a></li>
-<li><a href="#sources" id="toc-sources">SOURCES</a>
+<li><a href="#data" id="toc-data">Data</a>
 <ul>
-<li><a href="#acquire-data" id="toc-acquire-data">Acquire Data</a></li>
-<li><a href="#wrangle-data" id="toc-wrangle-data">Wrangle Data</a></li>
-<li><a href="#calculate-data" id="toc-calculate-data">Calculate
-Data</a></li>
-<li><a href="#visualize-data" id="toc-visualize-data">Visualize
-Data</a></li>
-<li><a href="#quick-example" id="toc-quick-example">Quick
-Example</a></li>
+<li><a href="#instructions-2" id="toc-instructions-2">INSTRUCTIONS</a></li>
 </ul></li>
-<li><a href="#analytics" id="toc-analytics">ANALYTICS</a></li>
+<li><a href="#methods" id="toc-methods">Methods</a>
+<ul>
+<li><a href="#instructions-3" id="toc-instructions-3">INSTRUCTIONS</a></li>
+</ul></li>
+<li><a href="#findings" id="toc-findings">Findings</a>
+<ul>
+<li><a href="#instructions-4" id="toc-instructions-4">INSTRUCTIONS</a></li>
+</ul></li>
+<li><a href="#so-what" id="toc-so-what">So What</a>
+<ul>
+<li><a href="#instructions-5" id="toc-instructions-5">INSTRUCTIONS</a></li>
+</ul></li>
+<li><a href="#writing-tips" id="toc-writing-tips">Writing Tips</a></li>
+<li><a href="#other-informationreminders" id="toc-other-informationreminders">Other Information/Reminders</a></li>
 </ul>
 
-<p>Here’s a collection of text formatting/styling things you may (or may
-not) care about. Copy them, use them, or delete them, just don’t leave
-all of this here when you submit your project…</p>
-<p>There’s a <a href="https://www.rforecology.com/post/how-to-use-rmarkdown-part-one/">useful
-link here</a>.</p>
-<p>And here’s <a href="https://sage-fenglisu-c38dfb.netlify.app/">another one</a>.</p>
-<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html">Here’s a
-great link</a> for creating tables as visuals in your file.</p>
-<p>Both of the examples above show you how to hyperlink text. That’s
-useful when you want to cite something, without providing the URL in the
-text.</p>
-<p>These are different heading styles. When you ‘knit’ this template,
-you see how they differ:</p>
-<h1 id="heading-1">Heading 1</h1>
-<h2 id="heading-2">Heading 2</h2>
-<h3 id="heading-3">Heading 3</h3>
-<h4 id="heading-4">Heading 4</h4>
-<h5 id="heading-5">Heading 5</h5>
-<h6 id="heading-6">Heading 6</h6>
-<h3 id="italics"><em>Italics</em></h3>
-<h3 id="bold"><strong>Bold</strong></h3>
-<h3 id="bold-italicized"><strong><em>Bold Italicized</em></strong></h3>
-<ol type="1">
-<li>Numbered</li>
-<li>List</li>
-<li>Like</li>
-<li>This</li>
-</ol>
+<p>Each research project will follow the general flow outlined below.
+Use this format as much or as little as you’d like, as long as the
+required components are covered.</p>
+<h1 id="research-questionn">Research QuestionN</h1>
+<h3 id="instructions">INSTRUCTIONS</h3>
+<h1 id="literature-review">Literature Review</h1>
+<h3 id="instructions-1">INSTRUCTIONS</h3>
+<h1 id="data">Data</h1>
+<h3 id="instructions-2">INSTRUCTIONS</h3>
+<h1 id="methods">Methods</h1>
+<h3 id="instructions-3">INSTRUCTIONS</h3>
+<h1 id="findings">Findings</h1>
+<h3 id="instructions-4">INSTRUCTIONS</h3>
+<h1 id="so-what">So What</h1>
+<h3 id="instructions-5">INSTRUCTIONS</h3>
+<p>In the context of operating in a real criminal justice organization,
+how do your findings <strong><em>inform</em></strong> decision-making
+processes? Does what you’ve discovered
+<strong><em>confirm/deny</em></strong> conventional wisdom? How does a
+criminal justice organization <strong><em>operationalize</em></strong>
+these findings? Why do your findings matter, and what does a successful
+<strong><em>integration</em></strong> of your work look like? Be bold,
+and be specific. For example, check out <a href="https://www.start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_CommunityBasedOrganizations_June2019.pdf">this</a>,
+<a href="https://start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_PublicHealthFramework_June2019.pdf">this</a>,
+and <a href="https://cebcp.org/evidence-based-policing/what-works-in-policing/research-evidence-review/focused-deterrence/">this</a>.
+Sure, they are violent extremism, but the way they were built can be
+really useful in this context, too.</p>
+<p>As an example, specific to this project, <a href="https://www.thetrace.org/2024/03/new-york-mass-shooting-victims-survivors/">consider
+something like this</a>.</p>
+<h1 id="writing-tips">Writing Tips</h1>
+<p>Related, some general notes about writing. Welcome to grad school,
+where the quality of your writing is held to a higher standard. Write
+directly. Thus, avoid using these words and phrases:</p>
 <ul>
-<li>bullet points</li>
-<li>work</li>
-<li>like this</li>
-<li>or this</li>
+<li>Simply. Very. Indeed. Specifically. Perhaps. Arguably. Usually.
+Essentially. Could possibly. Could potentially. Necessarily. Only.
+Especially. In order to. Likely. Primarily. Generally. It is important
+that. It is essential to note.</li>
 </ul>
-<p><em>When you are ready to see what the output looks like</em>,
-<strong>click the ‘Knit’ button.</strong> The output file will be saved
-to the same folder this script is saved to.</p>
-<h1 id="example-section">Example Section</h1>
-<p>See how the chunk of code above doesn’t show up in the knitted
-output? It’s magic, really.</p>
-<h1 id="packages">PACKAGES</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&#39;tidyverse&#39;)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&#39;formatdown&#39;)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(formatdown)</span></code></pre></div>
-<pre><code>## Warning: package &#39;formatdown&#39; was built under R version 4.3.3</code></pre>
-<p><strong>NOTE:</strong> <em>Never ever ever include any
-install.packages functions.</em> Either comment them out with a #, or
-delete them.</p>
-<p>Also, if we had used the message=FALSE here, all that extra stuff
-would not have displayed in the knit.</p>
-<h1 id="sources">SOURCES</h1>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data source link here</span></span></code></pre></div>
-<p>A completely optional section for any data source references.</p>
-<h2 id="acquire-data">Acquire Data</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Code here</span></span></code></pre></div>
-<p>Often, this is the section where you include how you got the
-data.</p>
-<h2 id="wrangle-data">Wrangle Data</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more code here</span></span></code></pre></div>
-<p>This is typically where any processing, extracting, and/or formatting
-occurs.</p>
-<h2 id="calculate-data">Calculate Data</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># more code</span></span></code></pre></div>
-<p>This can be the place where math is done. <strong>Wrangle</strong>
-and <strong>Calculate</strong> can often be one section, too.</p>
-<h2 id="visualize-data">Visualize Data</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># yep, more code, but with graphs</span></span></code></pre></div>
-<p>A place for graphs, maps, etc.</p>
-<h2 id="quick-example">Quick Example</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data set included in formatdown</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;metals&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract two columns (data.table syntax)</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>DT <span class="ot">&lt;-</span> metals[, .(metal, elast_mod)]</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Format one column</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">$</span>elast_mod <span class="ot">&lt;-</span> <span class="fu">format_numbers</span>(DT<span class="sc">$</span>elast_mod, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">format =</span> <span class="st">&quot;engr&quot;</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the text column</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">$</span>metal <span class="ot">&lt;-</span> <span class="fu">format_text</span>(DT<span class="sc">$</span>metal)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(DT, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;metal&quot;</span>, <span class="st">&quot;modulus (Pa)&quot;</span>))</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">metal</th>
-<th style="text-align: left;">modulus (Pa)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">aluminum 6061</span></td>
-<td style="text-align: left;"><span class="math inline">73.1 × 10<sup>9</sup></span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><span class="math inline">copper</span></td>
-<td style="text-align: left;"><span class="math inline">117 × 10<sup>9</sup></span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">lead</span></td>
-<td style="text-align: left;"><span class="math inline">13.8 × 10<sup>9</sup></span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><span class="math inline">platinum</span></td>
-<td style="text-align: left;"><span class="math inline">147 × 10<sup>9</sup></span></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">steel 1020</span></td>
-<td style="text-align: left;"><span class="math inline">207 × 10<sup>9</sup></span></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><span class="math inline">titanium</span></td>
-<td style="text-align: left;"><span class="math inline">102 × 10<sup>9</sup></span></td>
-</tr>
-</tbody>
-</table>
-<h1 id="analytics">ANALYTICS</h1>
-<p>Insert text here for your actual findings and results. You can also
-insert text above/below visualizations along the way.</p>
-<p><strong>NOTE:</strong> When submitting your projects, you are
-submitting either an <strong>HTML</strong> or <strong>PDF</strong>
-output of your Markdown file. Blackboard does not accept HTML files, so
-if you go that route (<em>and I recommend it, really</em>), <a href="mailto:mdanna2@gmu.edu">email me</a> a copy of your final
-submission.</p>
+<p>Also, words have meanings. <a href="https://www.themuse.com/advice/185-powerful-verbs-that-will-make-your-resume-awesome">Some
+are stronger than others</a>. <a href="https://www.rd.com/article/words-that-arent-words/">Others aren’t
+real</a>.</p>
+<p>Further, here’s some other strategies to consider:</p>
+<ul>
+<li>Read sentences aloud… but don’t write like you speak.</li>
+<li>Ask yourself - does this sentence make sense, by itself.</li>
+<li>It’s ok to occasionally use quotes, don’t copy specific language or
+words.</li>
+<li>If you don’t know the meaning of a word, don’t use it!</li>
+</ul>
+<p>And finally, <a href="https://www.thisworddoesnotexist.com/">this is
+just fun</a>.</p>
+<h1 id="other-informationreminders">Other Information/Reminders</h1>
+<ol type="1">
+<li>When submitting your projects, you are submitting either an
+<strong>HTML</strong> or <strong>PDF</strong> output of your Markdown
+file, as an upload to Canvas - not via email.</li>
+<li>When you are ready to see what the output looks like, <strong>click
+the ‘Knit’ button.</strong> The output file will be saved to the same
+folder this script is saved to.</li>
+<li><em>Never ever ever include any install.packages functions.</em>
+Either comment them out with a #, or delete them.</li>
+</ol>
 
 </main>
 

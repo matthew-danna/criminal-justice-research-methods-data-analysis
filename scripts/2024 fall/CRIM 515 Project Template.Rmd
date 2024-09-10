@@ -8,110 +8,55 @@ output:
     toc: yes
 ---
 
-Here's a collection of text formatting/styling things you may (or may not) care about. Copy them, use them, or delete them, just don't leave all of this here when you submit your project...
+Each research project will follow the general flow outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
 
-There's a [useful link here](https://www.rforecology.com/post/how-to-use-rmarkdown-part-one/).
+# Research QuestionN
 
-And here's [another one](https://sage-fenglisu-c38dfb.netlify.app/). 
+### INSTRUCTIONS
 
-[Here's a great link](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html) for creating tables as visuals in your file.
+# Literature Review
 
-Both of the examples above show you how to hyperlink text. That's useful when you want to cite something, without providing the URL in the text.
+### INSTRUCTIONS
 
-These are different heading styles. When you 'knit' this template, you see how they differ:
+# Data
 
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
+### INSTRUCTIONS
 
-### *Italics*
-### **Bold**
-### ***Bold Italicized***
+# Methods
 
-1. Numbered
-2. List
-3. Like
-4. This
+### INSTRUCTIONS
 
-* bullet points
-- work
-* like this
-- or this
+# Findings
 
-*When you are ready to see what the output looks like*, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
+### INSTRUCTIONS
 
-# Example Section
-```{r, echo=FALSE, message=FALSE, results='hide', fig.show='hide', warning=FALSE, error=FALSE}
-# when you set 'echo' to false, you are hiding the block of code 
-# when you set 'message' to false, you are hiding the console text that comes after running your code
-# when you set 'results' to hide, you are hiding extra processing that occasionally shows up in the console
-# when you set fig.show to hide, you are hiding the plot output
-```
-See how the chunk of code above doesn't show up in the knitted output? It's magic, really.
+# So What
 
-# PACKAGES
-```{r}
-#install.packages('tidyverse')
-library(tidyverse)
-#install.packages('formatdown')
-library(formatdown)
-```
-**NOTE:** *Never ever ever include any install.packages functions.* Either comment them out with a #, or delete them.
+### INSTRUCTIONS
 
-Also, if we had used the message=FALSE here, all that extra stuff would not have displayed in the knit.
+In the context of operating in a real criminal justice organization, how do your findings ***inform*** decision-making processes? Does what you’ve discovered ***confirm/deny*** conventional wisdom? How does a criminal justice organization ***operationalize*** these findings? Why do your findings matter, and what does a successful ***integration*** of your work look like? Be bold, and be specific. For example, check out [this](https://www.start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_CommunityBasedOrganizations_June2019.pdf), [this](https://start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_PublicHealthFramework_June2019.pdf), and [this](https://cebcp.org/evidence-based-policing/what-works-in-policing/research-evidence-review/focused-deterrence/). Sure, they are violent extremism, but the way they were built can be really useful in this context, too.  
 
-# SOURCES
-```{r}
-# Data source link here
-```
-A completely optional section for any data source references.
+As an example, specific to this project, [consider something like this](https://www.thetrace.org/2024/03/new-york-mass-shooting-victims-survivors/).
 
-## Acquire Data
-```{r}
-# Code here
-```
-Often, this is the section where you include how you got the data.
+# Writing Tips
 
-## Wrangle Data
-```{r}
-# more code here
-```
-This is typically where any processing, extracting, and/or formatting occurs.
+Related, some general notes about writing. Welcome to grad school, where the quality of your writing is held to a higher standard. Write directly. Thus, avoid using these words and phrases:
 
-## Calculate Data
-```{r}
-# more code
-```
-This can be the place where math is done. **Wrangle** and **Calculate** can often be one section, too.
+* Simply. Very. Indeed. Specifically. Perhaps. Arguably. Usually. Essentially. Could possibly. Could potentially. Necessarily. Only. Especially. In order to. Likely. Primarily. Generally. It is important that. It is essential to note.
 
-## Visualize Data
-```{r}
-# yep, more code, but with graphs
-```
-A place for graphs, maps, etc.
+Also, words have meanings. [Some are stronger than others](https://www.themuse.com/advice/185-powerful-verbs-that-will-make-your-resume-awesome). [Others aren’t real](https://www.rd.com/article/words-that-arent-words/).
 
-## Quick Example
-```{r}
-# Data set included in formatdown
-data("metals")
+Further, here’s some other strategies to consider:
 
-# Extract two columns (data.table syntax)
-DT <- metals[, .(metal, elast_mod)]
+* Read sentences aloud… but don’t write like you speak.
+* Ask yourself - does this sentence make sense, by itself.
+* It’s ok to occasionally use quotes, don’t copy specific language or words.
+* If you don’t know the meaning of a word, don’t use it!
 
-# Format one column
-DT$elast_mod <- format_numbers(DT$elast_mod, digits = 3, format = "engr")
-# Format the text column
-DT$metal <- format_text(DT$metal)
+And finally, [this is just fun](https://www.thisworddoesnotexist.com/).
 
-# Display the table
-knitr::kable(DT, col.names = c("metal", "modulus (Pa)"))
-```
+# Other Information/Reminders
 
-
-# ANALYTICS
-Insert text here for your actual findings and results. You can also insert text above/below visualizations along the way.
-
-**NOTE:** When submitting your projects, you are submitting either an **HTML** or **PDF** output of your Markdown file. Blackboard does not accept HTML files, so if you go that route (*and I recommend it, really*), [email me](mailto:mdanna2@gmu.edu) a copy of your final submission.
+1. When submitting your projects, you are submitting either an **HTML** or **PDF** output of your Markdown file, as an upload to Canvas - not via email.
+2. When you are ready to see what the output looks like, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
+3. *Never ever ever include any install.packages functions.* Either comment them out with a #, or delete them.
