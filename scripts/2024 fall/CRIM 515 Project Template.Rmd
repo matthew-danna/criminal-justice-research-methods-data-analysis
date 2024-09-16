@@ -10,27 +10,62 @@ output:
 
 Each research project will follow the general flow outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
 
-# Research QuestionN
+# 1. Research Question
 
 ### INSTRUCTIONS
 
-# Literature Review
+The goal of this project is to scientifically assess a complex criminal justice topic. You are taking a broad topic and refining it to a *measurable*, *answerable* question.
+
+Your research question should consider **behavior**, **space**, and **time**. You'll either *measure* or *control* for each of these. 
+
+- Behavior: what
+- Space: where
+- Time: when
+
+Additionally, you'll need to consider *how* you define and measure change.
+
+# 2. Literature Review
 
 ### INSTRUCTIONS
 
-# Data
+Identify one source that is relevant and related to your research question. This source needs to be an article from a peer-academic academic journal. Briefly describe the source and why it’s relevant to your study in approximately one paragraph. Include information about the **research question**, **data**, **methods**, and **findings**. 
+
+# 3. Data
 
 ### INSTRUCTIONS
 
-# Methods
+**Identifying** and **acquiring** relevant sources is something directly related to your research question, and we will develop in-class. It's worth noting your don't necessarily identify the question *before* the data. This section will be updated accordingly...
+
+# 4. Methods
 
 ### INSTRUCTIONS
 
-# Findings
+**Building** a relevant methodology is largely dependent on your research question and data. Any good methodology involves multiple steps for acquiring, wrangling, cleaning, analyzing, and visualizing data. There is no single right answer here; rather, it’s the ability to craft a unique, distinct workflow that results in innovative work. 
+
+This section will be updated accordingly during class and include these steps...
+
+##### Acquire
+
+##### Wrangle
+
+##### Calculate
+
+##### Visualize
+
+Ultimately, your methodology will result in analysis that becomes findings. Some things to consider:
+
+- What are the trends? 
+- What happens the most, what happens the least?
+- Are there anomalies? 
+- What do the statistics tell you? 
+
+# 5. Findings
 
 ### INSTRUCTIONS
 
-# So What
+So, that workflow and methodology you created? Use it to answer your research question. Based on the data acquired and the methods applied, what is your answer to the question? How confident are you in the results? What else? Is anything missing? Is the data complete? Is it accurate? Make sure to caveat your findings as necessary. Related, this section should be written in clear, concise, plain English statements. The methodology is for complex thought and processes; the findings are for easily digestible content.
+
+# 6. So What
 
 ### INSTRUCTIONS
 
@@ -60,3 +95,56 @@ And finally, [this is just fun](https://www.thisworddoesnotexist.com/).
 1. When submitting your projects, you are submitting either an **HTML** or **PDF** output of your Markdown file, as an upload to Canvas - not via email.
 2. When you are ready to see what the output looks like, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
 3. *Never ever ever include any install.packages functions.* Either comment them out with a #, or delete them.
+
+# Grading: 30pts
+
+#### 1. Research Question
+***2pts***
+
+Provide a brief paragraph on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured.
+
+#### 2. Literature Review
+***2pts***
+
+Provide a brief paragraph describing a prior study related to your current project. This study should be from a peer-academic academic journal. Include details about the *research question*, *data*, *methods*, and *findings*. Cite the article in *APA format*. 
+
+#### 3. Data 
+***2pts***
+
+Provide a brief paragraph on the data used in this study. This includes the specific source(s), and the specific temporal and spatial constraints. Address any major advantages and disadvantages with using these data compared to other sources. Be specific enough that a reader could replicate this work.
+
+#### 4. Methods
+***2pts***
+
+Provide a brief paragraph on the research methods leveraged to answer this question. This includes the software, calculations, skills, techniques, and unique workflows used to analyze your data and develop an answer. You do NOT need to describe click-by-click instructions or lines of code describing how you did things; you DO need to describe a logical process that is specific enough that a reader could replicate. 
+
+#### 5. Findings
+***10pts***
+
+Provide at least five paragraphs on the findings of your study (*2pts each*). Your findings should be descriptive, clear, and comprehensively answer the original question. Each paragraph should describe a unique analytic insight dervied from your research. Each analytic insight should be the product of your methods, applied to your data, to provide part of an answer to your research question.
+
+Address any limitations or factors to consider for future research. Make sure to actually answer the question! 
+
+#### 6. So What
+***5pts***
+
+Provide a brief paragraph on the importance of this study, as a criminal justice professional. How can these findings be integrated into a real world environment? Be as specific as possible as to why your findings matter, and what a successful application of your work would look like. Include any potentially actionable or tangible conclusions (*4pts*). 
+
+Based on your findings, include a brief discussion (2-3 sentences) on implications and opportunities for further research (*1pt*).
+
+#### 7. Visuals
+***6pts***
+
+Provide at least three visuals of your data. These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
+
+- Thoughtful and logical: do they make sense to someone that has never seen them before? (*2pts*)
+- All visuals should be somehow, someway referenced in the text (*2pts*) 
+- Analytically meaningful: does each visual provide useful, relevant, and actionable insights? (*2pts*) 
+
+#### 8. Formatting
+***1pt***
+
+- Error-free writing (*1pt*). No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
+- File submitted as the knitted HTML output of an RMarkdown file, via Canvas (*1pt*).
+
+Please [email me](mailto:mdanna2@gmu.edu) with any questions.
