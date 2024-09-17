@@ -1,0 +1,31 @@
+---
+title: "CRIM 515 Exercise 1 Template"
+author: "My Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+calls <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download",
+                          "1gniFP35GEfxycgpKGHAzkgSYmjTteTKm"))
+calls$date <- as.Date(calls$date, format = "%Y-%m-%d")
+calls$month <- month(calls$date)
+calls$months <- months(calls$date)
+calls$dow <- weekdays(calls$date)
+```
+
+# Graph 1
+```{r, warning=FALSE, echo=FALSE}
+ggplot(calls, aes(hour)) + geom_bar(stat = "count") +
+  theme_minimal() +
+  labs(title = "My first graph", x = "A thing", y = "Another thing")
+```
+
+# Graph 2
+```{r, warning=FALSE, echo=FALSE}
+ggplot(calls, aes(months)) + geom_bar(stat = "count") +
+  theme_minimal() +
+  labs(title = "My second graph", x = "A thing", y = "Another thing")
+```
+
