@@ -98,27 +98,24 @@ Identify one source that is relevant and related to your research question. This
 3. Suicides
 
     - Data from [CDC WONDER](https://wonder.cdc.gov/mcd.html)
+        - First, you may just want to analyze firearm suicides.
+        - Second, you may want to use the percentage of suicides committed with a firearm as a proxy for firearm ownership
 
-First, you may just want to analyze firearm suicides.
-Second, you may want to use the percentage of suicides committed with a firearm as a proxy for firearm ownership
-
-Select any of the location/demographic paramters
-Then in Underlying Cause of Death
-For #6 choose all suicides
-For #7 choose suicides by firearm
-Export
+    - Either way, select any of the location/demographic paramters
+    - Then in Underlying Cause of Death
+        - For #6 choose all suicides
+        - For #7 choose suicides by firearm
+    - Export
 
 4. Sales
 
-FBI NICS
-https://www.fbi.gov/file-repository/nics_firearm_checks_-_month_year.pdf
+    - The original source technically comes from FBI NICS but it's [virtually not usable](https://www.fbi.gov/file-repository/nics_firearm_checks_-_month_year.pdf).
+    - The better version of the data comes from the news blog [The Trace](https://www.thetrace.org/2020/08/gun-sales-estimates/).
+        - Download the CSV
 
-https://www.thetrace.org/2020/08/gun-sales-estimates/
-Download the CSV
+5. Firearm traces
 
-5. Traces
-ATF Trace data
-https://jasher.substack.com/p/atfs-2022-firearms-trace-data-is
+    - These are data from ATF, described in [this blog](https://jasher.substack.com/p/atfs-2022-firearms-trace-data-is).
 
 # 4. Methods
 
