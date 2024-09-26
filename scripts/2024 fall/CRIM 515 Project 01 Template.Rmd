@@ -25,7 +25,7 @@ Your research question should consider **behavior**, **space**, and **time**. Yo
 Additionally, you'll need to consider *how* you define and measure change.
 
 ### EXAMPLE
-**What is the interaction between firearm events and firearm access?**
+***What is the interaction between firearm events and firearm access?***
 
 # 2. Literature Review
 
@@ -39,83 +39,65 @@ Identify one source that is relevant and related to your research question. This
 
 **Identifying** and **acquiring** relevant sources is something directly related to your research question, and we will develop in-class. It's worth noting your don't necessarily identify the question *before* the data. This section will be updated accordingly...
 
-#### Two different types of data sources:
+### SOURCES
 
-##### Events
-1. FBI UCR SHR
-https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/shr
+#### Firearm Events
+1. [FBI UCR SHR](https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/explorer/crime/shr)
 
-Specifically, the Expanded Homicide Data
-Filter by weapon
-Do separate downloads for unique time periods and/or areas (jurisdictions)
+    - You want the Expanded Homicide Data
+    - Do separate downloads for unique time periods and/or areas (states)
+    - Time period downloads would allow you to compare homicides committed with a firearm over time, *controlling for location*
+    - Area downloads would allow you to compare homicidies committed with a firearm across states, *controlling for time*
+    - Use the page filters to adjust states and years
+    - Download the 'Murder Victim by Weapon' table
+    - **End Result:** results in multiple downloads: either multiple years of data, or multiple states of data
 
-Time period downloads would allow you to compare homicides committed with a firearm over time, controlling for location
+2. [Gun Violence Archive](https://www.gunviolencearchive.org/)
 
-Area downloads would allow you to compare homicidies committed with a firearm across states, controlling for time
+    - Select a type of event from the table at the bottom left of the homepage
+    - Export as CSV that year's data
+    - Go to Past Years section
+    - Repeat the process for as many years as you want
+    - **End result:** multiple yearly CSVs of event data
 
-Use the page filters to adjust states and years
-Download the 'Murder Victim by Weapon' table
+3. [Mother Jones](https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/)
 
-This results in multiple downloads - either multiple years of data, or multiple states of data
+    - Just click and download
+    - **End result:** one file
 
-2. Gun Violence Archive
-https://www.gunviolencearchive.org/
+4. [The Violence Project](https://www.theviolenceproject.org/mass-shooter-database/)
 
-Select a type of event from the table at the bottom left of the homepage
-Export as CSV that year's data
-Go to Past Years section
-Repeat the process for as many years as you want
+    - One click download
+    - **End result:** one file
 
-End result: multiple yearly CSVs of event data
-
-3. Mother Jones
-https://www.motherjones.com/politics/2012/12/mass-shootings-mother-jones-full-data/
-
-Just click and download
-
-4. The Violence Project
-https://www.theviolenceproject.org/mass-shooter-database/
-
-One click download
-
-##### Access
+#### Firearm Access
 1. Seizures
 
-U.S. - DHS Customs & Border Protection
-https://www.cbp.gov/document/stats/weapons-and-ammunition-seizures
-
-Get the most recently published data from the bottom of the page
-
-Global - UN
-https://dataunodc.un.org/dp-firearms-arms-seized
-
-Click download dataset on the right
+    - Option 1, domestic: [DHS Customs & Border Protection](https://www.cbp.gov/document/stats/weapons-and-ammunition-seizures)
+        - Get the most recently published data from the bottom of the page
+        - **End result:** one file that needs filtering
+    - Option 2, global: [United Nations](https://dataunodc.un.org/dp-firearms-arms-seized)
+        - Click download dataset on the right
+        - **End result:** one file
 
 2. Laws
 
-Everytown
-https://everytownresearch.org/rankings/
+    - Option 1: [Everytown](https://everytownresearch.org/rankings/)
+        - Option A: Manually convert the state rankings into a table
+        - Option B: Explore by State - pick select states of interest, Compare, and manually convert data into a table
+        - Option C: Explore by Policy - pick select policies, manually convert data into a table
+        - ***Use Everytown if you are doing a state-by-state comparison of FBI UCR SHR***
 
-Option 1: Manually convert the state rankings into a table
-Option 2: Explore by State - pick select states of interest, Compare, and manually convert data into a table
-Option 3: Explore by Policy - pick select policies, manually convert data into a table
-
-Use Everytown if you are doing a state-by-state comparison of FBI UCR SHR
-
-RAND
-https://www.rand.org/research/gun-policy/law-navigator.html
-
-Pick a law type, a weapon type, and a year, and then manually count states
-
-Use RAND if you are doing a year-by-year comparison
-
-State Firearm Laws Database
-http://www.statefirearmlaws.org/
+    - Option 2: [RAND](https://www.rand.org/research/gun-policy/law-navigator.html)
+        - Pick a law type, a weapon type, and a year, and then manually count states
+        - ***Use RAND if you are doing a year-by-year comparison***
+    
+    - Option 3: [State Firearm Laws Database](http://www.statefirearmlaws.org/)
+        - This site may be dead.
 
 3. Suicides
 
-CDC WONDER
-https://wonder.cdc.gov/mcd.html
+    - Data from [CDC WONDER](https://wonder.cdc.gov/mcd.html)
 
 First, you may just want to analyze firearm suicides.
 Second, you may want to use the percentage of suicides committed with a firearm as a proxy for firearm ownership
