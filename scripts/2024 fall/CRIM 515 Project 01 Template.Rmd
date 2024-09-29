@@ -125,13 +125,13 @@ Identify one source that is relevant and related to your research question. This
 
 This section will be updated accordingly during class and include these steps...
 
-##### Acquire
+##### 1. Acquire
 
-##### Wrangle
+##### 2. Wrangle (Merge + Clean)
 
-##### Calculate
+##### 3. Calculate
 
-##### Visualize
+##### 4. Visualize
 
 Ultimately, your methodology will result in analysis that becomes findings. Some things to consider:
 
