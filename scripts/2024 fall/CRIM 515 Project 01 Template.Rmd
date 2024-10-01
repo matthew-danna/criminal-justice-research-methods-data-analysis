@@ -125,7 +125,7 @@ Identify one source that is relevant and related to your research question. This
 
 This section will be updated accordingly during class and include these steps...
 
-#### 1. Acquire
+### 1. Acquire
 
 Libraries you need for this section:
 ```{r, message=FALSE, warning=FALSE}
