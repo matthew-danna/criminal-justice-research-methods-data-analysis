@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="My Name" />
-  <meta name="dcterms.date" content="2024-09-29" />
+  <meta name="dcterms.date" content="2024-09-30" />
   <title>CRIM 515 Project 1 Template</title>
 
 <style type="text/css" charset="utf-8">
@@ -232,6 +232,99 @@ img { max-width: 100%; }
 
 
 
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: auto;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ color: #00769e; background-color: #f1f3f5; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #00769e; } 
+code span.al { color: #ad0000; } 
+code span.an { color: #5e5e5e; } 
+code span.at { color: #657422; } 
+code span.bn { color: #ad0000; } 
+code span.bu { } 
+code span.cf { color: #00769e; } 
+code span.ch { color: #20794d; } 
+code span.cn { color: #8f5902; } 
+code span.co { color: #5e5e5e; } 
+code span.cv { color: #5e5e5e; font-style: italic; } 
+code span.do { color: #5e5e5e; font-style: italic; } 
+code span.dt { color: #ad0000; } 
+code span.dv { color: #ad0000; } 
+code span.er { color: #ad0000; } 
+code span.ex { } 
+code span.fl { color: #ad0000; } 
+code span.fu { color: #4758ab; } 
+code span.im { } 
+code span.in { color: #5e5e5e; } 
+code span.kw { color: #00769e; } 
+code span.op { color: #5e5e5e; } 
+code span.ot { color: #00769e; } 
+code span.pp { color: #ad0000; } 
+code span.sc { color: #5e5e5e; } 
+code span.ss { color: #20794d; } 
+code span.st { color: #20794d; } 
+code span.va { color: #111111; } 
+code span.vs { color: #20794d; } 
+code span.wa { color: #5e5e5e; font-style: italic; } 
+</style>
+<script>
+// remove everything from pandoc code styles _except_ for 'code span' colors
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      if (/^code span/.test(rule.selectorText)) {
+        j++;
+        continue;
+      }
+      sheets[i].deleteRule(j);
+    }
+  }
+})();
+</script>
 
 <style>
 code, pre { overflow: auto; }
@@ -246,7 +339,7 @@ pre code, pre code:not([class]) { white-space: unset; }
 <main>
 <header>
 <h1 id="title" class="toc-ignore">CRIM 515 Project 1 Template</h1>
-<p id="date">29 September 2024</p>
+<p id="date">30 September 2024</p>
 <p id="author">My Name</p>
 
 </header>
@@ -270,6 +363,10 @@ Literature Review</a>
 <li><a href="#methods" id="toc-methods">4. Methods</a>
 <ul>
 <li><a href="#instructions-3" id="toc-instructions-3">INSTRUCTIONS</a></li>
+<li><a href="#wrangle-merge-clean" id="toc-wrangle-merge-clean">2.
+Wrangle (Merge + Clean)</a></li>
+<li><a href="#calculate" id="toc-calculate">3. Calculate</a></li>
+<li><a href="#visualize" id="toc-visualize">4. Visualize</a></li>
 </ul></li>
 <li><a href="#findings" id="toc-findings">5. Findings</a>
 <ul>
@@ -447,10 +544,90 @@ ability to craft a unique, distinct workflow that results in innovative
 work.</p>
 <p>This section will be updated accordingly during class and include
 these steps…</p>
-<h5 id="acquire">1. Acquire</h5>
-<h5 id="wrangle-merge-clean">2. Wrangle (Merge + Clean)</h5>
-<h5 id="calculate">3. Calculate</h5>
-<h5 id="visualize">4. Visualize</h5>
+<h4 id="acquire">1. Acquire</h4>
+<p>Libraries you need for this section:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<h4 id="events-data">Events data</h4>
+<ol type="1">
+<li>Getting <strong>Gun Violence Archive</strong> looks like this
+(<em>note you’ll need to change the file path to match your
+computer</em>):</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data.gva<span class="fl">.2024</span> <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gva2024.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data.gva<span class="fl">.2023</span> <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gva2023.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data.gva<span class="fl">.2022</span> <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gva2022.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data.gva<span class="fl">.2021</span> <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gva2021.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>data.gva<span class="fl">.2020</span> <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gva2020.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>data.gva <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data.gva<span class="fl">.2024</span>, data.gva<span class="fl">.2023</span>, data.gva<span class="fl">.2022</span>, data.gva<span class="fl">.2021</span>, data.gva<span class="fl">.2020</span>)</span></code></pre></div>
+<p>Each year is a separate download, and ‘rbind’ combines all tables
+into one.</p>
+<ol start="2" type="1">
+<li>Getting <strong>Mother Jones</strong> looks like this:</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data.mj <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vQBEbQoWMn_P81DuwmlQC0_jr2sJDzkkC0mvF6WLcM53ZYXi8RMfUlunvP1B5W0jRrJvH-wc-WGjDB1/pub?gid=0&amp;single=true&amp;output=csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<h4 id="access-data">Access data</h4>
+<ol type="1">
+<li>US firearm seizures from <strong>DHS CBP</strong> looks like
+this:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data.cbp <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.cbp.gov/sites/default/files/2024-09/weapons-ammunition-seizures-fy21-fy24-aug.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<ol start="2" type="1">
+<li>Firearm laws from <strong>RAND</strong> or
+<strong>Everytown</strong> For <strong>RAND</strong>
+<ul>
+<li>Consider a time range that matches your events data.</li>
+<li>Pick one of the four subtypes of laws
+<ul>
+<li>as an example…Child Access Prevention: 0, 1, 2
+<ul>
+<li>0 = none, 1 = Reckless, 2 = Negligent</li>
+</ul></li>
+</ul></li>
+<li>Build a CSV in Excel and then import:</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data.laws <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gun laws sample.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>For <strong>Everytown</strong> - Add a column to the RAND data for
+the 2024 Everytown data - Re-import the same file with the new
+column</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data.laws <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gun laws sample.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<ol start="3" type="1">
+<li>Suicide counts from <strong>CDC</strong>
+<ul>
+<li>Using the <a href>WONDER</a> to build two queries
+<ul>
+<li>One for all suicides (using the MCD section)</li>
+<li>One for suicides with a firearm (using the MCD sub-section)</li>
+<li>Export, save to your computer</li>
+</ul></li>
+<li>Import both files (<em>note we use read.delim here since the exports
+were TXT files</em>):</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data.cdc.firearm <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/state year firearm.txt&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data.cdc.all <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/state year all.txt&quot;</span>)</span></code></pre></div>
+<p>This gets you all of the potential data you need.</p>
+<h3 id="wrangle-merge-clean">2. Wrangle (Merge + Clean)</h3>
+<p>Some important considerations for <strong><em>how</em></strong> you
+wrangle your data include:</p>
+<ul>
+<li><strong>SPACE</strong>
+<ul>
+<li>Overall: U.S. (most likely)</li>
+<li>Unit of Measurement: State? U.S.?</li>
+</ul></li>
+<li><strong>TIME</strong>:
+<ul>
+<li>Overall: time range for your datas</li>
+<li>Unit of Measurement: Years? Months?</li>
+</ul></li>
+</ul>
+<p>These considerations help you build your methodology</p>
+<p>Methodology = how you conduct the interaction between Events and
+Access</p>
+<h3 id="calculate">3. Calculate</h3>
+<h3 id="visualize">4. Visualize</h3>
 <p>Ultimately, your methodology will result in analysis that becomes
 findings. Some things to consider:</p>
 <ul>
@@ -595,7 +772,7 @@ a great reference</a>, too.</li>
 <li>File submitted as the knitted HTML output of an RMarkdown file, via
 Canvas (<em>1pt</em>).</li>
 </ul>
-<p>ONE LAST THING… the source code for creating this file can be <a href="https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%20Template.Rmd">found
+<p>ONE LAST THING… the source code for creating this file can be <a href="https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2001%20Template.Rmd">found
 here</a>.</p>
 <p>Please <a href="mailto:mdanna2@gmu.edu">email me</a> with any
 questions.</p>

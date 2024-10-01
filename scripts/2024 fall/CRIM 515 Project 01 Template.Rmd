@@ -125,13 +125,86 @@ Identify one source that is relevant and related to your research question. This
 
 This section will be updated accordingly during class and include these steps...
 
-##### 1. Acquire
+#### 1. Acquire
 
-##### 2. Wrangle (Merge + Clean)
+Libraries you need for this section:
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
 
-##### 3. Calculate
+#### Events data
+1. Getting **Gun Violence Archive** looks like this (*note you'll need to change the file path to match your computer*):
+```{r}
+data.gva.2024 <- read.csv("/Users/matthewdanna/Downloads/gva2024.csv", stringsAsFactors = FALSE)
+data.gva.2023 <- read.csv("/Users/matthewdanna/Downloads/gva2023.csv", stringsAsFactors = FALSE)
+data.gva.2022 <- read.csv("/Users/matthewdanna/Downloads/gva2022.csv", stringsAsFactors = FALSE)
+data.gva.2021 <- read.csv("/Users/matthewdanna/Downloads/gva2021.csv", stringsAsFactors = FALSE)
+data.gva.2020 <- read.csv("/Users/matthewdanna/Downloads/gva2020.csv", stringsAsFactors = FALSE)
 
-##### 4. Visualize
+data.gva <- rbind(data.gva.2024, data.gva.2023, data.gva.2022, data.gva.2021, data.gva.2020)
+```
+Each year is a separate download, and 'rbind' combines all tables into one.
+
+2. Getting **Mother Jones** looks like this:
+```{r}
+data.mj <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQBEbQoWMn_P81DuwmlQC0_jr2sJDzkkC0mvF6WLcM53ZYXi8RMfUlunvP1B5W0jRrJvH-wc-WGjDB1/pub?gid=0&single=true&output=csv", stringsAsFactors = FALSE)
+```
+
+#### Access data
+1. US firearm seizures from **DHS CBP** looks like this:
+```{r}
+data.cbp <- read.csv("https://www.cbp.gov/sites/default/files/2024-09/weapons-ammunition-seizures-fy21-fy24-aug.csv", stringsAsFactors = FALSE)
+```
+
+2. Firearm laws from **RAND** or **Everytown**
+For **RAND**
+    - Consider a time range that matches your events data.
+    - Pick one of the four subtypes of laws
+        - as an example...Child Access Prevention: 0, 1, 2
+            - 0 = none, 1 = Reckless, 2 = Negligent
+    - Build a CSV in Excel and then import:
+```{r}
+data.laws <- read.csv("/Users/matthewdanna/Downloads/gun laws sample.csv", stringsAsFactors = FALSE)
+```
+
+For **Everytown**
+    - Add a column to the RAND data for the 2024 Everytown data
+    - Re-import the same file with the new column
+```{r}
+data.laws <- read.csv("/Users/matthewdanna/Downloads/gun laws sample.csv", stringsAsFactors = FALSE)
+```
+
+3. Suicide counts from **CDC**
+    - Using the [WONDER]() to build two queries
+        - One for all suicides (using the MCD section)
+        - One for suicides with a firearm (using the MCD sub-section)
+        - Export, save to your computer
+    - Import both files (*note we use read.delim here since the exports were TXT files*):
+```{r}
+data.cdc.firearm <- read.delim("/Users/matthewdanna/Downloads/state year firearm.txt")
+data.cdc.all <- read.delim("/Users/matthewdanna/Downloads/state year all.txt")
+```
+
+This gets you all of the potential data you need.
+
+### 2. Wrangle (Merge + Clean)
+Some important considerations for ***how*** you wrangle your data include:
+
+  - **SPACE**
+      - Overall: U.S. (most likely)
+      - Unit of Measurement: State? U.S.?
+  
+  - **TIME**: 
+      - Overall: time range for your datas
+      - Unit of Measurement: Years? Months?
+
+These considerations help you build your methodology
+
+Methodology = how you conduct the interaction between Events and Access
+
+### 3. Calculate
+
+### 4. Visualize
 
 Ultimately, your methodology will result in analysis that becomes findings. Some things to consider:
 
@@ -228,6 +301,6 @@ Provide at least three visuals of your data. These visuals should be relevant to
 - Error-free writing (*1pt*). No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
 - File submitted as the knitted HTML output of an RMarkdown file, via Canvas (*1pt*).
 
-ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%20Template.Rmd).
+ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2001%20Template.Rmd).
 
 Please [email me](mailto:mdanna2@gmu.edu) with any questions.
