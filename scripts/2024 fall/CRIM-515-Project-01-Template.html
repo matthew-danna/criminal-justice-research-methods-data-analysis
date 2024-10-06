@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="My Name" />
-  <meta name="dcterms.date" content="2024-09-30" />
+  <meta name="dcterms.date" content="2024-10-05" />
   <title>CRIM 515 Project 1 Template</title>
 
 <style type="text/css" charset="utf-8">
@@ -339,7 +339,7 @@ pre code, pre code:not([class]) { white-space: unset; }
 <main>
 <header>
 <h1 id="title" class="toc-ignore">CRIM 515 Project 1 Template</h1>
-<p id="date">30 September 2024</p>
+<p id="date">05 October 2024</p>
 <p id="author">My Name</p>
 
 </header>
@@ -575,19 +575,12 @@ this:</li>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data.cbp <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://www.cbp.gov/sites/default/files/2024-09/weapons-ammunition-seizures-fy21-fy24-aug.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <ol start="2" type="1">
 <li>Firearm laws from <strong>RAND</strong> or
-<strong>Everytown</strong> For <strong>RAND</strong>
-<ul>
-<li>Consider a time range that matches your events data.</li>
-<li>Pick one of the four subtypes of laws
-<ul>
-<li>as an example…Child Access Prevention: 0, 1, 2
-<ul>
-<li>0 = none, 1 = Reckless, 2 = Negligent</li>
-</ul></li>
-</ul></li>
-<li>Build a CSV in Excel and then import:</li>
-</ul></li>
+<strong>Everytown</strong></li>
 </ol>
+<p>For <strong>RAND</strong> - Consider a time range that matches your
+events data. - Pick one of the four subtypes of laws - as an
+example…Child Access Prevention: 0, 1, 2 - 0 = none, 1 = Reckless, 2 =
+Negligent - Build a CSV in Excel and then import:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data.laws <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;/Users/matthewdanna/Downloads/gun laws sample.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>For <strong>Everytown</strong> - Add a column to the RAND data for
 the 2024 Everytown data - Re-import the same file with the new
@@ -627,6 +620,89 @@ wrangle your data include:</p>
 <p>These considerations help you build your methodology</p>
 <p>Methodology = how you conduct the interaction between Events and
 Access</p>
+<h4 id="cleaning-gun-violence-archive">Cleaning Gun Violence
+Archive</h4>
+<ol type="1">
+<li>Clean the dates</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data.gva<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data.gva<span class="sc">$</span>Incident.Date, <span class="at">format =</span> <span class="st">&quot;%B %d, %Y&quot;</span>)</span></code></pre></div>
+<ol start="2" type="1">
+<li>Sum the victim count</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data.gva<span class="sc">$</span>Victims.Total <span class="ot">&lt;-</span> data.gva<span class="sc">$</span>Victims.Killed <span class="sc">+</span> data.gva<span class="sc">$</span>Victims.Injured</span></code></pre></div>
+<ol start="3" type="1">
+<li>Create a year attribute</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data.gva<span class="sc">$</span>Year <span class="ot">&lt;-</span> <span class="fu">substr</span>(data.gva<span class="sc">$</span>Date, <span class="dv">0</span>, <span class="dv">4</span>)</span></code></pre></div>
+<h4 id="cleaning-mother-jones">Cleaning Mother Jones</h4>
+<ol type="1">
+<li>Clean the dates</li>
+</ol>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.month <span class="ot">&lt;-</span> <span class="fu">substr</span>(data.mj<span class="sc">$</span>date, <span class="dv">0</span>, <span class="dv">2</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.month <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;/&quot;</span>, <span class="st">&quot;&quot;</span>, data.mj<span class="sc">$</span>temp.month)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.day <span class="ot">&lt;-</span> <span class="fu">substr</span>(data.mj<span class="sc">$</span>date, (<span class="fu">nchar</span>(data.mj<span class="sc">$</span>temp.month)<span class="sc">+</span><span class="dv">2</span>), (<span class="fu">nchar</span>(data.mj<span class="sc">$</span>temp.month)<span class="sc">+</span><span class="dv">3</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.day <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;/&quot;</span>, <span class="st">&quot;&quot;</span>, data.mj<span class="sc">$</span>temp.day)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.year <span class="ot">&lt;-</span> <span class="fu">substr</span>(data.mj<span class="sc">$</span>date, <span class="fu">nchar</span>(data.mj<span class="sc">$</span>date)<span class="sc">-</span><span class="dv">1</span>, <span class="fu">nchar</span>(data.mj<span class="sc">$</span>date))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>temp.date <span class="ot">&lt;-</span> <span class="fu">paste</span>(data.mj<span class="sc">$</span>temp.month, data.mj<span class="sc">$</span>temp.day, data.mj<span class="sc">$</span>temp.year, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>data.mj<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(data.mj<span class="sc">$</span>temp.date, <span class="at">format =</span> <span class="st">&quot;%m/%d/%y&quot;</span>)</span></code></pre></div>
+<ol start="2" type="1">
+<li>Parse the location</li>
+</ol>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data.mj <span class="ot">&lt;-</span> <span class="fu">separate</span>(data.mj, location, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;city&quot;</span>, <span class="st">&quot;state&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>)</span></code></pre></div>
+<h4 id="cleaning-cbp-weapons-seizures">Cleaning CBP Weapons
+Seizures</h4>
+<ol type="1">
+<li>Clean the year</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data.cbp<span class="sc">$</span>Fiscal.Year <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot; </span><span class="sc">\\</span><span class="st">(FYTD)&quot;</span>, <span class="st">&quot;&quot;</span>, data.cbp<span class="sc">$</span>Fiscal.Year, <span class="at">fixed =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<ol start="2" type="1">
+<li><p>Adjust the month</p></li>
+<li><p>Subset Outbound Weapons only</p></li>
+</ol>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data.cbp.outbound <span class="ot">&lt;-</span> <span class="fu">subset</span>(data.cbp, data.cbp<span class="sc">$</span>Inbound.Outbound <span class="sc">==</span> <span class="st">&#39;OUTBOUND&#39;</span> <span class="sc">&amp;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                              data.cbp<span class="sc">$</span>Seizure.Type <span class="sc">==</span> <span class="st">&#39;Weapons&#39;</span>)</span></code></pre></div>
+<h4 id="summary-table-examples">Summary Table Examples</h4>
+<p>Using Gun Violence Archive data as an example…</p>
+<p>Counting events per year</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sum.gva.events.year <span class="ot">&lt;-</span> data.gva <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p>Counting events per state</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sum.gva.events.state <span class="ot">&lt;-</span> data.gva <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(State) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p>Counting events per state &amp; year</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sum.gva.events.state.year <span class="ot">&lt;-</span> data.gva <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(State, Year) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;State&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p>Counting victims per year</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sum.gva.victims.year <span class="ot">&lt;-</span> data.gva <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Total =</span> <span class="fu">sum</span>(Victims.Total))</span></code></pre></div>
+<p>Counting victims per state &amp; year</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sum.gva.victims.state.year <span class="ot">&lt;-</span> data.gva <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(State, Year) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Total =</span> <span class="fu">sum</span>(Victims.Total))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;State&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p>One table for total victims and event counts by year and state</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sum.gva.events.state.year<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">paste</span>(sum.gva.events.state.year<span class="sc">$</span>State, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                                      sum.gva.events.state.year<span class="sc">$</span>Year, <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>sum.gva.victims.state.year<span class="sc">$</span>ID <span class="ot">&lt;-</span> <span class="fu">paste</span>(sum.gva.victims.state.year<span class="sc">$</span>State,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                                       sum.gva.victims.state.year<span class="sc">$</span>Year, <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>sum.gva <span class="ot">&lt;-</span> sum.gva.events.state.year <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sum.gva.victims.state.year, <span class="at">by =</span> <span class="st">&quot;ID&quot;</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>sum.gva <span class="ot">&lt;-</span> sum.gva[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">7</span>)]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sum.gva) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Event.Count&quot;</span>, <span class="st">&quot;Total.Victims&quot;</span>)</span></code></pre></div>
+<p>Summary to count quantities of outbound weapons</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sum.cbp <span class="ot">&lt;-</span> data.cbp.outbound <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Fiscal.Year) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Total =</span> <span class="fu">sum</span>(Quantity.Seized)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PCT =</span> Total<span class="sc">/</span><span class="fu">sum</span>(Total)<span class="sc">*</span><span class="dv">100</span>)</span></code></pre></div>
 <h3 id="calculate">3. Calculate</h3>
 <h3 id="visualize">4. Visualize</h3>
 <p>Ultimately, your methodology will result in analysis that becomes

@@ -157,6 +157,7 @@ data.cbp <- read.csv("https://www.cbp.gov/sites/default/files/2024-09/weapons-am
 ```
 
 2. Firearm laws from **RAND** or **Everytown**
+
 For **RAND**
     - Consider a time range that matches your events data.
     - Pick one of the four subtypes of laws
@@ -201,6 +202,119 @@ Some important considerations for ***how*** you wrangle your data include:
 These considerations help you build your methodology
 
 Methodology = how you conduct the interaction between Events and Access
+
+#### Cleaning Gun Violence Archive
+
+1. Clean the dates
+```{r}
+data.gva$Date <- as.Date(data.gva$Incident.Date, format = "%B %d, %Y")
+```
+
+2. Sum the victim count
+```{r}
+data.gva$Victims.Total <- data.gva$Victims.Killed + data.gva$Victims.Injured
+```
+
+3. Create a year attribute
+```{r}
+data.gva$Year <- substr(data.gva$Date, 0, 4)
+```
+
+#### Cleaning Mother Jones
+
+1. Clean the dates
+```{r}
+data.mj$temp.month <- substr(data.mj$date, 0, 2)
+data.mj$temp.month <- gsub("/", "", data.mj$temp.month)
+data.mj$temp.day <- substr(data.mj$date, (nchar(data.mj$temp.month)+2), (nchar(data.mj$temp.month)+3))
+data.mj$temp.day <- gsub("/", "", data.mj$temp.day)
+data.mj$temp.year <- substr(data.mj$date, nchar(data.mj$date)-1, nchar(data.mj$date))
+data.mj$temp.date <- paste(data.mj$temp.month, data.mj$temp.day, data.mj$temp.year, sep = "/")
+data.mj$date <- as.Date(data.mj$temp.date, format = "%m/%d/%y")
+```
+
+2. Parse the location
+```{r}
+data.mj <- separate(data.mj, location, into = c("city", "state"), sep = ", ")
+```
+
+#### Cleaning CBP Weapons Seizures
+
+1. Clean the year
+```{r}
+data.cbp$Fiscal.Year <- gsub(" \\(FYTD)", "", data.cbp$Fiscal.Year, fixed = TRUE)
+```
+
+2. Adjust the month
+```{r}
+
+```
+
+3. Subset Outbound Weapons only
+```{r}
+data.cbp.outbound <- subset(data.cbp, data.cbp$Inbound.Outbound == 'OUTBOUND' &
+                              data.cbp$Seizure.Type == 'Weapons')
+```
+
+#### Summary Table Examples
+Using Gun Violence Archive data as an example...
+
+Counting events per year
+```{r}
+sum.gva.events.year <- data.gva %>% 
+  group_by(Year) %>%
+  summarise(Count = n())
+```
+
+Counting events per state
+```{r}
+sum.gva.events.state <- data.gva %>% 
+  group_by(State) %>%
+  summarise(Count = n())
+```
+
+Counting events per state & year
+```{r}
+sum.gva.events.state.year <- data.gva %>% 
+  group_by(State, Year) %>%
+  summarise(Count = n())
+```
+
+Counting victims per year
+```{r}
+sum.gva.victims.year <- data.gva %>%
+  group_by(Year) %>%
+  summarise(Total = sum(Victims.Total))
+```
+
+Counting victims per state & year
+```{r}
+sum.gva.victims.state.year <- data.gva %>%
+  group_by(State, Year) %>%
+  summarise(Total = sum(Victims.Total))
+```
+
+One table for total victims and event counts by year and state
+```{r}
+sum.gva.events.state.year$ID <- paste(sum.gva.events.state.year$State, 
+                                      sum.gva.events.state.year$Year, sep = "-")
+sum.gva.victims.state.year$ID <- paste(sum.gva.victims.state.year$State,
+                                       sum.gva.victims.state.year$Year, sep = "-")
+
+sum.gva <- sum.gva.events.state.year %>%
+  left_join(sum.gva.victims.state.year, by = "ID")
+
+sum.gva <- sum.gva[c(1:3,7)]
+names(sum.gva) <- c("State", "Year", "Event.Count", "Total.Victims")
+```
+
+Summary to count quantities of outbound weapons
+```{r}
+sum.cbp <- data.cbp.outbound %>%
+  group_by(Fiscal.Year) %>%
+  summarise(Total = sum(Quantity.Seized)) %>%
+  mutate(PCT = Total/sum(Total)*100)
+```
 
 ### 3. Calculate
 
