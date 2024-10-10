@@ -4,8 +4,10 @@ author: "My Name"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output: 
   cleanrmd::html_document_clean:
-    theme: water-dark
+    theme: markdown-modest
     toc: yes
+    toc_float: 
+      collapsed: true
 ---
 
 Each research project will follow the general flow outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
