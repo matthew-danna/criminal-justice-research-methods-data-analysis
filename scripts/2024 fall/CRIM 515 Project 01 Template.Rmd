@@ -345,6 +345,30 @@ In the context of operating in a real criminal justice organization, how do your
 
 As an example, specific to this project, [consider something like this](https://www.thetrace.org/2024/03/new-york-mass-shooting-victims-survivors/).
 
+# Notes
+Here are the instructions from class on 10/7/2024:
+
+1. Research Question:
+  - 1 paragraph describing the **interaction of** events and access 
+2. Literature Review
+  - 1 paragraph, a relevant source
+3. Data
+  - Describe what, size, scope, how
+  - Events: 1 paragraph
+  - Access: 1 paragraph
+4. Methods
+  - Cleaning, merging, calculating, summarizing, joining 
+  - 3 paragraphs (events, access, analytics)
+5. Findings
+  - Your answers
+  - 5 analytic insights
+    - Insights are the interactions
+    - Each insight is a statement plus evidence
+      - Consider: *most, least, and normal across events and victims, state and year*
+  - **Include 3 visuals**
+6. So What
+  - Make *tangible, useful* sense of your findings
+
 # Writing Tips
 
 Related, some general notes about writing. Welcome to grad school, where the quality of your writing is held to a higher standard. Write directly. Thus, avoid using these words and phrases:
