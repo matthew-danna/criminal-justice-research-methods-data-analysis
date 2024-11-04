@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="My Name" />
-  <meta name="dcterms.date" content="2024-10-27" />
+  <meta name="dcterms.date" content="2024-11-04" />
   <title>CRIM 515 Project 2 Template</title>
 
 <style type="text/css" charset="utf-8">
@@ -347,7 +347,7 @@ pre code, pre code:not([class]) { white-space: unset; }
 <main>
 <header>
 <h1 id="title" class="toc-ignore">CRIM 515 Project 2 Template</h1>
-<p id="date">27 October 2024</p>
+<p id="date">04 November 2024</p>
 <p id="author">My Name</p>
 
 </header>
@@ -410,7 +410,8 @@ a <em>measurable</em>, <em>answerable</em> question.</p>
 <p>Additionally, you’ll need to consider <em>how</em> you define and
 measure change.</p>
 <h3 id="example">EXAMPLE</h3>
-<p><strong><em>Gangs</em></strong></p>
+<p><strong>Gangs</strong>, with a focus on <strong><em>statistical
+correlations, t tests, and/or proportionality</em></strong></p>
 <h1 id="literature-review">2. Literature Review</h1>
 <h3 id="instructions-1">INSTRUCTIONS</h3>
 <p>Identify one source that is relevant and related to your research
@@ -427,7 +428,13 @@ will develop in-class. It’s worth noting your don’t necessarily identify
 the question <em>before</em> the data. This section will be updated
 accordingly…</p>
 <h3 id="sources">SOURCES</h3>
-<p><strong><em>#soon</em></strong></p>
+<ol type="1">
+<li><strong>State Gang Stats</strong></li>
+<li><strong>FBI Juvenile Arrests</strong></li>
+<li><strong>DEA Drug Seizures</strong></li>
+<li><strong>CDC Drug Overdoses</strong></li>
+<li><strong>US Census</strong></li>
+</ol>
 <h1 id="methods">4. Methods</h1>
 <h3 id="instructions-3">INSTRUCTIONS</h3>
 <p><strong>Building</strong> a relevant methodology is largely dependent
@@ -439,28 +446,94 @@ work.</p>
 <p>This section will be updated accordingly during class and include
 these steps…</p>
 <h3 id="acquire">1. Acquire</h3>
+<ol type="1">
+<li><strong>State Gang Stats</strong>
+<ul>
+<li><a href="https://worldpopulationreview.com/state-rankings/gangs-by-state">Overall
+gangs by state</a>, allegedly, questionably</li>
+<li>Arizona: best we can do is a <a href="https://www.azcjc.gov/Portals/0/Documents/pubs/11092022_Commission_Gang%20Threat%20Assessment_FINAL.pdf">2022
+annual report</a> with statistics</li>
+<li><a href="https://oag.ca.gov/calgang/reports">California</a> has some
+of the best publicly available gang data in the US/World</li>
+<li>Florida has something publicly available</li>
+<li>Idaho has <a href="https://nibrs.isp.idaho.gov/CrimeInIdaho/Home/Index">crime
+data</a> and a lot of subjective radio station websites</li>
+<li>Illinois had <a href="https://www.propublica.org/article/chicago-illinois-gang-databases-download-propublica-data-store">so
+much potential</a>, but it’s all really old now</li>
+<li>Nevada and has <a href="https://nevadacrimestats.nv.gov/tops">crime
+data</a> but nothing specific</li>
+<li>New York has a <a href="https://data.cityofnewyork.us/Public-Safety/Daily-Inmates-In-Custody/7479-ugqb/about_data">Daily
+Inmates In Custody dataset</a> with a gang marker</li>
+<li>Texas has <strong><em>TxGang</em></strong> but it’s been subject to
+issues</li>
+<li>Virginia has really old reporting and some slideshows available. So,
+nothing really</li>
+</ul></li>
+<li><strong>FBI Juvenile Arrests</strong>
+<ul>
+<li>There’s two options, both from the <a href="https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/downloads">Crime
+Data Explorer</a>:
+<ol type="1">
+<li>The NIBRS Arrestees table by year</li>
+<li>The Master File Downloads Arrest table by year</li>
+</ol></li>
+</ul></li>
+<li><strong>DEA Drug Seizures</strong>
+<ul>
+<li><a href="https://www.nflis.deadiversion.usdoj.gov/publicationsRedesign.xhtml">DEA
+NLFIS Toxicology Reporting</a></li>
+</ul></li>
+<li><strong>CDC Drug Overdoses</strong>
+<ul>
+<li>There’s two options, both from CDC:
+<ol type="1">
+<li><a href="https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm">Provisional
+Drug Overdose Death Counts</a></li>
+<li><a href="https://wonder.cdc.gov/">WONDER Multiple Cause of
+Death</a></li>
+</ol></li>
+</ul></li>
+<li><strong>US Census</strong>
+<ul>
+<li>Use of the <a href="https://csde-uw.github.io/tidycensus-tutorial/">tidycensus</a>
+package</li>
+</ul></li>
+</ol>
 <p>Libraries you need for this section:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidycensus)</span></code></pre></div>
 <h3 id="wrangle-merge-clean">2. Wrangle (Merge + Clean)</h3>
 <p>Some important considerations for <strong><em>how</em></strong> you
 wrangle your data include:</p>
 <ul>
-<li><strong>SPACE</strong>
+<li><strong>SPACE</strong>:
 <ul>
-<li>Overall: U.S. (most likely)</li>
-<li>Unit of Measurement: State? U.S.?</li>
+<li>Overall: <strong><em>U.S.</em></strong></li>
+<li>Unit of Measurement: <strong><em>States or
+Counties</em></strong></li>
 </ul></li>
 <li><strong>TIME</strong>:
 <ul>
 <li>Overall: time range for your datas</li>
-<li>Unit of Measurement: Years? Months?</li>
+<li>Unit of Measurement: <strong><em>Years</em></strong></li>
+</ul></li>
+<li><strong>BEHAVIOR</strong>:
+<ul>
+<li>Overall: Types, categories</li>
+<li>Unit of Measurement: <strong><em>Arrest type</em></strong>,
+<strong><em>Drug type</em></strong>, <strong><em>Gang
+name</em></strong></li>
 </ul></li>
 </ul>
 <p>These considerations help you build your methodology</p>
 <p>Methodology = how you conduct the interaction between Events and
 Access</p>
 <h3 id="calculate">3. Calculate</h3>
-<p><strong><em>#soon</em></strong></p>
+<ul>
+<li><strong><em>Statistical Correlations</em></strong></li>
+<li><strong><em>t tests</em></strong></li>
+<li><strong><em>Proportionality</em></strong></li>
+</ul>
 <h3 id="visualize">4. Visualize</h3>
 <p>Ultimately, your methodology will result in analysis that becomes
 findings. Some things to consider:</p>

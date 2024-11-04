@@ -27,7 +27,7 @@ Your research question should consider **behavior**, **space**, and **time**. Yo
 Additionally, you'll need to consider *how* you define and measure change.
 
 ### EXAMPLE
-***Gangs***
+**Gangs**, with a focus on ***statistical correlations, t tests, and/or proportionality***
 
 # 2. Literature Review
 
@@ -42,7 +42,12 @@ Identify one source that is relevant and related to your research question. This
 **Identifying** and **acquiring** relevant sources is something directly related to your research question, and we will develop in-class. It's worth noting your don't necessarily identify the question *before* the data. This section will be updated accordingly...
 
 ### SOURCES
-***#soon***
+
+1. **State Gang Stats**
+2. **FBI Juvenile Arrests**
+3. **DEA Drug Seizures**
+4. **CDC Drug Overdoses**
+5. **US Census**
 
 # 4. Methods
 
@@ -54,21 +59,50 @@ This section will be updated accordingly during class and include these steps...
 
 ### 1. Acquire
 
+1. **State Gang Stats**
+    - [Overall gangs by state](https://worldpopulationreview.com/state-rankings/gangs-by-state), allegedly, questionably
+    - Arizona: best we can do is a [2022 annual report](https://www.azcjc.gov/Portals/0/Documents/pubs/11092022_Commission_Gang%20Threat%20Assessment_FINAL.pdf) with statistics
+    - [California](https://oag.ca.gov/calgang/reports) has some of the best publicly available gang data in the US/World
+    - Florida has something publicly available
+    - Idaho has [crime data](https://nibrs.isp.idaho.gov/CrimeInIdaho/Home/Index) and a lot of subjective radio station websites
+    - Illinois had [so much potential](https://www.propublica.org/article/chicago-illinois-gang-databases-download-propublica-data-store), but it's all really old now
+    - Nevada and has [crime data](https://nevadacrimestats.nv.gov/tops) but nothing specific
+    - New York has a [Daily Inmates In Custody dataset](https://data.cityofnewyork.us/Public-Safety/Daily-Inmates-In-Custody/7479-ugqb/about_data) with a gang marker
+    - Texas has ***TxGang*** but it's been subject to issues 
+    - Virginia has really old reporting and some slideshows available. So, nothing really
+2. **FBI Juvenile Arrests**
+    - There's two options, both from the [Crime Data Explorer](https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/downloads):
+        1. The NIBRS Arrestees table by year
+        2. The Master File Downloads Arrest table by year
+3. **DEA Drug Seizures**
+    - [DEA NLFIS Toxicology Reporting](https://www.nflis.deadiversion.usdoj.gov/publicationsRedesign.xhtml)
+4. **CDC Drug Overdoses**
+    - There's two options, both from CDC:
+        1. [Provisional Drug Overdose Death Counts](https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm)
+        2. [WONDER Multiple Cause of Death](https://wonder.cdc.gov/)
+5. **US Census**
+    - Use of the [tidycensus](https://csde-uw.github.io/tidycensus-tutorial/) package
+
 Libraries you need for this section:
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(tidycensus)
 ```
 
 ### 2. Wrangle (Merge + Clean)
 Some important considerations for ***how*** you wrangle your data include:
 
-  - **SPACE**
-      - Overall: U.S. (most likely)
-      - Unit of Measurement: State? U.S.?
+  - **SPACE**:
+      - Overall: ***U.S.***
+      - Unit of Measurement: ***States or Counties***
   
   - **TIME**: 
       - Overall: time range for your datas
-      - Unit of Measurement: Years? Months?
+      - Unit of Measurement: ***Years***
+  
+  - **BEHAVIOR**:
+      - Overall: Types, categories
+      - Unit of Measurement: ***Arrest type***, ***Drug type***, ***Gang name***
 
 These considerations help you build your methodology
 
@@ -76,7 +110,9 @@ Methodology = how you conduct the interaction between Events and Access
 
 ### 3. Calculate
 
-***#soon***
+- ***Statistical Correlations***
+- ***t tests***
+- ***Proportionality***
 
 ### 4. Visualize
 
