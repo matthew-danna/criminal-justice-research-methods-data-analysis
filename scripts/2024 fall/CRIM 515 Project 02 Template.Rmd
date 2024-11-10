@@ -27,7 +27,7 @@ Your research question should consider **behavior**, **space**, and **time**. Yo
 Additionally, you'll need to consider *how* you define and measure change.
 
 ### EXAMPLE
-**Gangs**, with a focus on ***statistical correlations, t tests, and/or proportionality***
+**Gangs**, with a focus on ***statistical correlations, t tests/chi squared, and/or proportionality***
 
 # 2. Literature Review
 
@@ -83,10 +83,27 @@ This section will be updated accordingly during class and include these steps...
 5. **US Census**
     - Use of the [tidycensus](https://csde-uw.github.io/tidycensus-tutorial/) package
 
-Libraries you need for this section:
+**Here's an example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Libraries you need:
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(tidycensus)
+library(knitr)
+library(gplots)
+library('graphics')
+library('vcd')
+library(corrplot)
+```
+
+2. Download the data from the website, read it into R (change file paths as necessary):
+```{r}
+ny.inmates <- read.csv("/Users/matthewdanna/Downloads/Daily_Inmates_In_Custody_20241109.csv", 
+                       stringsAsFactors = FALSE)
+```
+
+3. Get the charge code data from a [different website](https://www.criminaljustice.ny.gov/crimnet/ccman/codedlawmanual.xlsx), clean it manually in Excel, save it as a CSV, and then read it into R:
+```{r}
+ny.charges <- read.csv("/Users/matthewdanna/Downloads/codedlawmanual.csv", stringsAsFactors = FALSE)
 ```
 
 ### 2. Wrangle (Merge + Clean)
@@ -104,15 +121,136 @@ Some important considerations for ***how*** you wrangle your data include:
       - Overall: Types, categories
       - Unit of Measurement: ***Arrest type***, ***Drug type***, ***Gang name***
 
-These considerations help you build your methodology
+These considerations help you build your methodology.
 
-Methodology = how you conduct the interaction between Events and Access
+**Here's more of the example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Create subsets for gang and non-gang members:
+```{r}
+ny.inmates.gang <- subset(ny.inmates, ny.inmates$SRG_FLG == 'Y')
+ny.inmates.nogang <- subset(ny.inmates, ny.inmates$SRG_FLG == 'N')
+```
+
+2. Summarize gang and non-gang tables by key demographic features, including ***Sex***, ***Race***, ***Custody Level***, ***Mental Health***, and ***Criminal Charges***:
+```{r}
+# Gender
+ny.sex.gang <- ny.inmates.gang %>%
+  group_by(GENDER) %>%
+  summarise(GANG = n())
+ny.sex.ng <- ny.inmates.nogang %>%
+  group_by(GENDER) %>%
+  summarise(NOGANG = n())
+
+# Race
+ny.race.gang <- ny.inmates.gang %>%
+  group_by(RACE) %>%
+  summarise(GANG = n())
+ny.race.ng <- ny.inmates.nogang %>%
+  group_by(RACE) %>%
+  summarise(NOGANG = n())
+
+# Custody Level
+ny.cust.gang <- ny.inmates.gang %>%
+  group_by(CUSTODY_LEVEL) %>%
+  summarise(GANG = n())
+ny.cust.ng <- ny.inmates.nogang %>%
+  group_by(CUSTODY_LEVEL) %>%
+  summarise(NOGANG = n())
+```
+
+3. Clean up these tables by joining the gang and non-gang summaries for each into one table:
+```{r}
+ny.sex <- ny.sex.gang %>% left_join(ny.sex.ng, by = 'GENDER')
+ny.race <- ny.race.gang %>% left_join(ny.race.ng, by = 'RACE')
+ny.cust <- ny.cust.gang %>% left_join(ny.cust.ng, by = 'CUSTODY_LEVEL')
+```
+
+4. Update the column names so they match for all these new tables:
+```{r}
+colnames(ny.sex) <- c("CATEGORY", "GANG", "NOGANG")
+colnames(ny.race) <- c("CATEGORY", "GANG", "NOGANG")
+colnames(ny.cust) <- c("CATEGORY", "GANG", "NOGANG")
+```
+
+5. Remove the blank row (for incomplete data, we're assuming) for each:
+```{r}
+ny.sex <- subset(ny.sex, ny.sex$CATEGORY != "")
+ny.race <- subset(ny.race, ny.race$CATEGORY != "")
+ny.cust <- subset(ny.cust, ny.cust$CATEGORY != "")
+```
+
+6. Combine the tables into one:
+```{r}
+ny.combo <- rbind(ny.sex, ny.race, ny.cust)
+```
+
+7. Create a new table, keeping only the gang and non-gang columns, removing the categories:
+```{r}
+ny.sum <- ny.combo[c(2:3)]
+```
+
+8. Re-add the categories, as row names, to this new table:
+```{r, warning=FALSE}
+row.names(ny.sum) <- c("FEMALE", "MALE", "ASIAN", "BLACK", "NAT AM", "OTHER", "UNK", "WHITE", "MAX", "MED", "MIN")
+kable(head(ny.sum), format = "markdown")
+```
+*This doesn't show the row names but they are there, don't worry.*
+
+This example does not incorporate the mental health indicators and the charge code data...yet.
 
 ### 3. Calculate
 
 - ***Statistical Correlations***
-- ***t tests***
+- ***t tests/chi-squared***
 - ***Proportionality***
+
+The ***chi-square test*** of independence is used to analyze a table with counts/frequencies, aka a contingency table. These counts are formed by two categorical variables. This test evaluates whether there is a statistically significant relationship between the categories. The *null hypothesis (H0)* is that the variables of the contingency table are independent. The *alternative hypothesis (H1)* is that the variables are dependent. For each cell of the table, we will calculate the expected value under the null hypothesis.
+
+**Even more of the example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Calculate the chi-square, and view the result:
+```{r, warning=FALSE}
+chisq <- chisq.test(ny.sum)
+chisq
+```
+The result shows:
+
+  - statistic: the value of the chi-squared test 
+  - parameter: the degrees of freedom
+  - p.value: the measure of statistical significance
+  - observed: the observed count
+  - expected: the expected count
+  
+2. Examine the chi-square outputs, including:
+
+  - p-value
+```{r, warning=FALSE}
+chisq$p.value
+```
+
+  - Observed counts
+```{r}
+chisq$observed
+```
+
+  - Expected counts
+```{r}
+round(chisq$expected,2)
+```
+
+3. Calculate the residuals and contribution percentage:
+
+  - Residuals: cells with the highest absolute standardized residuals contribute the most to the chi-square output
+```{r}
+round(chisq$residuals, 3)
+```
+
+  - Contribution percentage: the relative contribution of each cell to the total chi-square score indicates the dependency between rows and columns of the contingency table
+```{r}
+contrib <- 100*chisq$residuals^2/chisq$statistic
+round(contrib, 3)
+```
+
 
 ### 4. Visualize
 
@@ -122,6 +260,113 @@ Ultimately, your methodology will result in analysis that becomes findings. Some
 - What happens the most, what happens the least?
 - Are there anomalies? 
 - What do the statistics tell you? 
+
+**Keep the good times rolling with use of the** ***NYC Daily Inmate*** **Data**:
+
+1. Reformat the data as a table:
+```{r}
+ny.table <- as.table(as.matrix(ny.sum))
+```
+
+2. Create a Balloon plot, where dot size is the relative magnitude of each component:
+```{r}
+balloonplot(t(ny.table), main ="Characteristics", xlab ="Inmates", ylab="Components",
+            label = FALSE, show.margins = FALSE)
+```
+
+3. Create a Mosaic plot, where blue represents a higher than expected value, and red is a lower than expected value (if the data were random):
+```{r}
+mosaicplot(ny.table, shade = TRUE, las=2,
+           main = "Characteristics")
+```
+
+4. Create an association plot, using the same legend as above. Make sure to set this number to the number of rows in your table:
+```{r}
+assoc(head(ny.table, 11), shade = TRUE, las=3) 
+```
+
+5. Create a residuals plot. Positives are in blue, negatives in red. Positive values show attraction between variables; negatives show repulsion.
+```{r}
+corrplot(chisq$residuals, is.cor = FALSE)
+```
+
+6. Create a correlation plot for the contribution percentage.
+```{r}
+corrplot(contrib, is.cor = FALSE)
+```
+
+# Additional Example
+### DEA NFLIS data
+
+1. Data prep
+  - Download, unzip, open table 2 in Excel
+  - Delete rows 1 and 2, delete the last 11 rows of footers
+  - Move rows of states into new columns
+  - Format every state column as a number
+  - Save as a CSV
+  - Read into R:
+```{r}
+dea.seizures <- read.csv("/Users/matthewdanna/Downloads/2022NFLISWebsiteTable2.csv", stringsAsFactors = FALSE)
+```
+
+2. Pick drugs and states of interest
+  - Drugs
+```{r}
+dea.subset <- subset(dea.seizures, 
+                     dea.seizures$Drug == 'Cocaine' | 
+                       dea.seizures$Drug == 'Fentanyl' |
+                       dea.seizures$Drug == 'Heroin' |
+                       dea.seizures$Drug == 'Methamphetamine')
+```
+
+  - States
+```{r}
+dea.states <- as.data.frame(t(dea.subset[,-1]))
+colnames(dea.states) <- dea.subset$Drug
+dea.states$Total <- dea.states$Cocaine + dea.states$Fentanyl + 
+  dea.states$Heroin + dea.states$Methamphetamine
+```
+
+Subset, remove the drug categories, re-add them as row names.
+```{r}
+dea.subset <- dea.subset[c(1,6,45,37,34)]
+dea <- dea.subset[c(2:5)]
+row.names(dea) <- c("COCAINE", "FENTANYL", "HEROIN", "METH")
+```
+
+3. Stats
+```{r}
+chisq <- chisq.test(dea)
+chisq
+chisq$p.value
+dea.expected <- data.frame(round(chisq$expected,2))
+dea.residentials <- data.frame(round(chisq$residuals, 3))
+contrib <- 100*chisq$residuals^2/chisq$statistic
+```
+
+4. Visuals
+```{r}
+dea.table <- as.table(as.matrix(dea))
+balloonplot(t(dea.table), main ="Characteristics", xlab ="", ylab="",
+            label = FALSE, show.margins = FALSE)
+```
+
+```{r}
+mosaicplot(dea.table, shade = TRUE, las=2,
+           main = "Characteristics")
+```
+
+```{r}
+assoc(head(dea.table, 11), shade = TRUE, las=3) 
+```
+
+```{r}
+corrplot(chisq$residuals, is.cor = FALSE)
+```
+
+```{r}
+corrplot(contrib, is.cor = FALSE)
+```
 
 # 5. Findings
 
