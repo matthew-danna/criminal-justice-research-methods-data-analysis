@@ -1,0 +1,466 @@
+---
+title: "CRIM 515 Final Project Template"
+author: "My Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  cleanrmd::html_document_clean:
+    theme: markdown-modest
+    toc: yes
+    toc_float: 
+      collapsed: true
+---
+
+Each research project will follow the general flow outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
+
+# 1. Research Question
+
+### INSTRUCTIONS
+
+The goal of this project is to scientifically assess a complex criminal justice topic. You are taking a broad topic and refining it to a *measurable*, *answerable* question.
+
+Your research question should consider **behavior**, **space**, and **time**. You'll either *measure* or *control* for each of these. 
+
+- Behavior: what
+- Space: where
+- Time: when
+
+Additionally, you'll need to consider *how* you define and measure change.
+
+### EXAMPLE
+**Gangs**, with a focus on ***statistical correlations, t tests/chi squared, and/or proportionality***
+
+# 2. Literature Review
+
+### INSTRUCTIONS
+
+Identify one source that is relevant and related to your research question. This source needs to be an article from a peer-academic academic journal. Briefly describe the source and why it’s relevant to your study in approximately one paragraph. Include information about the **research question**, **data**, **methods**, and **findings**. 
+
+# 3. Data
+
+### INSTRUCTIONS
+
+**Identifying** and **acquiring** relevant sources is something directly related to your research question, and we will develop in-class. It's worth noting your don't necessarily identify the question *before* the data. This section will be updated accordingly...
+
+Filter a group of call types:
+```{r}
+group <- c("TRESPASSING", "TRAFFIC STOP")
+cfs <- old.cfs %>% filter(old.cfs$type %in% group)
+```
+
+
+### SOURCES
+
+1. **State Gang Stats**
+2. **FBI Juvenile Arrests**
+3. **DEA Drug Seizures**
+4. **CDC Drug Overdoses**
+5. **US Census**
+
+# 4. Methods
+
+### INSTRUCTIONS
+
+**Building** a relevant methodology is largely dependent on your research question and data. Any good methodology involves multiple steps for acquiring, wrangling, cleaning, analyzing, and visualizing data. There is no single right answer here; rather, it’s the ability to craft a unique, distinct workflow that results in innovative work. 
+
+This section will be updated accordingly during class and include these steps...
+
+### 1. Acquire
+
+1. **State Gang Stats**
+    - [Overall gangs by state](https://worldpopulationreview.com/state-rankings/gangs-by-state), allegedly, questionably
+    - Arizona: best we can do is a [2022 annual report](https://www.azcjc.gov/Portals/0/Documents/pubs/11092022_Commission_Gang%20Threat%20Assessment_FINAL.pdf) with statistics
+    - [California](https://oag.ca.gov/calgang/reports) has some of the best publicly available gang data in the US/World
+    - Florida has something publicly available
+    - Idaho has [crime data](https://nibrs.isp.idaho.gov/CrimeInIdaho/Home/Index) and a lot of subjective radio station websites
+    - Illinois had [so much potential](https://www.propublica.org/article/chicago-illinois-gang-databases-download-propublica-data-store), but it's all really old now
+    - Nevada and has [crime data](https://nevadacrimestats.nv.gov/tops) but nothing specific
+    - New York has a [Daily Inmates In Custody dataset](https://data.cityofnewyork.us/Public-Safety/Daily-Inmates-In-Custody/7479-ugqb/about_data) with a gang marker
+    - Texas has ***TxGang*** but it's been subject to issues 
+    - Virginia has really old reporting and some slideshows available. So, nothing really
+2. **FBI Juvenile Arrests**
+    - There's two options, both from the [Crime Data Explorer](https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/downloads):
+        1. The NIBRS Arrestees table by year
+        2. The Master File Downloads Arrest table by year
+3. **DEA Drug Seizures**
+    - [DEA NLFIS Toxicology Reporting](https://www.nflis.deadiversion.usdoj.gov/publicationsRedesign.xhtml)
+4. **CDC Drug Overdoses**
+    - There's two options, both from CDC:
+        1. [Provisional Drug Overdose Death Counts](https://www.cdc.gov/nchs/nvss/vsrr/drug-overdose-data.htm)
+        2. [WONDER Multiple Cause of Death](https://wonder.cdc.gov/)
+5. **US Census**
+    - Use of the [tidycensus](https://csde-uw.github.io/tidycensus-tutorial/) package
+
+**Here's an example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Libraries you need:
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(gplots)
+library('graphics')
+library('vcd')
+library(corrplot)
+```
+
+2. Download the data from the website, read it into R (change file paths as necessary):
+```{r}
+ny.inmates <- read.csv("/Users/matthewdanna/Downloads/Daily_Inmates_In_Custody_20241109.csv", 
+                       stringsAsFactors = FALSE)
+```
+
+3. Get the charge code data from a [different website](https://www.criminaljustice.ny.gov/crimnet/ccman/codedlawmanual.xlsx), clean it manually in Excel, save it as a CSV, and then read it into R:
+```{r}
+ny.charges <- read.csv("/Users/matthewdanna/Downloads/codedlawmanual.csv", stringsAsFactors = FALSE)
+```
+
+### 2. Wrangle (Merge + Clean)
+Some important considerations for ***how*** you wrangle your data include:
+
+  - **SPACE**:
+      - Overall: ***U.S.***
+      - Unit of Measurement: ***States or Counties***
+  
+  - **TIME**: 
+      - Overall: time range for your datas
+      - Unit of Measurement: ***Years***
+  
+  - **BEHAVIOR**:
+      - Overall: Types, categories
+      - Unit of Measurement: ***Arrest type***, ***Drug type***, ***Gang name***
+
+These considerations help you build your methodology.
+
+**Here's more of the example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Create subsets for gang and non-gang members:
+```{r}
+ny.inmates.gang <- subset(ny.inmates, ny.inmates$SRG_FLG == 'Y')
+ny.inmates.nogang <- subset(ny.inmates, ny.inmates$SRG_FLG == 'N')
+```
+
+2. Summarize gang and non-gang tables by key demographic features, including ***Sex***, ***Race***, ***Custody Level***, ***Mental Health***, and ***Criminal Charges***:
+```{r}
+# Gender
+ny.sex.gang <- ny.inmates.gang %>%
+  group_by(GENDER) %>%
+  summarise(GANG = n())
+ny.sex.ng <- ny.inmates.nogang %>%
+  group_by(GENDER) %>%
+  summarise(NOGANG = n())
+
+# Race
+ny.race.gang <- ny.inmates.gang %>%
+  group_by(RACE) %>%
+  summarise(GANG = n())
+ny.race.ng <- ny.inmates.nogang %>%
+  group_by(RACE) %>%
+  summarise(NOGANG = n())
+
+# Custody Level
+ny.cust.gang <- ny.inmates.gang %>%
+  group_by(CUSTODY_LEVEL) %>%
+  summarise(GANG = n())
+ny.cust.ng <- ny.inmates.nogang %>%
+  group_by(CUSTODY_LEVEL) %>%
+  summarise(NOGANG = n())
+```
+
+3. Clean up these tables by joining the gang and non-gang summaries for each into one table:
+```{r}
+ny.sex <- ny.sex.gang %>% left_join(ny.sex.ng, by = 'GENDER')
+ny.race <- ny.race.gang %>% left_join(ny.race.ng, by = 'RACE')
+ny.cust <- ny.cust.gang %>% left_join(ny.cust.ng, by = 'CUSTODY_LEVEL')
+```
+
+4. Update the column names so they match for all these new tables:
+```{r}
+colnames(ny.sex) <- c("CATEGORY", "GANG", "NOGANG")
+colnames(ny.race) <- c("CATEGORY", "GANG", "NOGANG")
+colnames(ny.cust) <- c("CATEGORY", "GANG", "NOGANG")
+```
+
+5. Remove the blank row (for incomplete data, we're assuming) for each:
+```{r}
+ny.sex <- subset(ny.sex, ny.sex$CATEGORY != "")
+ny.race <- subset(ny.race, ny.race$CATEGORY != "")
+ny.cust <- subset(ny.cust, ny.cust$CATEGORY != "")
+```
+
+6. Combine the tables into one:
+```{r}
+ny.combo <- rbind(ny.sex, ny.race, ny.cust)
+```
+
+7. Create a new table, keeping only the gang and non-gang columns, removing the categories:
+```{r}
+ny.sum <- ny.combo[c(2:3)]
+```
+
+8. Re-add the categories, as row names, to this new table:
+```{r, warning=FALSE}
+row.names(ny.sum) <- c("FEMALE", "MALE", "ASIAN", "BLACK", "NAT AM", "OTHER", "UNK", "WHITE", "MAX", "MED", "MIN")
+kable(head(ny.sum), format = "markdown")
+```
+*This doesn't show the row names but they are there, don't worry.*
+
+This example does not incorporate the mental health indicators and the charge code data...yet.
+
+### 3. Calculate
+
+- ***Statistical Correlations***
+- ***t tests/chi-squared***
+- ***Proportionality***
+
+The ***chi-square test*** of independence is used to analyze a table with counts/frequencies, aka a contingency table. These counts are formed by two categorical variables. This test evaluates whether there is a statistically significant relationship between the categories. The *null hypothesis (H0)* is that the variables of the contingency table are independent. The *alternative hypothesis (H1)* is that the variables are dependent. For each cell of the table, we will calculate the expected value under the null hypothesis.
+
+**Even more of the example that focuses on using** ***NYC Daily Inmate*** **Data**:
+
+1. Calculate the chi-square, and view the result:
+```{r, warning=FALSE}
+chisq <- chisq.test(ny.sum)
+chisq
+```
+The result shows:
+
+  - statistic: the value of the chi-squared test 
+  - parameter: the degrees of freedom
+  - p.value: the measure of statistical significance
+  - observed: the observed count
+  - expected: the expected count
+  
+2. Examine the chi-square outputs, including:
+
+  - p-value
+```{r, warning=FALSE}
+chisq$p.value
+```
+
+  - Observed counts
+```{r}
+chisq$observed
+```
+
+  - Expected counts
+```{r}
+round(chisq$expected,2)
+```
+
+3. Calculate the residuals and contribution percentage:
+
+  - Residuals: cells with the highest absolute standardized residuals contribute the most to the chi-square output
+```{r}
+round(chisq$residuals, 3)
+```
+
+  - Contribution percentage: the relative contribution of each cell to the total chi-square score indicates the dependency between rows and columns of the contingency table
+```{r}
+contrib <- 100*chisq$residuals^2/chisq$statistic
+round(contrib, 3)
+```
+
+
+### 4. Visualize
+
+Ultimately, your methodology will result in analysis that becomes findings. Some things to consider:
+
+- What are the trends? 
+- What happens the most, what happens the least?
+- Are there anomalies? 
+- What do the statistics tell you? 
+
+**Keep the good times rolling with use of the** ***NYC Daily Inmate*** **Data**:
+
+1. Reformat the data as a table:
+```{r}
+ny.table <- as.table(as.matrix(ny.sum))
+```
+
+2. Create a Balloon plot, where dot size is the relative magnitude of each component:
+```{r}
+balloonplot(t(ny.table), main ="Characteristics", xlab ="Inmates", ylab="Components",
+            label = FALSE, show.margins = FALSE)
+```
+
+3. Create a Mosaic plot, where blue represents a higher than expected value, and red is a lower than expected value (if the data were random):
+```{r}
+mosaicplot(ny.table, shade = TRUE, las=2,
+           main = "Characteristics")
+```
+
+4. Create an association plot, using the same legend as above. Make sure to set this number to the number of rows in your table:
+```{r}
+assoc(head(ny.table, 11), shade = TRUE, las=3) 
+```
+
+5. Create a residuals plot. Positives are in blue, negatives in red. Positive values show attraction between variables; negatives show repulsion.
+```{r}
+corrplot(chisq$residuals, is.cor = FALSE)
+```
+
+6. Create a correlation plot for the contribution percentage.
+```{r}
+corrplot(contrib, is.cor = FALSE)
+```
+
+# Additional Example
+### DEA NFLIS data
+
+1. Data prep
+  - Download, unzip, open table 2 in Excel
+  - Delete rows 1 and 2, delete the last 11 rows of footers
+  - Move rows of states into new columns
+  - Format every state column as a number
+  - Save as a CSV
+  - Read into R:
+```{r}
+dea.seizures <- read.csv("/Users/matthewdanna/Downloads/2022NFLISWebsiteTable2.csv", stringsAsFactors = FALSE)
+```
+
+2. Pick drugs and states of interest
+  - Drugs
+```{r}
+dea.subset <- subset(dea.seizures, 
+                     dea.seizures$Drug == 'Cocaine' | 
+                       dea.seizures$Drug == 'Fentanyl' |
+                       dea.seizures$Drug == 'Heroin' |
+                       dea.seizures$Drug == 'Methamphetamine')
+```
+
+  - States
+```{r}
+dea.states <- as.data.frame(t(dea.subset[,-1]))
+colnames(dea.states) <- dea.subset$Drug
+dea.states$Total <- dea.states$Cocaine + dea.states$Fentanyl + 
+  dea.states$Heroin + dea.states$Methamphetamine
+```
+
+Subset, remove the drug categories, re-add them as row names.
+```{r}
+dea.subset <- dea.subset[c(1,6,45,37,34)]
+dea <- dea.subset[c(2:5)]
+row.names(dea) <- c("COCAINE", "FENTANYL", "HEROIN", "METH")
+```
+
+3. Stats
+```{r}
+chisq <- chisq.test(dea)
+chisq
+chisq$p.value
+dea.expected <- data.frame(round(chisq$expected,2))
+dea.residentials <- data.frame(round(chisq$residuals, 3))
+contrib <- 100*chisq$residuals^2/chisq$statistic
+```
+
+4. Visuals
+```{r}
+dea.table <- as.table(as.matrix(dea))
+balloonplot(t(dea.table), main ="Characteristics", xlab ="", ylab="",
+            label = FALSE, show.margins = FALSE)
+```
+
+```{r}
+mosaicplot(dea.table, shade = TRUE, las=2,
+           main = "Characteristics")
+```
+
+```{r}
+assoc(head(dea.table, 11), shade = TRUE, las=3) 
+```
+
+```{r}
+corrplot(chisq$residuals, is.cor = FALSE)
+```
+
+```{r}
+corrplot(contrib, is.cor = FALSE)
+```
+
+# 5. Findings
+
+### INSTRUCTIONS
+
+So, that workflow and methodology you created? Use it to answer your research question. Based on the data acquired and the methods applied, what is your answer to the question? How confident are you in the results? What else? Is anything missing? Is the data complete? Is it accurate? Make sure to caveat your findings as necessary. Related, this section should be written in clear, concise, plain English statements. The methodology is for complex thought and processes; the findings are for easily digestible content.
+
+# 6. So What
+
+### INSTRUCTIONS
+
+In the context of operating in a real criminal justice organization, how do your findings ***inform*** decision-making processes? Does what you’ve discovered ***confirm/deny*** conventional wisdom? How does a criminal justice organization ***operationalize*** these findings? Why do your findings matter, and what does a successful ***integration*** of your work look like? Be bold, and be specific. For example, check out [this](https://www.start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_CommunityBasedOrganizations_June2019.pdf), [this](https://start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_PublicHealthFramework_June2019.pdf), and [this](https://cebcp.org/evidence-based-policing/what-works-in-policing/research-evidence-review/focused-deterrence/). Sure, they are violent extremism, but the way they were built can be really useful in this context, too.  
+
+# Writing Tips
+
+Related, some general notes about writing. Welcome to grad school, where the quality of your writing is held to a higher standard. Write directly. Thus, avoid using these words and phrases:
+
+* Simply. Very. Indeed. Specifically. Perhaps. Arguably. Usually. Essentially. Could possibly. Could potentially. Necessarily. Only. Especially. In order to. Likely. Primarily. Generally. It is important that. It is essential to note.
+
+Also, words have meanings. [Some are stronger than others](https://www.themuse.com/advice/185-powerful-verbs-that-will-make-your-resume-awesome). [Others aren’t real](https://www.rd.com/article/words-that-arent-words/).
+
+Further, here’s some other strategies to consider:
+
+* Read sentences aloud… but don’t write like you speak.
+* Ask yourself - does this sentence make sense, by itself.
+* It’s ok to occasionally use quotes, don’t copy specific language or words.
+* If you don’t know the meaning of a word, don’t use it!
+
+And finally, [this is just fun](https://www.thisworddoesnotexist.com/).
+
+# Other Information/Reminders
+
+1. When submitting your projects, you are submitting either an **HTML** or **PDF** output of your Markdown file, as an upload to Canvas - not via email.
+2. When you are ready to see what the output looks like, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
+3. *Never ever ever include any install.packages functions.* Either comment them out with a #, or delete them.
+
+# Grading: 30pts
+
+#### 1. Research Question
+***2pts***
+
+Provide a brief paragraph on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured.
+
+#### 2. Literature Review
+***2pts***
+
+Provide a brief paragraph describing a prior study related to your current project. This study should be from a peer-academic academic journal. Include details about the *research question*, *data*, *methods*, and *findings*. Cite the article in *APA format*. 
+
+#### 3. Data 
+***2pts***
+
+Provide a brief paragraph on the data used in this study. This includes the specific source(s), and the specific temporal and spatial constraints. Address any major advantages and disadvantages with using these data compared to other sources. Be specific enough that a reader could replicate this work.
+
+#### 4. Methods
+***2pts***
+
+Provide a brief paragraph on the research methods leveraged to answer this question. This includes the software, calculations, skills, techniques, and unique workflows used to analyze your data and develop an answer. You do NOT need to describe click-by-click instructions or lines of code describing how you did things; you DO need to describe a logical process that is specific enough that a reader could replicate. 
+
+#### 5. Findings
+***10pts***
+
+Provide at least five paragraphs on the findings of your study (*2pts each*). Your findings should be descriptive, clear, and comprehensively answer the original question. Each paragraph should describe a unique analytic insight dervied from your research. Each analytic insight should be the product of your methods, applied to your data, to provide part of an answer to your research question.
+
+Address any limitations or factors to consider for future research. Make sure to actually answer the question! 
+
+#### 6. So What
+***5pts***
+
+Provide a brief paragraph on the importance of this study, as a criminal justice professional. How can these findings be integrated into a real world environment? Be as specific as possible as to why your findings matter, and what a successful application of your work would look like. Include any potentially actionable or tangible conclusions (*4pts*). 
+
+Based on your findings, include a brief discussion (2-3 sentences) on implications and opportunities for further research (*1pt*).
+
+#### 7. Visuals
+***6pts***
+
+Provide at least three visuals of your data. These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
+
+- Thoughtful and logical: do they make sense to someone that has never seen them before? (*2pts*)
+- All visuals should be somehow, someway referenced in the text (*2pts*) 
+- Analytically meaningful: does each visual provide useful, relevant, and actionable insights? (*2pts*) 
+
+#### 8. Formatting
+***1pt***
+
+- Error-free writing (*1pt*). No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
+- File submitted as the knitted HTML output of an RMarkdown file, via Canvas (*1pt*).
+
+ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2002%20Template.Rmd).
+
+Please [email me](mailto:mdanna2@gmu.edu) with any questions.
