@@ -456,4 +456,10 @@ Provide at least three visuals of your data. These visuals should be relevant to
 
 ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2002%20Template.Rmd).
 
+AND, from class on 11/11/2024:
+
+- [Here is the script we built throughout the night](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/crim%20515%20project%2002%202024%2011%2011.R)
+
+- [Here is the basic Markdown file we built at the end of class](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2002%20Template%202024%2011%2011.Rmd)
+
 Please [email me](mailto:mdanna2@gmu.edu) with any questions.
