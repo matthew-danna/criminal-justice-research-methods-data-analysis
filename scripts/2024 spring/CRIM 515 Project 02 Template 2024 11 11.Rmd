@@ -1,0 +1,41 @@
+---
+title: "CRIM 515 Project 2 Template"
+author: "Your Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+# 1. Research Question
+
+**Gangs**, with a focus on ***statistical correlations, t tests/chi squared, and/or proportionality***
+
+# 2. Literature Review
+
+Include information about the **research question**, **data**, **methods**, and **findings**. 
+
+Include an APA citation - here or at the end.
+
+# 3. Data
+
+1. **NYC Inmates**
+
+or
+
+2. **DEA Drug Seizures**
+
+One paragraph about the data itself - size, format, time, space, etc.
+
+# 4. Methods
+
+1. Acquire
+2. Wrangle (Merge + Clean)
+3. Calculate
+4. Visualize
+
+# 5. Findings
+
+Have one paragraph per finding; five findings total
+
+Include visuals to accompany findings (only need 3 visuals).
+
+# 6. So What
