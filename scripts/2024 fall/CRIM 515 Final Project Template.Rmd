@@ -10,51 +10,64 @@ output:
       collapsed: true
 ---
 
-Each research project will follow the general flow outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
+The Final Project follows the same general flow as the Research Projects, as outlined below. Use this format as much or as little as you'd like, as long as the required components are covered.
 
 # 1. Research Question
 
 ### INSTRUCTIONS
 
-The goal of this project is to scientifically assess a complex criminal justice topic. You are taking a broad topic and refining it to a *measurable*, *answerable* question.
+The goal of this project is **forecast** future **calls for service** activity in the **City of Fairfax, Virginia** for calendar year 2025. 
 
 Your research question should consider **behavior**, **space**, and **time**. You'll either *measure* or *control* for each of these. 
 
-- Behavior: what
+- Behavior: what call type(s)
 - Space: where
 - Time: when
 
-Additionally, you'll need to consider *how* you define and measure change.
-
 ### EXAMPLE
-**Gangs**, with a focus on ***statistical correlations, t tests/chi squared, and/or proportionality***
+Using 2008-2024 data, forecast **trespass** calls for service counts and locations in the City of Fairfax, VA for each month in 2025.
 
 # 2. Literature Review
 
 ### INSTRUCTIONS
 
-Identify one source that is relevant and related to your research question. This source needs to be an article from a peer-academic academic journal. Briefly describe the source and why it’s relevant to your study in approximately one paragraph. Include information about the **research question**, **data**, **methods**, and **findings**. 
+Identify one source that is *relevant* and *related* to your research question. This source needs to be an article from a peer-academic academic journal. Briefly describe the source and why it’s relevant to your study in approximately one paragraph. Include information about the **research question**, **data**, **methods**, and **findings**. 
 
 # 3. Data
 
-### INSTRUCTIONS
+### INSTRUCTIONS / EXAMPLE
 
-**Identifying** and **acquiring** relevant sources is something directly related to your research question, and we will develop in-class. It's worth noting your don't necessarily identify the question *before* the data. This section will be updated accordingly...
-
-Filter a group of call types:
-```{r}
-group <- c("TRESPASSING", "TRAFFIC STOP")
-cfs <- old.cfs %>% filter(old.cfs$type %in% group)
+1. Load the libraries you need for success:
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+library(zoo)
+library(aTSA)
+library(tseries)
+library(forecast)
 ```
 
 
-### SOURCES
+2. Get the latest Fairfax calls for service data:
+```{r}
+calls <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", "1gniFP35GEfxycgpKGHAzkgSYmjTteTKm"))
+```
 
-1. **State Gang Stats**
-2. **FBI Juvenile Arrests**
-3. **DEA Drug Seizures**
-4. **CDC Drug Overdoses**
-5. **US Census**
+3. Determine the total count and percentage of each call type:
+```{r}
+sum.calls <- calls %>%
+  group_by(type) %>%
+  summarise(call.count = n()) %>%
+  mutate(pct = round(call.count/sum(call.count)*100,2))
+```
+
+4. Filter the call types to forecast:
+```{r}
+group <- c("TRESPASSING", "TRAFFIC STOP")
+calls.subset <- calls %>% filter(calls$type %in% group)
+```
 
 # 4. Methods
 
