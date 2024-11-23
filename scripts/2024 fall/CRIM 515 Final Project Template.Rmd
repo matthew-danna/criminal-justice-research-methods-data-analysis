@@ -54,9 +54,10 @@ calls.full <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download
 
 ### Wrangle
 
-3. Format the date, as a date:
+3. Format the date, as a date, and add a month column for later:
 ```{r}
 calls.full$DATE <- as.Date(calls.full$date, format = "%Y-%m-%d")
+calls.full$MONTH <- months(calls.full$DATE)
 ```
 
 4. Determine the total count and percentage of each call type:
@@ -161,7 +162,34 @@ additional.7days <- round(sum(forecast.7days$upper[,2]),0)
 additional.7days
 ```
 
-9. 
+9. Identify the number of days between the last date in your dataset and the end of 2025:
+```{r}
+forecast.window <- as.numeric(as.Date("2025-12-31")-max(calls$DATE))
+```
+
+10. Forecast the number of calls per day for everyday in that window:
+```{r}
+forecast.2025 <- forecast(arima.calls, h=forecast.window)
+```
+
+11. Extract the forecasted values as a table, clean up the column names, add the forecast date, and month:
+```{r}
+forecast.values <- as.data.frame(forecast.2025$upper)
+colnames(forecast.values) <- c("CI80", "CI90")
+forecast.values$ID <- seq.int(nrow(forecast.values))
+forecast.values$DATE <- as.Date(max(calls$DATE) + forecast.values$ID)
+forecast.values$MONTH <- months(forecast.values$DATE)
+```
+
+12. Filter to 2025, summarize forecasts by month:
+```{r}
+forecast.values.2025 <- subset(forecast.values, forecast.values$DATE > '2024-12-31')
+forecast.months <- forecast.values.2025 %>%
+  group_by(MONTH) %>%
+  summarise(FORECAST.90 = round(sum(CI90),0), FORECAST.80 = round(sum(CI80),0))
+forecast.months$DIFF <- forecast.months$FORECAST.90 - forecast.months$FORECAST.80
+```
+
 
 ### Visualize
 
@@ -180,16 +208,54 @@ graph.calls +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-2. Graph your monthly forecasts:
+2. Tweak the data table for making a graph:
 ```{r}
-
+forecast.months$MONTH <- factor(forecast.months$MONTH, levels = forecast.months$MONTH)
+forecast.long <- pivot_longer(forecast.months, cols = c(FORECAST.80, DIFF), 
+                          names_to = "Category", values_to = "Value")
+forecast.long$Category <- gsub("DIFF", "90% Confidence Interval", forecast.long$Category)
+forecast.long$Category <- gsub("FORECAST.80", "80% Confidence Interval", forecast.long$Category)
 ```
 
-3. Map your monthly hotspots:
+3. Graph your monthly forecasts:
 ```{r}
-
+ggplot(forecast.long, aes(x = MONTH, y = Value, fill = fct_rev(Category))) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = FORECAST.90), size = 3, colour = 'white', position = position_stack(vjust = 0.5)) + 
+  labs(title = "City of Fairfax 2025 Monthly Forecast", 
+       x = "Month", 
+       y = "Call Count") +
+  scale_fill_manual(values = c("90% Confidence Interval" = "blue",
+                               "80% Confidence Interval" = "grey"),
+                    name = "Forecasts") +
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August",
+                              "September", "October", "November", "December")) + 
+  coord_cartesian(ylim = c(300, 700)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+3. Map your monthly hotspots.
+
+  - Get the city outline and roads
+```{r, warning=FALSE, message=FALSE, results='hide'}
+fairfax.roads <- roads("VA", "Fairfax city")
+fairfax.outline <- county_subdivisions("VA", "Fairfax city")
+```
+  - Filter your data by month
+  - Choose a hotspot method
+  - Facet by year
+```{r, warning=FALSE}
+ggplot() +
+  geom_sf(data = fairfax.outline, color = "grey") +
+  geom_hex(aes(x = lon, y = lat), data = subset(calls.subset, calls.subset$MONTH == 'January'), bins = 15) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = fairfax.roads, color = "black", alpha = 0.4) +
+  theme_classic() +
+  facet_wrap(~ year)
+```
+
+  - Repeat for each month.
 
 # 4. Findings
 
@@ -247,20 +313,23 @@ Provide one brief paragraph (4-5 sentences) per month forecasted (*2pts each*). 
 Address any limitations or factors to consider for future research. Make sure to actually answer the question! 
 
 #### 7. Visuals
-***12pts***
+***13pts***
 
-Provide a graph showing the forecasted counts at least three visuals of your data. These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
+Provide a graph showing the forecasted counts for each month in 2025. This graph should have a title and correct axis labels (*1pt*).
+
+Provide twelve (yes, 12) hotspot maps. 
+at least three visuals of your data. These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
 
 - Thoughtful and logical: do they make sense to someone that has never seen them before? (*2pts*)
 - All visuals should be somehow, someway referenced in the text (*2pts*) 
 - Analytically meaningful: does each visual provide useful, relevant, and actionable insights? (*2pts*) 
 
 #### 8. Formatting
-***2pts***
+***1pt***
 
-- Error-free writing (*1pt*). No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
-- File submitted as the knitted HTML output of an RMarkdown file, via Canvas (*1pt*).
+- Error-free writing. No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
+- File submitted as the knitted HTML output of an RMarkdown file, via Canvas.
 
-ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2002%20Template.Rmd).
+ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Final%20Project%20Template.Rmd).
 
 Please [email me](mailto:mdanna2@gmu.edu) with any questions.
