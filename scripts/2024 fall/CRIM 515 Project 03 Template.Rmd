@@ -165,6 +165,8 @@ Provide at least three visuals of your data. These visuals should be relevant to
 - Error-free writing (*1pt*). No typos, run-on sentences, or sentence fragments. Proper punctuation. Real words. Need help paraphrasing dense content? [Try this](https://quillbot.com/). And [here’s a great reference](https://cognella-titles-sneakpreviews.s3-us-west-2.amazonaws.com/83869-1A-URT/83869-1A_SP.pdf), too.
 - File submitted as the knitted HTML output of an RMarkdown file, via Canvas (*1pt*).
 
+[HERE IS THE FILE WE BUILT IN CLASS ON 11/25/2024](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/project%203%202024%2011%2025.R)
+
 ONE LAST THING... the source code for creating this file can be [found here](https://github.com/matthew-danna/criminal-justice-research-methods-data-analysis/blob/main/scripts/2024%20fall/CRIM%20515%20Project%2002%20Template.Rmd).
 
 Please [email me](mailto:mdanna2@gmu.edu) with any questions.
