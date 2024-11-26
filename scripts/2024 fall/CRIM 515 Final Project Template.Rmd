@@ -18,9 +18,10 @@ The Final Project follows the same general flow as the Research Projects, as out
 
 The goal of this project is to **forecast** future **calls for service** activity in the **City of Fairfax, Virginia** for calendar year 2025. 
 
-These instructions will demonstrate how to forecast using an ARIMA model.
+These instructions will demonstrate how to forecast using an ***ARIMA model***. An ARIMA model is an Autoregressive Integrated Moving Average. Let's breakdown these terms:
+  - **Autoregressive**: "auto" means self, and "regressive" refers to using prior values. This is a univariate model
+  - **Integrated**: integrated refers to the process of making data stationary, 
 
-The ***chi-square test*** of independence is used to analyze a table with counts/frequencies, aka a contingency table. These counts are formed by two categorical variables. This test evaluates whether there is a statistically significant relationship between the categories. The *null hypothesis (H0)* is that the variables of the contingency table are independent. The *alternative hypothesis (H1)* is that the variables are dependent. For each cell of the table, we will calculate the expected value under the null hypothesis.
 
 Your research question should consider **behavior**, **space**, and **time**. You'll either *measure* or *control* for each of these. 
 
