@@ -14,23 +14,21 @@ The Final Project follows the same general flow as the Research Projects, as out
 
 # 1. Research Question
 
-### INSTRUCTIONS
-
 The goal of this project is to **forecast** future **calls for service** activity in the **City of Fairfax, Virginia** for calendar year 2025. 
 
-These instructions will demonstrate how to forecast using an ***ARIMA model***. An ARIMA model is an Autoregressive Integrated Moving Average. Let's breakdown these terms:
-  - **Autoregressive**: "auto" means self, and "regressive" refers to using prior values. This is a univariate model
-  - **Integrated**: integrated refers to the process of making data stationary, 
+These instructions will demonstrate how to forecast using an ***ARIMA model***. An ARIMA model is an Autoregressive Integrated Moving Average, which is a univariate model predicting future values of a single variable over time. Let's breakdown these terms:
 
+  - **Autoregressive**: "auto" means self, and "regressive" refers to using prior values.
+  - **Integrated**: "integrated" refers to the process of making data stationary, which identifies trends by differencing the data
+  - **Moving Average**: "moving average" is a calculation for a series of averages using subsets of data to identify trends over time. It is a more precise measure for smoothing out fluctuations.
 
 Your research question should consider **behavior**, **space**, and **time**. You'll either *measure* or *control* for each of these. 
 
 - Behavior: what call type(s)
 - Space: where
-- Time: when
+- Time: when is the data from, when are you forecasting
 
-### EXAMPLE
-Using 2008-2024 data, forecast **trespass** calls for service counts and locations in the City of Fairfax, VA for each month in 2025.
+For example, ***using 2008-2024 data, forecast trespass calls for service counts and locations in the City of Fairfax, VA for each month in 2025.***
 
 # 2. Data
 
@@ -48,17 +46,19 @@ library(tseries)
 library(forecast)
 ```
 
-2. Get the latest Fairfax calls for service data:
+2. Get the latest and greatest Fairfax calls for service data:
 ```{r}
-calls.full <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", "1gniFP35GEfxycgpKGHAzkgSYmjTteTKm"))
+calls.full <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download",
+                               "1ti7BCMe1vvDVVr75p6lqvgouCy_ae7rn"))
 ```
 
 ### Wrangle
 
-3. Format the date, as a date, and add a month column for later:
+3. Format the date, as a date, and add month columns (different styles) for later:
 ```{r}
 calls.full$DATE <- as.Date(calls.full$date, format = "%Y-%m-%d")
-calls.full$MONTH <- months(calls.full$DATE)
+calls.full$MONTHS <- months(calls.full$DATE)
+calls.full$MONTH <- month(calls.full$DATE)
 ```
 
 4. Determine the total count and percentage of each call type:
@@ -69,23 +69,21 @@ sum.calls <- calls.full %>%
   mutate(pct = round(call.count/sum(call.count)*100,2))
 ```
 
-5. Filter the call types to forecast:
+5. Use the table from #4 to find and filter the call types to forecast (choose your own!):
 ```{r}
-group <- c("TRESPASSING", "TRAFFIC STOP")
+group <- c("SUSPICIOUS", "MISC")
 calls.subset <- calls.full %>% filter(calls.full$type %in% group)
 ```
 
 # 3. Methods
 
-### INSTRUCTIONS
-
-**Building** a relevant methodology is largely dependent on your research question and data. Any good methodology involves multiple steps for ***acquiring***, ***wrangling***, ***calculating***, ***visualizing***, and ***analyzing*** data. There is no single right answer here; rather, it’s the ability to craft a unique, distinct workflow that results in innovative work. 
+Building a relevant methodology is largely dependent on your research question and data. Any good methodology involves multiple steps for **acquiring** (done above), **wrangling** (done above), **calculating**, **visualizing**, and **analyzing** data. There is no single right answer here; rather, its the ability to craft a unique, distinct workflow that results in innovative work. 
 
 Some important considerations for ***how*** you use your data include:
 
   - **SPACE**:
       - Overall: ***Fairfax, VA***
-      - Unit of Measurement: ***Neighborhoods?***
+      - Unit of Measurement: ***Neighborhoods? Streets?***
   
   - **TIME**: 
       - Overall: time range for your datas
@@ -95,12 +93,11 @@ Some important considerations for ***how*** you use your data include:
       - Overall: Types, categories
       - Unit of Measurement: ***Call type(s)***
 
-Ultimately, your methodology will result in analysis that becomes findings. Some things to consider:
+To use an ARIMA model, we will identify values for **p**, **d**, and **q**:
 
-- What are the trends? 
-- What happens the most, what happens the least?
-- Are there anomalies? 
-- What do the statistics tell you? 
+  - *p*: Lagged observations
+  - *d*: Differencing the data set
+  - *q*: Prior error handling 
 
 ### Calculate
 
@@ -124,7 +121,7 @@ calls <- calls %>%
 calls <- replace(calls, is.na(calls), 0)
 ```
 
-3. Change the data type, update the sequencing:
+3. Change the data type to a proper time series, update the sequencing:
 ```{r}
 cleaned.calls <- zoo(calls$CALL.COUNT, 
                        seq(from = as.Date(min(calls$DATE)), 
@@ -138,29 +135,67 @@ plot(cleaned.calls)
 title("My Calls Per Day") # this adds a title to your graph
 ```
 
-5. Make the data stationary (normalized, as a deviation from the mean), and a new basic graph:
+5. Make the data stationary (normalized, as a deviation from previous values), and a new basic graph. You can do more/higher differences as necessary (but probably don't need to). Examine the graphs and compare the spikes. These are just examples:
 ```{r}
-stationary.calls <- diff(cleaned.calls)
-plot(stationary.calls)
+stationary1 <- diff(cleaned.calls, differences = 1)
+plot(stationary1)
+stationary2 <- diff(cleaned.calls, differences = 2)
+plot(stationary2)
+stationary3 <- diff(cleaned.calls, differences = 3)
+plot(stationary3)
 ```
 
-6. Conduct an [Augmented Dickey-Fuller test](https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test) for stationariness:
+Look for the data with the narrowest y axis range, as consistently as close to 0 as possible. In this example, ***stationary1*** is the best dataset.
+
+6. Conduct an [Augmented Dickey-Fuller test](https://en.wikipedia.org/wiki/Augmented_Dickey%E2%80%93Fuller_test) to determine if the data is stationary. The resultant score should be a negative number, and the lower the number the stronger the data is stationary. In this example, 'cleaned.calls' is run as a comparison to data that is not differenced.
 ```{r}
-adf.test(as.matrix(stationary.calls)) 
+adf.test(as.matrix(cleaned.calls))
+adf.test(as.matrix(stationary1))
+adf.test(as.matrix(stationary2))
+adf.test(as.matrix(stationary3))
 ```
 
-7. Build an ARIMA function
+In this example, all scenarios are negative. When combined with the plot analysis in Step 5, ***stationary1*** is best. Ideally you want to manipulate the data as little as possible. While 'stationary2' and 'stationary3' are even more negative, they are not negative *enough* to warrant choosing them.
+
+7. Lagged autocorrelations - specifically using the Autocorrelation (ACF) and Partial Autocorrelation (PACF) functions - will help determine the **p** and **q** values. For both calculations and visuals, you will use the best stationary dataset you chose in Steps 5 and 6 above.
+
+  - Determine the **p** order by examining the PACF graph and data. Specifically, look for the last *significant* lag:
 ```{r}
-arima.calls <- auto.arima(stationary.calls)
-arima.calls
+pacf(stationary1)
+pacf(stationary1, pl=FALSE)
 ```
+
+  - Determine the **q** order by identifying the last *significant* lag in the ACF:
+```{r}
+acf(stationary1)
+acf(stationary1, pl=FALSE)
+```
+
+In this example, the **p** should be **8**, and the **q** should be **1**.
+
+8. Build an ARIMA function using the inputs derived from previous steps (based on analysis from the graph in Step 4, it's reasonable to assume our data has season trends - so we'll set it to TRUE):
+```{r}
+arima.calls <- auto.arima(cleaned.calls, d = 1, max.p = 8, max.q = 1, seasonal = T)
+summary(arima.calls)
+```
+
+Note that the 'auto.arima' function runs a series of ARIMA models and choose the best fit for the data. The best fitting model can be interpreted as ARIMA(d, p, q).
+
+9. Do a quick residuals checks on the model to see how it performed:
+```{r}
+checkresiduals(arima.calls)
+```
+Proper residuals derived from your model include:
+
+  - the top graph not demonstrating any clear, cyclical, repeating patterns
+  - the bottom right graph generally being a normally distributed bell curve
 
 8. Use the ARIMA function to do a sample forecast for the next week of data:
 ```{r}
 # h = the number of units of time to measure
 forecast.7days <- forecast(arima.calls, h=7)
-additional.7days <- round(sum(forecast.7days$upper[,2]),0)
-additional.7days
+round(sum(forecast.7days$upper[,2]),0)
+forecast.7days$mean
 ```
 
 9. Identify the number of days between the last date in your dataset and the end of 2025:
@@ -168,16 +203,21 @@ additional.7days
 forecast.window <- as.numeric(as.Date("2025-12-31")-max(calls$DATE))
 ```
 
-10. Forecast the number of calls per day for everyday in that window:
+10. Forecast the number of calls per day for everyday in that window, and plot it:
 ```{r}
 forecast.2025 <- forecast(arima.calls, h=forecast.window)
+autoplot(forecast.2025)
 ```
 
 11. Extract the forecasted values as a table, clean up the column names, add the forecast date, and month:
 ```{r}
-forecast.values <- as.data.frame(forecast.2025$upper)
-colnames(forecast.values) <- c("CI80", "CI90")
+forecast.values <- as.data.frame(forecast.2025$mean)
 forecast.values$ID <- seq.int(nrow(forecast.values))
+forecast.upper <- as.data.frame(forecast.2025$upper)
+forecast.upper$ID <- seq.int(nrow(forecast.upper))
+forecast.values <- forecast.values %>%
+  left_join(forecast.upper, by = 'ID')
+colnames(forecast.values) <- c("MEAN", "ID", "CI80", "CI90")
 forecast.values$DATE <- as.Date(max(calls$DATE) + forecast.values$ID)
 forecast.values$MONTH <- months(forecast.values$DATE)
 ```
@@ -187,15 +227,14 @@ forecast.values$MONTH <- months(forecast.values$DATE)
 forecast.values.2025 <- subset(forecast.values, forecast.values$DATE > '2024-12-31')
 forecast.months <- forecast.values.2025 %>%
   group_by(MONTH) %>%
-  summarise(FORECAST.90 = round(sum(CI90),0), FORECAST.80 = round(sum(CI80),0))
+  summarise(MEAN = round(sum(MEAN),0), FORECAST.90 = round(sum(CI90),0), FORECAST.80 = round(sum(CI80),0))
 forecast.months$DIFF <- forecast.months$FORECAST.90 - forecast.months$FORECAST.80
 ```
 
-
 ### Visualize
 
-1. Graph of calls per day with a trend line:
-```{r}
+1. Graph of calls with a trend line:
+```{r, message=FALSE}
 graph.calls <- ggplot(calls, aes(x=DATE, y=CALL.COUNT)) + 
   geom_line() + 
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") + 
@@ -209,7 +248,28 @@ graph.calls +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-2. Tweak the data table for making a graph:
+2. Graph actual calls with predicted calls:
+```{r}
+calls2024 <- calls[c(1,2)]
+calls2025 <- forecast.values[c(5,1)]
+names(calls2025) <- c("DATE", "CALL.COUNT")
+
+new.calls <- rbind(calls2024, calls2025)
+
+graph.new.calls <- ggplot(new.calls, aes(x=DATE, y=CALL.COUNT)) + 
+  geom_line() + 
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") + 
+  xlab("Years") + 
+  ylab("Call Count") + 
+  ggtitle("TITLE HERE") + 
+  geom_area(fill="lightblue", color="black")
+
+graph.new.calls + 
+  geom_smooth(method = lm, col = "red", se = FALSE) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+3. Tweak the data table for making a graph:
 ```{r}
 forecast.months$MONTH <- factor(forecast.months$MONTH, levels = forecast.months$MONTH)
 forecast.long <- pivot_longer(forecast.months, cols = c(FORECAST.80, DIFF), 
@@ -218,12 +278,12 @@ forecast.long$Category <- gsub("DIFF", "90% Confidence Interval", forecast.long$
 forecast.long$Category <- gsub("FORECAST.80", "80% Confidence Interval", forecast.long$Category)
 ```
 
-3. Graph your monthly forecasts:
+4. Graph your monthly forecasts, first for the upper bounds, and then for the mean:
 ```{r}
 ggplot(forecast.long, aes(x = MONTH, y = Value, fill = fct_rev(Category))) +
   geom_bar(stat = "identity") +
-  geom_text(aes(label = FORECAST.90), size = 3, colour = 'white', position = position_stack(vjust = 0.5)) + 
-  labs(title = "City of Fairfax 2025 Monthly Forecast", 
+  geom_text(aes(label = Value), size = 3, colour = 'white', position = position_stack(vjust = 0.5)) + 
+  labs(title = "City of Fairfax 2025 Monthly Forecast Upper Bounds", 
        x = "Month", 
        y = "Call Count") +
   scale_fill_manual(values = c("90% Confidence Interval" = "blue",
@@ -231,12 +291,23 @@ ggplot(forecast.long, aes(x = MONTH, y = Value, fill = fct_rev(Category))) +
                     name = "Forecasts") +
   scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August",
                               "September", "October", "November", "December")) + 
-  coord_cartesian(ylim = c(300, 700)) +
+  coord_cartesian(ylim = c(0, 500)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplot(forecast.months, aes(x = MONTH, y = MEAN)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August",
+                              "September", "October", "November", "December")) +
+  coord_cartesian(ylim = c(100, 175)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "City of Fairfax 2025 Mean Monthly Forecast", 
+       x = "Month", 
+       y = "Call Count")
 ```
 
-3. Map your monthly hotspots.
+5. Map your monthly hotspots.
 
   - Get the city outline and roads
 ```{r, warning=FALSE, message=FALSE, results='hide'}
@@ -249,22 +320,25 @@ fairfax.outline <- county_subdivisions("VA", "Fairfax city")
 ```{r, warning=FALSE}
 ggplot() +
   geom_sf(data = fairfax.outline, color = "grey") +
-  geom_hex(aes(x = lon, y = lat), data = subset(calls.subset, calls.subset$MONTH == 'January'), bins = 15) +
+  geom_hex(aes(x = lon, y = lat), data = calls.subset, bins = 8) +
   scale_fill_continuous(type = "viridis") +
   geom_sf(data = fairfax.roads, color = "black", alpha = 0.4) +
   theme_classic() +
-  facet_wrap(~ year)
+  facet_wrap(~ MONTH)
 ```
 
-  - Repeat for each month.
+  - Repeat for multiple years to confirm any monthly patterns.
 
 # 4. Findings
 
 ### INSTRUCTIONS
 
-So, that workflow and methodology you created? Use it to answer your research question. Based on the data acquired and the methods applied, what is your answer to the question? How confident are you in the results? What else? Is anything missing? Is the data complete? Is it accurate? Make sure to caveat your findings as necessary. Related, this section should be written in clear, concise, plain English statements. The methodology is for complex thought and processes; the findings are for easily digestible content.
-
-In the context of operating in a real criminal justice organization, how do your findings ***inform*** decision-making processes? Does what you’ve discovered ***confirm/deny*** conventional wisdom? How does a criminal justice organization ***operationalize*** these findings? Why do your findings matter, and what does a successful ***integration*** of your work look like? Be bold, and be specific. For example, check out [this](https://www.start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_CommunityBasedOrganizations_June2019.pdf), [this](https://start.umd.edu/pubs/UIC_MPAC_START_SafeSpaces_PublicHealthFramework_June2019.pdf), and [this](https://cebcp.org/evidence-based-policing/what-works-in-policing/research-evidence-review/focused-deterrence/). Sure, they are violent extremism, but the way they were built can be really useful in this context, too.  
+  - Describe the model
+  - Describe the outputs
+  - Contextualize the results
+  - Describe the hotspots
+  - Make it real
+  - Make it usable
 
 # Writing Tips
 
@@ -283,7 +357,7 @@ Further, here’s some other strategies to consider:
 
 And finally, [this is just fun](https://www.thisworddoesnotexist.com/).
 
-# Other Information/Reminders
+# Creating the Output
 
 1. When submitting your projects, you are submitting either an **HTML** or **PDF** output of your Markdown file, as an upload to Canvas - not via email.
 2. When you are ready to see what the output looks like, **click the 'Knit' button.** The output file will be saved to the same folder this script is saved to.
@@ -292,9 +366,14 @@ And finally, [this is just fun](https://www.thisworddoesnotexist.com/).
 # Grading: 30pts
 
 #### 1. Research Question
-***1pt***
+***2pt***
 
-Provide a brief paragraph on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured.
+Provide a brief paragraph (1-2 sentences) on the research question. State the question, in terms of behavior, space, and time. Define key terms and concepts, to include how variables will be measured.
+
+#### 2. Literature Review
+***2pts***
+
+Provide a brief paragraph describing a prior study related to your current project. This study should be from a peer-academic academic journal. Include details about the *research question*, *data*, *methods*, and *findings*. Cite the article in *APA format*. 
 
 #### 3. Data 
 ***1pt***
@@ -309,21 +388,18 @@ Provide a brief paragraph on the research methods leveraged to answer this quest
 #### 5. Findings
 ***12pts***
 
-Provide one brief paragraph (4-5 sentences) per month forecasted (*2pts each*). Each paragraph should ___Your findings should be descriptive, clear, and comprehensively answer the original question. Each paragraph should describe a unique analytic insight dervied from your research. Each analytic insight should be the product of your methods, applied to your data, to provide part of an answer to your research question.
-
-Address any limitations or factors to consider for future research. Make sure to actually answer the question! 
+Provide one brief paragraph (4-5 sentences) per month forecasted (*2pts each*). Each paragraph should include forecasted counts, and specific areas of the city to focus on. Your findings should be descriptive, clear, and comprehensively answer the original question. 
 
 #### 7. Visuals
-***13pts***
+***10pts***
 
-Provide a graph showing the forecasted counts for each month in 2025. This graph should have a title and correct axis labels (*1pt*).
+  - Provide a graph that highlights your model (*2pts*).
 
-Provide twelve (yes, 12) hotspot maps. 
-at least three visuals of your data. These visuals should be relevant to your research and used as aids to articulate your findings. Think of these as support/evidence for your words. These visuals can be any combination of charts, tables, graphs, maps, or other similar graphics. All visuals should be intuitive and logical, meaning the reader can understand them without an additional explanation. 
+  - Provide a graph showing the forecasted counts for each month in 2025. This graph should have a title and correct axis labels (*2pts*).
 
-- Thoughtful and logical: do they make sense to someone that has never seen them before? (*2pts*)
-- All visuals should be somehow, someway referenced in the text (*2pts*) 
-- Analytically meaningful: does each visual provide useful, relevant, and actionable insights? (*2pts*) 
+  - Provide hotspot maps (*6pts*). 
+
+  - All visuals should be thoughtful and logical (make sense to someone that has never seen them before); somehow, someway referenced in the text; and analytically meaningful (provide useful, relevant, and actionable insights) 
 
 #### 8. Formatting
 ***1pt***
