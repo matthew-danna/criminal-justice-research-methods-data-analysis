@@ -111,6 +111,15 @@ everytown.post <- data.everytown.post %>%
   group_by(YEARMONTH) %>%
   summarise(EVENT.COUNT = n())
 
+##### NEW! Summarize by month and victims
+everytown.victims.pre <- data.everytown.pre %>%
+  group_by(YEARMONTH) %>%
+  summarise(VICTIM.COUNT = sum(VICTIMS))
+
+everytown.victims.post <- data.everytown.post %>%
+  group_by(YEARMONTH) %>%
+  summarise(VICTIM.COUNT = sum(VICTIMS))
+
 ### 4c. VPP K-12 - summarizing by month and events
 k12.pre <- data.vpp.k12.pre %>%
   group_by(YEARMONTH) %>%
@@ -132,5 +141,106 @@ college.post <- data.vpp.college.post %>%
 # 5. t test
 t.test(chds.pre$EVENT.COUNT, chds.post$EVENT.COUNT)
 t.test(everytown.pre$EVENT.COUNT, everytown.post$EVENT.COUNT)
+t.test(everytown.victims.pre$VICTIM.COUNT, everytown.victims.post$VICTIM.COUNT)
 t.test(k12.pre$EVENT.COUNT, k12.post$EVENT.COUNT)
 t.test(college.pre$EVENT.COUNT, college.post$EVENT.COUNT)
+
+# 6. Visuals
+### a pretty slick bar graph that uses your break-point!
+everytown.pre$CATEGORY <- "Pre"
+everytown.post$CATEGORY <- "Post"
+everytown.yearmonth <- rbind(everytown.pre, everytown.post)
+
+xbreaks <-
+  c(
+    "2013-03","2013-06","2013-09","2013-12",
+    "2014-03","2014-06","2014-09","2014-12",
+    "2015-03","2015-06","2015-09","2015-12",
+    "2016-03","2016-06","2016-09","2016-12",
+    "2017-03","2017-06","2017-09","2017-12",
+    "2018-03","2018-06","2018-09","2018-12",
+    "2019-03","2019-06","2019-09","2019-12",
+    "2020-03","2020-06","2020-09","2020-12",
+    "2021-03","2021-06","2021-09","2021-12",
+    "2022-03","2022-06","2022-09","2022-12",
+    "2023-03","2023-06","2023-09","2023-12",
+    "2024-03","2024-06","2024-09")
+
+ggplot(everytown.yearmonth) +
+  geom_bar(aes(YEARMONTH, EVENT.COUNT, fill = CATEGORY), stat = 'identity') +
+  labs(
+    title = "School Shootings by Month and Year", 
+    subtitle = "January 2013 - November 2024",
+    x = "Month Occurred",
+    y = "Number of Shootings",
+    fill = "Time Period") +
+  theme(
+    axis.text.x = element_text(angle = 90),
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.grid = element_blank()
+  ) +
+  scale_fill_manual(values = c("darkred", "darkgreen")) +
+  scale_x_discrete(breaks =  xbreaks)
+
+### a map!
+library(rnaturalearth)
+world <- ne_countries(scale = "medium", returnclass = "sf") # this builds a list of countries
+states <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE)) # this cleans up the US states
+
+# an overall map
+ggplot() +
+  geom_sf(data = world, color = "grey") +
+  geom_hex(aes(x = Longitude, y = Latitude), data = data.everytown, bins = 30) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = states, lwd = 0.5, color = "black", fill = NA) +
+  coord_sf(xlim = c(-128, -65), ylim = c(24, 50), expand = FALSE) +
+  theme_minimal() +
+  labs(
+    title = "School Shooting Hotspots",
+    subtitle = "January 2013 - November 2024",
+    fill = "Event Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+  )
+
+# same map, but for pre data
+ggplot() +
+  geom_sf(data = world, color = "grey") +
+  geom_hex(aes(x = Longitude, y = Latitude), 
+           data = subset(data.everytown, data.everytown$YEARMONTH < '2019-01'), bins = 30) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = states, lwd = 0.5, color = "black", fill = NA) +
+  coord_sf(xlim = c(-128, -65), ylim = c(24, 50), expand = FALSE) +
+  theme_minimal() +
+  labs(
+    title = "School Shooting Hotspots",
+    subtitle = "January 2013 - December 2018",
+    fill = "Event Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+  )
+
+# same map, but for post data
+ggplot() +
+  geom_sf(data = world, color = "grey") +
+  geom_hex(aes(x = Longitude, y = Latitude), 
+           data = subset(data.everytown, data.everytown$YEARMONTH >= '2019-01'), bins = 30) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = states, lwd = 0.5, color = "black", fill = NA) +
+  coord_sf(xlim = c(-128, -65), ylim = c(24, 50), expand = FALSE) +
+  theme_minimal() +
+  labs(
+    title = "School Shooting Hotspots",
+    subtitle = "January 2019 - November 2024",
+    fill = "Event Count"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+  )
+
