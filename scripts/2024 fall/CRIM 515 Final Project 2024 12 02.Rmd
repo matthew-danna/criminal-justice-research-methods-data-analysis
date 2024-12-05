@@ -1,0 +1,164 @@
+---
+title: "CRIM 515 Final Project In-Class"
+author: "Your Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  cleanrmd::html_document_clean:
+    theme: markdown-modest
+    toc: yes
+    toc_float: 
+      collapsed: true
+---
+
+# 1. Research Question
+
+EXAMPLE:  Using 2008-2024 data, this project forecasts animal-related calls for service counts and locations in the City of Fairfax, VA for each month in 2025.
+
+# 2. Literature Review
+
+INSERT THAT TEXT, WITH CITATION, HERE.
+
+# 3. Data
+
+### Libraries
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+library(zoo)
+library(aTSA)
+library(tseries)
+library(forecast)
+```
+
+Get the latest Fairfax calls for service data:
+```{r}
+calls.full <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download",
+                               "1ti7BCMe1vvDVVr75p6lqvgouCy_ae7rn"))
+```
+
+Format the date and add month columns:
+```{r}
+calls.full$DATE <- as.Date(calls.full$date, format = "%Y-%m-%d")
+calls.full$MONTHS <- months(calls.full$DATE)
+calls.full$MONTH <- month(calls.full$DATE)
+```
+
+Determine the total count and percentage of each call type:
+```{r}
+sum.calls <- calls.full %>%
+  group_by(type) %>%
+  summarise(call.count = n()) %>%
+  mutate(pct = round(call.count/sum(call.count)*100,2))
+```
+
+Identify a set of calls to analyze, and then filter the data:
+```{r}
+group <- c("ANIMAL BITE", "ANIMAL CASE", "ANIMAL CONTROL", "ANIMAL LOST-FOUND")
+calls.subset <- calls.full %>% filter(calls.full$type %in% group)
+```
+
+Calculate calls per day:
+```{r}
+calls <- calls.subset %>%
+  group_by(DATE) %>%
+  summarise(CALL.COUNT = n())
+```
+
+Fill in blank days:
+```{r}
+calls <- calls %>%
+  complete(DATE = seq.Date(min(DATE), max(DATE), by = "day")) %>%
+  mutate(WEEKDAY = lubridate::wday(DATE, label = T, week_start = 1), 
+         MONTH = lubridate::month(DATE, label = T, abbr = F),
+         WEEK = isoweek(DATE),
+         DAY = day(DATE),
+         YEAR = year(DATE))
+calls <- replace(calls, is.na(calls), 0)
+```
+
+Make the data a time series:
+```{r}
+cleaned.calls <- zoo(calls$CALL.COUNT, 
+                       seq(from = as.Date(min(calls$DATE)), 
+                           to = as.Date(max(calls$DATE)), by = 1))
+```
+
+Generate basic stats and a basic graph:
+```{r}
+summary(cleaned.calls)
+plot(cleaned.calls)
+title("Animal Calls Per Day")
+```
+
+Make the data stationary:
+```{r}
+stationary1 <- diff(cleaned.calls, differences = 1)
+stationary2 <- diff(cleaned.calls, differences = 2)
+stationary3 <- diff(cleaned.calls, differences = 3)
+```
+
+Plot each one:
+```{r}
+plot(stationary1)
+plot(stationary2)
+plot(stationary3)
+```
+
+Run ADF tests on the original data, and the stationary datasets:
+```{r}
+adf.test(as.matrix(cleaned.calls))
+adf.test(as.matrix(stationary1))
+adf.test(as.matrix(stationary2))
+adf.test(as.matrix(stationary3))
+```
+
+Stationary1 is the winner.
+
+Determine the p value using PACF:
+```{r}
+pacf(stationary1)
+pacf(stationary1, pl=FALSE)
+```
+
+The p value for this example will be 13.
+
+Determine the q value using ACF:
+```{r}
+acf(stationary1)
+acf(stationary1, pl=FALSE)
+```
+
+The q value for this example will be 1.
+
+Build the ARIMA model:
+```{r}
+arima.calls <- auto.arima(cleaned.calls, d = 1, max.p = 13, max.q = 1, seasonal = T)
+summary(arima.calls)
+```
+
+Check the model residuals:
+```{r}
+checkresiduals(arima.calls)
+```
+
+Build a sample forecast for 11/1-11/7:
+```{r}
+forecast.7days <- forecast(arima.calls, h=7)
+round(sum(forecast.7days$upper[,2]),0)
+forecast.7days$mean
+```
+
+Identify our forecast window:
+```{r}
+forecast.window <- as.numeric(as.Date("2025-12-31")-max(calls$DATE))
+```
+
+Forecast 2025
+```{r}
+forecast.2025 <- forecast(arima.calls, h=forecast.window)
+autoplot(forecast.2025)
+```
+
