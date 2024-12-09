@@ -184,7 +184,10 @@ ggplot(everytown.yearmonth) +
   scale_x_discrete(breaks =  xbreaks)
 
 ### a map!
+install.packages('rnaturalearth')
 library(rnaturalearth)
+install.packages('sf')
+library(sf)
 world <- ne_countries(scale = "medium", returnclass = "sf") # this builds a list of countries
 states <- st_as_sf(maps::map("state", plot = FALSE, fill = TRUE)) # this cleans up the US states
 
