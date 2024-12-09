@@ -10,6 +10,10 @@ output:
       collapsed: true
 ---
 
+Some R Markdown styles to try, if you're interested:
+
+“almond”, “awsm.css”, “axist”, “bamboo”, “bullframe”, “holiday”, “kacit”, “latex.css”, “markdown-splendor”, “markdown-retro”, “markdown-air”, “markdown-modest”, “marx”, “minicss”, “new.css”, “no-class”, “picocss”, “sakura”, “sakura-vader”, “semantic”, “simplecss”, “style-sans”, “style-serif”, “stylize”, “superstylin”, “tacit”, “vanilla”, “water”, “water-dark”, “writ”
+
 # 1. Research Question
 
 EXAMPLE:  Using 2008-2024 data, this project forecasts animal-related calls for service counts and locations in the City of Fairfax, VA for each month in 2025.
