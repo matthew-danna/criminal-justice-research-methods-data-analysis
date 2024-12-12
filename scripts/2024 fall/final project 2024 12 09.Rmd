@@ -1,0 +1,289 @@
+---
+title: "CRIM 515 Final Project In-Class"
+author: "Your Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  cleanrmd::html_document_clean:
+    theme: markdown-modest
+    toc: yes
+    toc_float: 
+      collapsed: true
+---
+
+Some R Markdown styles to try, if you're interested:
+
+“almond”, “awsm.css”, “axist”, “bamboo”, “bullframe”, “holiday”, “kacit”, “latex.css”, “markdown-splendor”, “markdown-retro”, “markdown-air”, “markdown-modest”, “marx”, “minicss”, “new.css”, “no-class”, “picocss”, “sakura”, “sakura-vader”, “semantic”, “simplecss”, “style-sans”, “style-serif”, “stylize”, “superstylin”, “tacit”, “vanilla”, “water”, “water-dark”, “writ”
+
+# 1. Research Question
+
+EXAMPLE:  Using 2008-2024 data, this project forecasts animal-related calls for service counts and locations in the City of Fairfax, VA for each month in 2025.
+
+# 2. Literature Review
+
+INSERT THAT TEXT, WITH CITATION, HERE.
+
+# 3. Data
+
+### Libraries
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(tigris)
+library(zoo)
+library(aTSA)
+library(tseries)
+library(forecast)
+```
+
+Get the latest Fairfax calls for service data:
+```{r}
+calls.full <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download",
+                               "1ti7BCMe1vvDVVr75p6lqvgouCy_ae7rn"))
+```
+
+Format the date and add month columns:
+```{r}
+calls.full$DATE <- as.Date(calls.full$date, format = "%Y-%m-%d")
+calls.full$MONTHS <- months(calls.full$DATE)
+calls.full$MONTH <- month(calls.full$DATE)
+```
+
+```{r, echo=FALSE, results='hide'}
+sum.calls <- calls.full %>%
+  group_by(type) %>%
+  summarise(call.count = n()) %>%
+  mutate(pct = round(call.count/sum(call.count)*100,2))
+```
+
+Identify a set of calls to analyze, and then filter the data:
+```{r}
+group <- c("ANIMAL BITE", "ANIMAL CASE", "ANIMAL CONTROL", "ANIMAL LOST-FOUND")
+calls.subset <- calls.full %>% filter(calls.full$type %in% group)
+```
+
+Calculate calls per day:
+```{r}
+calls <- calls.subset %>%
+  group_by(DATE) %>%
+  summarise(CALL.COUNT = n())
+```
+
+Fill in blank days:
+```{r}
+calls <- calls %>%
+  complete(DATE = seq.Date(min(DATE), max(DATE), by = "day")) %>%
+  mutate(WEEKDAY = lubridate::wday(DATE, label = T, week_start = 1), 
+         MONTH = lubridate::month(DATE, label = T, abbr = F),
+         WEEK = isoweek(DATE),
+         DAY = day(DATE),
+         YEAR = year(DATE))
+calls <- replace(calls, is.na(calls), 0)
+```
+
+Make the data a time series:
+```{r}
+cleaned.calls <- zoo(calls$CALL.COUNT, 
+                       seq(from = as.Date(min(calls$DATE)), 
+                           to = as.Date(max(calls$DATE)), by = 1))
+```
+
+Generate basic stats and a basic graph:
+```{r}
+summary(cleaned.calls)
+plot(cleaned.calls)
+title("Animal Calls Per Day")
+```
+
+Make the data stationary:
+```{r}
+stationary1 <- diff(cleaned.calls, differences = 1)
+```
+
+Plot each one:
+```{r}
+plot(stationary1)
+```
+
+Run ADF tests on the original data, and the stationary datasets:
+```{r}
+adf.test(as.matrix(stationary1))
+```
+
+Stationary1 is the winner.
+
+Determine the p value using PACF:
+```{r}
+pacf(stationary1)
+pacf(stationary1, pl=FALSE)
+```
+
+The p value for this example will be 13.
+
+Determine the q value using ACF:
+```{r}
+acf(stationary1)
+acf(stationary1, pl=FALSE)
+```
+
+The q value for this example will be 1.
+
+Build the ARIMA model:
+```{r}
+arima.calls <- auto.arima(cleaned.calls, d = 1, max.p = 13, max.q = 1, seasonal = T)
+summary(arima.calls)
+```
+
+Check the model residuals (probably not worth keeping in your Final):
+```{r, echo=FALSE, results='hide'}
+checkresiduals(arima.calls)
+```
+
+Identify our forecast window:
+```{r}
+forecast.window <- as.numeric(as.Date("2025-12-31")-max(calls$DATE))
+```
+
+Forecast 2025
+```{r}
+forecast.2025 <- forecast(arima.calls, h=forecast.window)
+autoplot(forecast.2025)
+```
+
+Make a forecast table:
+```{r}
+forecast.values <- as.data.frame(forecast.2025$mean)
+forecast.values$ID <- seq.int(nrow(forecast.values))
+
+forecast.upper <- as.data.frame(forecast.2025$upper)
+forecast.upper$ID <- seq.int(nrow(forecast.upper))
+
+forecast.values <- forecast.values %>%
+  left_join(forecast.upper, by = 'ID')
+
+colnames(forecast.values) <- c("MEAN", "ID", "CI80", "CI95")
+forecast.values$DATE <- as.Date(max(calls$DATE) + forecast.values$ID)
+forecast.values$MONTH <- months(forecast.values$DATE)
+```
+
+Filter to 2025, summarize by month:
+```{r}
+forecast.values.2025 <- subset(forecast.values, forecast.values$DATE > '2024-12-31')
+
+forecast.months <- forecast.values.2025 %>%
+  group_by(MONTH) %>%
+  summarise(MEAN = round(sum(MEAN),0), FORECAST.95 = round(sum(CI95),0), FORECAST.80 = round(sum(CI80),0))
+
+forecast.months$DIFF <- forecast.months$FORECAST.95 - forecast.months$FORECAST.80
+```
+
+# Graphs
+
+1. Calls per day with a trend line:
+```{r}
+graph.calls <- ggplot(calls, aes(x=DATE, y=CALL.COUNT)) + 
+  geom_line() + 
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") + 
+  xlab("Years") + 
+  ylab("Call Count") + 
+  ggtitle("TITLE HERE") + 
+  geom_area(fill="lightblue", color="black")
+
+graph.calls + 
+  geom_smooth(method = lm, col = "red", se = FALSE) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+2. Calls per day with a trend line and the forecast:
+```{r}
+calls2024 <- calls[c(1,2)]
+calls2025 <- forecast.values[c(5,1)]
+names(calls2025) <- c("DATE", "CALL.COUNT")
+
+new.calls <- rbind(calls2024, calls2025)
+
+graph.new.calls <- ggplot(new.calls, aes(x=DATE, y=CALL.COUNT)) + 
+  geom_line() + 
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") + 
+  xlab("Years") + 
+  ylab("Call Count") + 
+  ggtitle("TITLE HERE") + 
+  geom_area(fill="lightblue", color="black")
+
+graph.new.calls + 
+  geom_smooth(method = lm, col = "red", se = FALSE) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+3. Monthly upper bounds graph:
+```{r}
+forecast.months$MONTH <- factor(forecast.months$MONTH, levels = forecast.months$MONTH)
+forecast.long <- pivot_longer(forecast.months, cols = c(FORECAST.80, DIFF), 
+                          names_to = "Category", values_to = "Value")
+forecast.long$Category <- gsub("DIFF", "95% Confidence Interval", forecast.long$Category)
+forecast.long$Category <- gsub("FORECAST.80", "80% Confidence Interval", forecast.long$Category)
+
+ggplot(forecast.long, aes(x = MONTH, y = Value, fill = fct_rev(Category))) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = Value), size = 3, colour = 'white', position = position_stack(vjust = 0.5)) + 
+  labs(title = "City of Fairfax 2025 Monthly Forecast Upper Bounds", 
+       x = "Month", 
+       y = "Call Count") +
+  scale_fill_manual(values = c("95% Confidence Interval" = "gold",
+                               "80% Confidence Interval" = "maroon"),
+                    name = "Forecasts") +
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")) + 
+  coord_cartesian(ylim = c(0, 175)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+4. Monthly forecasts by mean predicted value:
+```{r}
+ggplot(forecast.months, aes(x = MONTH, y = MEAN)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August",
+                              "September", "October", "November", "December")) +
+  coord_cartesian(ylim = c(0, 50)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "City of Fairfax 2025 Mean Monthly Forecast", 
+       x = "Month", 
+       y = "Call Count")
+```
+
+Personally, I would use graph #2 AND either graph #3 or graph #4 (so two graphs total).
+
+# Maps
+
+Get the geographic data:
+```{r}
+fairfax.roads <- roads("VA", "Fairfax city")
+fairfax.outline <- county_subdivisions("VA", "Fairfax city")
+```
+
+Make the hotspots by month:
+```{r}
+ggplot() +
+  geom_sf(data = fairfax.outline, color = "grey") +
+  geom_hex(aes(x = lon, y = lat), data = calls.subset, bins = 6) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = fairfax.roads, color = "black", alpha = 0.4) +
+  theme_classic() +
+  facet_wrap(~ MONTH)
+```
+
+Or, make hotspots by month using only "recent" data (where recent is post-COVID or a similar change to your data):
+```{r}
+ggplot() +
+  geom_sf(data = fairfax.outline, color = "grey") +
+  geom_hex(aes(x = lon, y = lat), data = subset(calls.subset, calls.subset$year > '2019'), 
+           bins = 6) +
+  scale_fill_continuous(type = "viridis") +
+  geom_sf(data = fairfax.roads, color = "black", alpha = 0.4) +
+  theme_classic() +
+  facet_wrap(~ MONTH)
+```
+
+Don't include both sets of these maps - either use the full time range OR the post-COVID one. Not both.
