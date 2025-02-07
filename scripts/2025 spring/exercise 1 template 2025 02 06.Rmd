@@ -1,0 +1,29 @@
+---
+title: "CRIM 515 Exercise 1 Template"
+author: "My Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+calls <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", 
+                          "1wKXnsCgcEuipeU9Xv3xBUBAA-B2wprtq"))
+```
+
+# Graph 1
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+ggplot(calls, aes(as.factor(year))) + 
+  geom_bar(stat = "count") +
+  labs(
+    title = "Your title here",
+    x = "x axis label here",
+    y = "y axis label here"
+  )
+```
+
+# Graph 2
+```{r}
+
+```
+
