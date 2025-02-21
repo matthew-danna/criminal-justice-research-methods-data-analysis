@@ -1,0 +1,62 @@
+---
+title: "Course Name Course Number Project Template"
+author: "Your Name"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+
+```
+
+# Research Question
+
+Provide a brief paragraph (3-4 sentences) on the research question.
+
+# Lit Review
+
+Provide a paragraph (4-6 sentences) describing a prior study related to your current project.
+
+# Data
+
+Provide a brief paragraph (3-4 sentences) on the data used in this study. 
+
+# Methods
+
+Provide a brief paragraph (3-4 sentences) on the research methods leveraged to answer this question. 
+
+# Findings
+```{r}
+
+```
+
+### Finding 1
+
+### Finding 2
+
+### Finding 3
+
+### Finding 4
+
+### Finding 5
+
+# Visuals
+
+### Visual 1
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+### Visual 2
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+### Visual 3
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+# So What
+
+Provide a brief paragraph (4-6 sentences) on the importance of this study, as a criminal justice professional. 
