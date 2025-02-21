@@ -142,3 +142,19 @@ ggplot(sum.presidents) +
   scale_fill_manual(values = c("darkblue", "red")) +
   scale_x_discrete(breaks = xbreaks)
 
+# with a trendline!
+ggplot(sum.presidents) +
+  geom_bar(aes(yearmonth, count, fill = CATEGORY), stat = "identity") +
+  geom_smooth(method = "loess") +
+  labs(title = "My New Bar Graph",
+       subtitle = "Something smart about my graph",
+       x = "Time Period of some sort",
+       y = "The Things i'm counting",
+       fill = "President") +
+  theme(axis.text.x = element_text(angle = 90),
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid = element_blank()) +
+  scale_fill_manual(values = c("darkblue", "red")) +
+  scale_x_discrete(breaks = xbreaks) 
+
