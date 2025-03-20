@@ -1,9 +1,7 @@
 library(tidyverse)
-library(leaflet)
 library(sf)
 library(tigris)
 library(tidycensus)
-library(ggrepel)
 
 crime <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download",
                           "1e2q4yerhe4Md0kBfHE8pNVOVCAPaRkgx"))
